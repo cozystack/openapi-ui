@@ -2,6 +2,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import federation from '@originjs/vite-plugin-federation'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const { VITE_BASEPREFIX } = process.env
@@ -21,6 +22,14 @@ export default defineConfig({
   publicDir: 'public',
   plugins: [
     react(),
+    federation({
+      name: 'openapi-ui',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './App': './src/federation.tsx',
+      },
+      shared: ['react', 'react-dom', 'react-redux', 'react-router-dom', 'antd', '@tanstack/react-query'],
+    }),
     nodePolyfills({
       include: ['buffer', 'process'],
       globals: {
