@@ -1,0 +1,41 @@
+import React, { FC } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
+import { ManageableBreadcrumbsWithDataProvider } from '@prorobotech/openapi-k8s-toolkit'
+import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
+
+export const ManageableBreadcrumbs: FC = () => {
+  const { pathname } = useLocation()
+  const params = useParams()
+  const clusterName = params?.clusterName || ''
+  const namespace = params?.namespace || ''
+  const syntheticProject = params?.syntheticProject || ''
+  const apiGroup = params?.apiGroup || ''
+  const apiVersion = params?.apiVersion || ''
+  const typeName = params?.typeName || ''
+  const entryName = params?.entryName || ''
+  const apiExtensionVersion = params?.apiExtensionVersion || ''
+  const crdName = params?.crdName || ''
+
+  return (
+    <ManageableBreadcrumbsWithDataProvider
+      uri={`/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/breadcrumbs/`}
+      refetchInterval={5000}
+      isEnabled={clusterName !== undefined}
+      replaceValues={{
+        clusterName,
+        projectName: '',
+        instanceName: '',
+        namespace,
+        syntheticProject,
+        entryType: '',
+        apiGroup,
+        apiVersion,
+        typeName,
+        entryName,
+        apiExtensionVersion,
+        crdName,
+      }}
+      pathname={pathname}
+    />
+  )
+}

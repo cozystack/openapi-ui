@@ -83,7 +83,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         element={<ListCrdByApiGroupPage forcedTheme={forcedTheme} />}
       />
       <Route
-        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/non-crds-by-api/:apiGroup/:apiVersion/`}
+        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/apis-by-api/:apiGroup/:apiVersion/`}
         element={<ListApiByApiGroupPage forcedTheme={forcedTheme} />}
       />
       <Route
@@ -91,7 +91,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         element={<TableCrdPage forcedTheme={forcedTheme} />}
       />
       <Route
-        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/non-crd-table/:apiGroup/:apiVersion/:typeName`}
+        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/api-table/:apiGroup/:apiVersion/:typeName`}
         element={<TableApiPage forcedTheme={forcedTheme} />}
       />
       <Route

@@ -1,0 +1,1 @@
+export { TableBuiltinPage } from './TableBuiltinPage'
