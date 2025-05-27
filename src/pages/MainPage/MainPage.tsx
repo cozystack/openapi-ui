@@ -1,7 +1,5 @@
 import React, { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import type { RootState } from 'store/store'
 import { BaseTemplate } from 'templates'
 
 type TMainPageProps = {
@@ -10,11 +8,10 @@ type TMainPageProps = {
 
 export const MainPage: FC<TMainPageProps> = ({ forcedTheme }) => {
   const navigate = useNavigate()
-  const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   useEffect(() => {
-    navigate(`${baseprefix}/cluster-list`)
-  }, [navigate, baseprefix])
+    navigate(`./cluster-list`)
+  }, [navigate])
 
-  return <BaseTemplate forcedTheme={forcedTheme} />
+  return <BaseTemplate withNoCluster forcedTheme={forcedTheme} />
 }

@@ -31,7 +31,7 @@ export default defineConfig({
       shared: ['react', 'react-dom', 'react-redux', 'react-router-dom', 'antd', '@tanstack/react-query'],
     }),
     nodePolyfills({
-      include: ['buffer', 'process'],
+      include: ['buffer', 'process', 'path'],
       globals: {
         Buffer: true, // can also be 'build', 'dev', or false
         global: true,
