@@ -5,6 +5,7 @@ import { Card, Typography, Flex, Row, Col, Spin } from 'antd'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { MarketPlace } from 'components'
 import { DropdownActions } from './molecules'
 import { Styled } from './styled'
 
@@ -144,7 +145,7 @@ export const ProjectInfo: FC = () => {
           </Col>
         </Row>
       </Card>
-      Marketplace
+      <MarketPlace />
       {isDeleteModalOpen && (
         <DeleteModal
           name={project.metadata.name}
