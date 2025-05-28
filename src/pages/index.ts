@@ -1,8 +1,14 @@
 export { MainPage } from './MainPage'
-export { ClusterAndNsListPage } from './ClusterAndNsListPage'
-export { ListApiPage } from './ListApiPage'
-export { ListCrdByApiGroupPage } from './ListCrdByApiGroupPage'
-export { ListApiByApiGroupPage } from './ListApiByApiGroupPage'
+/* main routing */
+export { ListClustersPage } from './ListClustersPage'
+export { ListProjectsPage } from './ListProjectsPage'
+export { ProjectInfoPage } from './ProjectInfoPage'
+/* inside routing */
+export { ListInsideClustersAndNsPage } from './ListInsideClustersAndNsPage'
+export { ListInsideApiPage } from './ListInsideApiPage'
+export { ListInsideCrdByApiGroupPage } from './ListInsideCrdByApiGroupPage'
+export { ListInsideApiByApiGroupPage } from './ListInsideApiByApiGroupPage'
+/* common routing */
 export { TableCrdPage } from './TableCrdPage'
 export { TableApiPage } from './TableApiPage'
 export { TableBuiltinPage } from './TableBuiltinPage'

@@ -1,2 +1,3 @@
 export const BASE_API_GROUP = import.meta.env.VITE_CUSTOMIZATION_API_GROUP
 export const BASE_API_VERSION = import.meta.env.VITE_CUSTOMIZATION_API_VERSION
+export const BASE_RPROJECTS_VERSION = import.meta.env.VITE_RPROJECTS_VERSION

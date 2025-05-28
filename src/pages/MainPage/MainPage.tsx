@@ -10,7 +10,7 @@ export const MainPage: FC<TMainPageProps> = ({ forcedTheme }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    navigate(`./cluster-list`)
+    navigate('./clusters')
   }, [navigate])
 
   return <BaseTemplate withNoCluster forcedTheme={forcedTheme} />

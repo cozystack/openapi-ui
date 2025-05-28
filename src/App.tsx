@@ -15,10 +15,13 @@ import { setIsFederation } from 'store/federation/federation/federation'
 import { setBaseprefix } from 'store/federation/federation/baseprefix'
 import {
   MainPage,
-  ClusterAndNsListPage,
-  ListApiPage,
-  ListCrdByApiGroupPage,
-  ListApiByApiGroupPage,
+  ListClustersPage,
+  ListProjectsPage,
+  ProjectInfoPage,
+  ListInsideClustersAndNsPage,
+  ListInsideApiPage,
+  ListInsideCrdByApiGroupPage,
+  ListInsideApiByApiGroupPage,
   TableCrdPage,
   TableApiPage,
   TableBuiltinPage,
@@ -79,15 +82,25 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
   const renderRoutes = (prefix = '') => (
     <Routes>
       <Route path={`${prefix}/`} element={<MainPage forcedTheme={forcedTheme} />} />
-      <Route path={`${prefix}/cluster-list`} element={<ClusterAndNsListPage forcedTheme={forcedTheme} />} />
-      <Route path={`${prefix}/:clusterName/:namespace?/apis`} element={<ListApiPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/clusters`} element={<ListClustersPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/clusters/:clusterName`} element={<ListProjectsPage forcedTheme={forcedTheme} />} />
       <Route
-        path={`${prefix}/:clusterName/:namespace?/crds-by-api/:apiGroup/:apiVersion/:apiExtensionVersion`}
-        element={<ListCrdByApiGroupPage forcedTheme={forcedTheme} />}
+        path={`${prefix}/clusters/:clusterName/projects/:namespace`}
+        element={<ProjectInfoPage forcedTheme={forcedTheme} />}
+      />
+      <Route path={`${prefix}/inside/`} element={<MainPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/inside/clusters`} element={<ListInsideClustersAndNsPage forcedTheme={forcedTheme} />} />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/apis`}
+        element={<ListInsideApiPage forcedTheme={forcedTheme} />}
       />
       <Route
-        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/apis-by-api/:apiGroup/:apiVersion/`}
-        element={<ListApiByApiGroupPage forcedTheme={forcedTheme} />}
+        path={`${prefix}/inside/:clusterName/:namespace?/crds-by-api/:apiGroup/:apiVersion/:apiExtensionVersion`}
+        element={<ListInsideCrdByApiGroupPage forcedTheme={forcedTheme} />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/apis-by-api/:apiGroup/:apiVersion/`}
+        element={<ListInsideApiByApiGroupPage forcedTheme={forcedTheme} />}
       />
       <Route
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/crd-table/:apiGroup/:apiVersion/:apiExtensionVersion/:crdName`}
@@ -113,7 +126,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/forms/crds/:apiGroup/:apiVersion/:typeName/:entryName?/`}
         element={<FormCrdPage forcedTheme={forcedTheme} />}
       />
-      <Route path={`${prefix}/factory/*`} element={<FactoryPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/:clusterName/factory/:key/*`} element={<FactoryPage forcedTheme={forcedTheme} />} />
     </Routes>
   )
 

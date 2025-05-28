@@ -1,0 +1,1 @@
+export { ListInsideCrdByApiGroupPage } from './ListInsideCrdByApiGroupPage'
