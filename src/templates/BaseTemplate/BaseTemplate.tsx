@@ -7,7 +7,7 @@ import type { RootState } from 'store/store'
 import { setTheme } from 'store/theme/theme/theme'
 import { setCluster } from 'store/cluster/cluster/cluster'
 import { setClusterList } from 'store/clusterList/clusterList/clusterList'
-import { DefaultLayout, DefaultColorProvider, TitleWithNoTopMargin, ThemeSelector } from 'components'
+import { DefaultLayout, DefaultColorProvider, Header } from 'components'
 import { Styled } from './styled'
 
 type TBaseTemplateProps = {
@@ -85,14 +85,9 @@ export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, 
           <DefaultLayout.Layout $bgColor={token.colorBgLayout}>
             <DefaultLayout.ContentContainer>
               <DefaultLayout.ContentPadding $isFederation={isFederation}>
-                {!isFederation && (
-                  <Styled.TitleAndThemeToggle>
-                    <TitleWithNoTopMargin level={1}>OpenAPI UI</TitleWithNoTopMargin>
-                    {clusterListQuery.error && (
-                      <Alert message={`Cluster List Error: ${clusterListQuery.error?.message} `} type="error" />
-                    )}
-                    <ThemeSelector />
-                  </Styled.TitleAndThemeToggle>
+                <Header />
+                {clusterListQuery.error && (
+                  <Alert message={`Cluster List Error: ${clusterListQuery.error?.message} `} type="error" />
                 )}
                 {children}
               </DefaultLayout.ContentPadding>
