@@ -1,8 +1,11 @@
 import React, { FC } from 'react'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import type { RootState } from 'store/store'
 import { TableCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
+import { BASE_API_GROUP, BASE_INSTANCES_VERSION } from 'constants/customizationApiGroupAndVersion'
 
 type TTableCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
@@ -10,21 +13,21 @@ type TTableCrdPageProps = {
 
 export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
   const { clusterName, namespace, syntheticProject, apiGroup, apiVersion, apiExtensionVersion, crdName } = useParams()
+  const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
 
+  const customBacklink = possibleInstance
+    ? `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_API_GROUP}/${BASE_INSTANCES_VERSION}/instances`
+    : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
+
+  const clustererBacklink = `${baseprefix}/clusters`
+
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
-      <BackLink
-        to={
-          possibleInstance
-            ? `/instances-federation/clusters/${clusterName}/projects/${possibleProject}/${possibleInstance}`
-            : `/core/clusters/${clusterName}/projects/${possibleProject}`
-        }
-        title={`${apiGroup}/${apiVersion}/${crdName}`}
-      />
+      <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${crdName}`} />
       <Spacer $space={16} $samespace />
       {crdName && apiGroup && apiVersion && apiExtensionVersion && (
         <TableCrdInfo

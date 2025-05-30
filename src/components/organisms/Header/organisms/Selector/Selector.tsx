@@ -41,7 +41,7 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
 
   const handleInstanceChange = (value: string) => {
     setSelectedInstanceName(value)
-    navigate(`${baseprefix}/${selectedClusterName}/${value}/${selectedProjectName}/non-crd-table/apps/v1/deployments`)
+    navigate(`${baseprefix}/${selectedClusterName}/${value}/${selectedProjectName}/api-table/apps/v1/deployments`)
   }
 
   useMountEffect(() => {

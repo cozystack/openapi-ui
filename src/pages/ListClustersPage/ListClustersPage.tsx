@@ -4,7 +4,6 @@ import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { HomeOutlined } from '@ant-design/icons'
 import { ListClusters } from 'components'
 import { BaseTemplate } from 'templates'
 
@@ -17,11 +16,7 @@ export const ListClustersPage: FC<TListClustersPageProps> = ({ forcedTheme }) =>
 
   const breadcrumbItems = [
     {
-      title: (
-        <Link to={`${baseprefix}/`}>
-          <HomeOutlined />
-        </Link>
-      ),
+      title: <Link to={`${baseprefix}/`}>In-Cloud</Link>,
       key: 'home',
     },
     {

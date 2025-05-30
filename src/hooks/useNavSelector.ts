@@ -1,7 +1,11 @@
 import { useApiResources, TClusterList, TSingleResource } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import {
+  BASE_API_GROUP,
+  BASE_RPROJECTS_VERSION,
+  BASE_INSTANCES_VERSION,
+} from 'constants/customizationApiGroupAndVersion'
 
 const mappedClusterToOptionInSidebar = ({ name }: TClusterList[number]): { value: string; label: string } => ({
   value: name,
@@ -29,7 +33,7 @@ export const useNavSelector = (clusterName?: string, projectName?: string) => {
     clusterName: clusterName || '',
     namespace: '',
     apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_RPROJECTS_VERSION,
+    apiVersion: BASE_INSTANCES_VERSION,
     typeName: 'instances',
     limit: null,
   })

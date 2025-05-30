@@ -28,7 +28,7 @@ export const getPathToNav = ({
   }
 
   if (type === 'nonCrd') {
-    return `${baseprefix}/${clusterName}/${namespace}/non-crd-table/${apiGroup}/${apiVersion}/${typeName}`
+    return `${baseprefix}/${clusterName}/${namespace}/api-table/${apiGroup}/${apiVersion}/${typeName}`
   }
 
   return `${baseprefix}/${clusterName}/${namespace}/builtin-table/${typeName}`

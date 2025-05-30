@@ -4,7 +4,6 @@ import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { HomeOutlined } from '@ant-design/icons'
 import { ListInsideAllResources } from 'components'
 import { BaseTemplate } from 'templates'
 
@@ -18,11 +17,7 @@ export const ListInsideApiPage: FC<TListInsideApiPageProps> = ({ forcedTheme }) 
 
   const breadcrumbItems = [
     {
-      title: (
-        <Link to={`${baseprefix}/inside/clusters`}>
-          <HomeOutlined />
-        </Link>
-      ),
+      title: <Link to={`${baseprefix}/inside/clusters`}>In-Cloud: inside</Link>,
       key: 'home',
     },
     {
