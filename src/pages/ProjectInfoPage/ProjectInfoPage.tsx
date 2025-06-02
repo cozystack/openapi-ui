@@ -11,7 +11,7 @@ export const ProjectInfoPage: FC<TProjectInfoPageProps> = ({ forcedTheme }) => {
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       <ProjectInfo />
     </BaseTemplate>
   )

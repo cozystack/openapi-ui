@@ -4,7 +4,7 @@ import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { ListInsideClusterAndNs } from 'components'
+import { ContentCard, ListInsideClusterAndNs } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TListInsideClustersAndNsPageProps = {
@@ -28,8 +28,10 @@ export const ListInsideClustersAndNsPage: FC<TListInsideClustersAndNsPageProps> 
   return (
     <BaseTemplate withNoCluster forcedTheme={forcedTheme}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
-      <Spacer $space={16} $samespace />
-      <ListInsideClusterAndNs />
+      <Spacer $space={20} $samespace />
+      <ContentCard flexGrow={1}>
+        <ListInsideClusterAndNs />
+      </ContentCard>
     </BaseTemplate>
   )
 }

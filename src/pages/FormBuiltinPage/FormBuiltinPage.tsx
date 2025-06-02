@@ -35,7 +35,7 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
         to={backLink || customBacklink}
         title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
       />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       {entryName ? (
         <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
       ) : (

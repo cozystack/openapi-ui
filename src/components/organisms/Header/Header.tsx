@@ -1,45 +1,49 @@
 import React, { FC } from 'react'
-import { Row, Col } from 'antd'
+import { Flex, theme } from 'antd'
 import { useParams } from 'react-router-dom'
-import { AccessGroups, Documentation, Logo, ManageableSidebar, Selector, User } from './organisms'
+// import { ManageableSidebar, Logo, Documentation ThemeSelector, User, Selector, } from './organisms'
+import { Logo, Documentation, ThemeSelector, User, Selector } from './organisms'
+import { Styled } from './styled'
 
 export const Header: FC = () => {
-  const { projectName, instanceName, clusterName, entryType, namespace, syntheticProject } = useParams()
+  // const { projectName, instanceName, clusterName, entryType, namespace, syntheticProject } = useParams()
+  const { projectName, instanceName, clusterName, namespace, syntheticProject } = useParams()
+  const { token } = theme.useToken()
 
   const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
 
   return (
-    <Row>
-      <Col span={2}>
-        <Logo />
-      </Col>
-      <Col span={8}>
-        <Selector
-          clusterName={clusterName}
-          projectName={projectName || possibleProject}
-          instanceName={instanceName || possibleInstance}
-        />
-      </Col>
-      <Col span={8}>
-        <ManageableSidebar
-          clusterName={clusterName}
-          entryType={entryType}
-          instanceName={instanceName}
-          projectName={projectName}
-        />
-      </Col>
-      <Col span={2}>
-        {instanceName && projectName && (
-          <AccessGroups clusterName={clusterName} instanceName={instanceName} projectName={projectName} />
-        )}
-      </Col>
-      <Col span={2}>
-        <Documentation key="SidebarDocumentation" />
-      </Col>
-      <Col span={2}>
-        <User key="SidebarUser" />
-      </Col>
-    </Row>
+    <>
+      <Styled.PaddingContainer>
+        <Flex justify="space-between">
+          <div>
+            <Logo />
+          </div>
+          <div>
+            <Flex gap={10}>
+              {/* <ManageableSidebar
+                clusterName={clusterName}
+                entryType={entryType}
+                instanceName={instanceName}
+                projectName={projectName}
+              /> */}
+              <Documentation key="SidebarDocumentation" />
+              <ThemeSelector />
+              <User key="SidebarUser" />
+            </Flex>
+          </div>
+        </Flex>
+      </Styled.PaddingContainer>
+      <Styled.BackgroundContainer $bgColor={token.colorFillSecondary} $borderColor={token.colorBorder}>
+        <Styled.PaddingContainer>
+          <Selector
+            clusterName={clusterName}
+            projectName={projectName || possibleProject}
+            instanceName={instanceName || possibleInstance}
+          />
+        </Styled.PaddingContainer>
+      </Styled.BackgroundContainer>
+    </>
   )
 }

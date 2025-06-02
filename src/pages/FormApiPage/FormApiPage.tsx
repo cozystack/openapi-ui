@@ -37,7 +37,7 @@ export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
           entryName ? `/${entryName}` : ''
         }`}
       />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       {entryName ? (
         <UpdateApisForm
           namespace={namespace}

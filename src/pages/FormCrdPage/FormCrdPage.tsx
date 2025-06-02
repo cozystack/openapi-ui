@@ -37,7 +37,7 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme }) => {
           entryName ? `/${entryName}` : ''
         }`}
       />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       {entryName ? (
         <UpdateCrdsForm
           namespace={namespace}

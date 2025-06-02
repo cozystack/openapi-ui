@@ -3,7 +3,7 @@ import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { ContentCard, TableNonCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
 import { BASE_API_GROUP, BASE_INSTANCES_VERSION } from 'constants/customizationApiGroupAndVersion'
 
@@ -37,16 +37,18 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme }) => {
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${typeName}`} />
-      <Spacer $space={16} $samespace />
-      {typeName && apiGroup && apiVersion && (
-        <TableNonCrdInfo
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          limit={searchParams.get('limit')}
-        />
-      )}
+      <Spacer $space={20} $samespace />
+      <ContentCard flexGrow={1} displayFlex flexFlow="column">
+        {typeName && apiGroup && apiVersion && (
+          <TableNonCrdInfo
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            limit={searchParams.get('limit')}
+          />
+        )}
+      </ContentCard>
     </BaseTemplate>
   )
 }

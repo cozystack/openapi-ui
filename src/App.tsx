@@ -147,6 +147,10 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
             Layout: {
               ...colors,
             },
+            Button: {
+              colorPrimary: theme === 'dark' ? '#fff' : '#000',
+              primaryColor: theme === 'dark' ? '#000' : '#fff',
+            },
           },
         }}
       >

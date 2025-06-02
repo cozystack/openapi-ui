@@ -3,7 +3,7 @@ import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { ContentCard, TableBuiltinInfo, BackLink, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
 import { BASE_API_GROUP, BASE_INSTANCES_VERSION } from 'constants/customizationApiGroupAndVersion'
 
@@ -29,8 +29,10 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) =>
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={typeName} />
-      <Spacer $space={16} $samespace />
-      {typeName && <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />}
+      <Spacer $space={20} $samespace />
+      <ContentCard flexGrow={1} displayFlex flexFlow="column">
+        {typeName && <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />}
+      </ContentCard>
     </BaseTemplate>
   )
 }

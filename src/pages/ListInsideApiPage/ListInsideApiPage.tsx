@@ -29,7 +29,7 @@ export const ListInsideApiPage: FC<TListInsideApiPageProps> = ({ forcedTheme }) 
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       <ListInsideAllResources namespace={namespace} />
     </BaseTemplate>
   )
