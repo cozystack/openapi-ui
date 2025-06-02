@@ -28,5 +28,7 @@ export const Factory: FC = () => {
     return null
   }
 
-  return <DynamicRendererWithProviders items={spec.data} components={DynamicComponents} />
+  return (
+    <DynamicRendererWithProviders urlsToFetch={spec.urlsToFetch} items={spec.data} components={DynamicComponents} />
+  )
 }
