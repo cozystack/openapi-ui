@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { EnrichedTable } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
+import { TABLE_PROPS } from 'constants/tableProps'
 
 export const ListClusters: FC = () => {
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
@@ -42,6 +43,7 @@ export const ListClusters: FC = () => {
       pathToNavigate={`${baseprefix}/clusters/~recordValue~`}
       recordKeysForNavigation={['name']}
       withoutControls
+      tableProps={TABLE_PROPS}
     />
   )
 }

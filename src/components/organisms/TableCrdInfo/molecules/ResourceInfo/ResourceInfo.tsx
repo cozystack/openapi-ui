@@ -17,6 +17,7 @@ import {
 } from '@prorobotech/openapi-k8s-toolkit'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { FlexGrow } from 'components'
+import { TABLE_PROPS } from 'constants/tableProps'
 
 type TResourceInfoProps = {
   clusterName: string
@@ -174,6 +175,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
               setSelectedRowsData(selectedRowsData)
             },
           }}
+          tableProps={TABLE_PROPS}
         />
       )}
       <FlexGrow />

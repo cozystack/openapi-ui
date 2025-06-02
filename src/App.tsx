@@ -151,6 +151,14 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
               colorPrimary: theme === 'dark' ? '#fff' : '#000',
               primaryColor: theme === 'dark' ? '#000' : '#fff',
             },
+            Tooltip: {
+              colorBgSpotlight: colors?.colorBgLayout,
+              colorText: colors?.colorText,
+              colorTextLightSolid: colors?.colorText,
+            },
+            Table: {
+              headerBg: colors?.colorBgLayout,
+            },
           },
         }}
       >

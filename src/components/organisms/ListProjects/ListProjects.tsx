@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_API_VERSION, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { FlexGrow } from 'components'
+import { TABLE_PROPS } from 'constants/tableProps'
 
 export const ListProjects: FC = () => {
   const navigate = useNavigate()
@@ -168,6 +169,7 @@ export const ListProjects: FC = () => {
               setSelectedRowsData(selectedRowsData)
             },
           }}
+          tableProps={TABLE_PROPS}
         />
       )}
       <FlexGrow />
