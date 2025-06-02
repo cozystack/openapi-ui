@@ -29,6 +29,7 @@ import {
   FormApiPage,
   FormCrdPage,
   FactoryPage,
+  FactoryAdminPage,
 } from 'pages'
 import { getBasePrefix } from 'utils/getBaseprefix'
 import { colorsLight, colorsDark, sizes } from 'constants/colors'
@@ -127,6 +128,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         element={<FormCrdPage forcedTheme={forcedTheme} />}
       />
       <Route path={`${prefix}/:clusterName/factory/:key/*`} element={<FactoryPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/factoryAdmin/*`} element={<FactoryAdminPage />} />
     </Routes>
   )
 
