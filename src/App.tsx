@@ -128,7 +128,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         element={<FormCrdPage forcedTheme={forcedTheme} />}
       />
       <Route path={`${prefix}/:clusterName/factory/:key/*`} element={<FactoryPage forcedTheme={forcedTheme} />} />
-      <Route path={`${prefix}/factoryAdmin/*`} element={<FactoryAdminPage />} />
+      <Route path={`${prefix}/factory-admin/*`} element={<FactoryAdminPage />} />
     </Routes>
   )
 
