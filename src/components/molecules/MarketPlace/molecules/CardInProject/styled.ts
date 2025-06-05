@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Tag } from 'antd'
+import { Card, Tag, Typography } from 'antd'
 
 type TCustomCardProps = {
   $hoverColor: string
@@ -8,73 +8,86 @@ type TCustomCardProps = {
 
 const CustomCard = styled(Card)<TCustomCardProps>`
   position: relative;
-  width: 256px;
-  min-height: 256px;
+  width: 238px;
+  overflow-x: auto;
   cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
+  box-shadow:
+    0px 6px 16px 0px #00000014,
+    0px 3px 6px -4px #0000001f,
+    0px 9px 28px 8px #0000000d;
 
   &:hover {
     border-color: ${({ $hoverColor, $isDisabled }) => !$isDisabled && $hoverColor};
   }
 
   .ant-card-body {
-    height: 100%;
+    height: 238px;
+    overflow-x: auto;
+    padding: 8px;
   }
-`
-const ControlsAndImageContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
 `
 
 const ImageContainer = styled.div`
-  min-width: 50px;
-  min-height: 50px;
+  min-width: 45px;
+  min-height: 45px;
+  padding: 6px;
 
   svg {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
   }
 `
 
-const ControlsContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
+const OverflowContainer = styled.div`
+  overflow-x: auto;
+  scrollbar-width: thin;
+  margin-bottom: 20px;
 `
 
-const ControlsItem = styled.div`
-  margin-right: 12px;
-
-  &:last-child {
-    margin-right: 0;
-  }
-`
-
-const FlexGrow = styled.div`
-  flex-grow: 1;
+const TitleContainer = styled(Typography.Text)`
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: 16px;
+  line-height: 24px;
 `
 
 const TagsContainer = styled.div`
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
   display: flex;
   flex-flow: row wrap;
   align-items: flex-start;
 `
 
 const CustomTag = styled(Tag)`
-  padding: 0 12px;
-  margin-right: 12px;
-  margin-bottom: 12px;
+  margin-right: 4px;
+  margin-bottom: 4px;
 
   &:last-child {
     margin-right: 0;
   }
 `
 
+const DescriptionContainer = styled.div`
+  padding-left: 6px;
+  padding-right: 6px;
+`
+
+const EditButtonContainer = styled.div`
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+`
+
 export const Styled = {
   CustomCard,
-  ControlsAndImageContainer,
   ImageContainer,
-  ControlsContainer,
-  ControlsItem,
-  FlexGrow,
+  OverflowContainer,
+  TitleContainer,
   TagsContainer,
   CustomTag,
+  DescriptionContainer,
+  EditButtonContainer,
 }

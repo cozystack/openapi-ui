@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useDirectUnknownResource, DeleteModal, usePermissions } from '@prorobotech/openapi-k8s-toolkit'
-import { Card, Typography, Flex, Row, Col, Spin } from 'antd'
+import { Spacer, useDirectUnknownResource, DeleteModal, usePermissions } from '@prorobotech/openapi-k8s-toolkit'
+import { Typography, Flex, Row, Col, Spin, Button } from 'antd'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
-import { MarketPlace } from 'components'
-import { DropdownActions } from './molecules'
+import { ContentCard, MarketPlace } from 'components'
+import { DropdownActions, DropdownAccessGroups } from './molecules'
 import { Styled } from './styled'
 
 export const ProjectInfo: FC = () => {
@@ -85,67 +85,113 @@ export const ProjectInfo: FC = () => {
     return null
   }
 
-  const readyCondition = project.status.conditions.find(({ type }) => type === 'Ready')
+  // const readyCondition = project.status.conditions.find(({ type }) => type === 'Ready')
+  const readyCondition = project.status.conditions.find(({ type }) => type !== 'Ready')
 
   return (
     <>
-      <Card>
-        <Row>
-          <Col span={14}>
-            <Flex gap={16} vertical>
-              <div>
-                <Flex align="center" gap="small">
-                  <Typography.Text type="secondary">Project Business Name</Typography.Text>
-                </Flex>
-                <Flex gap="small">
-                  <Styled.BigValue className="overflowOneLine">{project.spec.businessName || '-'}</Styled.BigValue>
-                  {readyCondition && (
-                    <Flex align="center" gap="small">
-                      <Typography.Text type={readyCondition.status === 'True' ? 'success' : 'warning'}>
-                        {readyCondition.reason}
-                      </Typography.Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </div>
-              <Typography.Text>{project.spec.description}</Typography.Text>
-            </Flex>
-          </Col>
-          <Col span={10}>
+      <Row gutter={[24, 24]} style={{ flexGrow: 1 }}>
+        <Col span={13}>
+          <ContentCard flexGrow={1}>
             <Flex justify="space-between">
-              <Flex vertical gap="small">
-                <div>
+              <div>
+                <Flex gap={20} vertical>
+                  <div>
+                    <Typography.Text type="secondary">Project Business Name</Typography.Text>
+                  </div>
                   <div>
                     <Flex gap="small">
-                      <Typography.Text type="secondary">Project Prefix</Typography.Text>
+                      <Styled.BigValue>{project.spec.businessName || '-'}</Styled.BigValue>
+                      {readyCondition && (
+                        <Flex align="center" gap="small">
+                          <Typography.Text type={readyCondition.status === 'True' ? 'success' : 'warning'}>
+                            {readyCondition.reason}
+                          </Typography.Text>
+                        </Flex>
+                      )}
                     </Flex>
                   </div>
                   <div>
-                    <Styled.BigValue>{project.spec.prefix}</Styled.BigValue>
+                    <Typography.Text>{project.spec.description}</Typography.Text>
                   </div>
-                </div>
-              </Flex>
-
-              {readyCondition?.status === 'True' &&
-              (updatePermission.data?.status.allowed || deletePermission.data?.status.allowed) ? (
-                <DropdownActions
-                  onDelete={
-                    deletePermission.data?.status.allowed
-                      ? () => {
-                          setIsDeleteModalOpen(true)
+                </Flex>
+                <Spacer $space={24} $samespace />
+                <Flex gap={14} vertical>
+                  <div>
+                    <Typography.Text type="secondary">Developer Instruments</Typography.Text>
+                  </div>
+                  <div>
+                    <Flex gap={14} wrap>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                      <Button type="link">Test</Button>
+                    </Flex>
+                  </div>
+                </Flex>
+              </div>
+              <div>
+                <Flex gap={24} vertical>
+                  <Flex justify="flex-end">
+                    {readyCondition?.status === 'True' &&
+                    (updatePermission.data?.status.allowed || deletePermission.data?.status.allowed) ? (
+                      <DropdownActions
+                        onDelete={
+                          deletePermission.data?.status.allowed
+                            ? () => {
+                                setIsDeleteModalOpen(true)
+                              }
+                            : undefined
                         }
-                      : undefined
-                  }
-                  onUpdate={updatePermission.data?.status.allowed ? openUpdate : undefined}
-                />
-              ) : (
-                <Styled.ActionMenuPlaceholder />
-              )}
+                        onUpdate={updatePermission.data?.status.allowed ? openUpdate : undefined}
+                      />
+                    ) : (
+                      <Styled.ActionMenuPlaceholder />
+                    )}
+                  </Flex>
+                  <DropdownAccessGroups />
+                </Flex>
+              </div>
             </Flex>
-          </Col>
-        </Row>
-      </Card>
-      <MarketPlace />
+          </ContentCard>
+        </Col>
+        <Col span={11}>
+          <ContentCard flexGrow={1}>
+            <MarketPlace />
+          </ContentCard>
+        </Col>
+      </Row>
       {isDeleteModalOpen && (
         <DeleteModal
           name={project.metadata.name}

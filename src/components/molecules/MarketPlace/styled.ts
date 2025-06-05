@@ -1,11 +1,6 @@
 import styled from 'styled-components'
 import { Typography } from 'antd'
 
-const ActionMenuPlaceholder = styled.div`
-  width: 45.33px;
-  height: 1px;
-`
-
 const BigValue = styled(Typography.Text)`
   font-size: 36px;
   line-height: 36px;
@@ -22,6 +17,5 @@ const BigValue = styled(Typography.Text)`
 `
 
 export const Styled = {
-  ActionMenuPlaceholder,
   BigValue,
 }

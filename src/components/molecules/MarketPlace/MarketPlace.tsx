@@ -2,22 +2,17 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AxiosError } from 'axios'
-import { usePermissions, useDirectUnknownResource, DeleteModal } from '@prorobotech/openapi-k8s-toolkit'
-import { notification, Typography, Card, Flex, Divider, Switch, theme, Spin, Alert } from 'antd'
+import { usePermissions, useDirectUnknownResource, DeleteModal, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { notification, Typography, Flex, Switch, Spin, Alert } from 'antd'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { AddCard } from './atoms'
 import { AddEditFormModal, CardInProject, SearchTextInput } from './molecules'
-import {
-  TMarketPlacePanelResponse,
-  TMarketPlacePanelResource,
-  TMarketPlacePanel,
-  TMarketPlaceFiltersAndSorters,
-} from './types'
+import { TMarketPlacePanelResponse, TMarketPlacePanelResource, TMarketPlacePanel } from './types'
+import { Styled } from './styled'
 
 export const MarketPlace: FC = () => {
-  const { useToken } = theme
-  const { token } = useToken()
   const [api, contextHolder] = notification.useNotification()
+
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isAddEditOpen, setIsAddEditOpen] = useState<boolean | TMarketPlacePanelResource>(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState<{ name: string } | boolean>(false)
@@ -28,9 +23,7 @@ export const MarketPlace: FC = () => {
   const [initialData, setInitialData] = useState<TMarketPlacePanel[]>([])
   const [filteredAndSortedData, setFilterAndSortedData] = useState<TMarketPlacePanel[]>([])
   const [uniqueTags, setUniqueTags] = useState<string[]>([])
-  const [filtersAndSorters, setFiltersAndSorters] = useState<TMarketPlaceFiltersAndSorters>({
-    searchText: '',
-  })
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const { clusterName, namespace } = useParams()
 
@@ -111,22 +104,23 @@ export const MarketPlace: FC = () => {
   }, [marketplacePanels, isEditMode])
 
   useEffect(() => {
-    const { searchText, selectedTag } = filtersAndSorters
+    let newData: TMarketPlacePanel[] = []
 
-    let newData = initialData
-      .filter(
-        ({ name, description }) =>
-          name.toLowerCase().includes(searchText.toLowerCase()) ||
-          description.toLowerCase().includes(searchText.toLowerCase()),
-      )
-      .sort()
-
-    if (selectedTag) {
-      newData = newData.filter(({ tags }) => tags.includes(selectedTag))
+    if (selectedTags && selectedTags.length > 0) {
+      newData = initialData
+        .filter(
+          ({ name, description, tags }) =>
+            selectedTags.some(tag => name.toLowerCase().includes(tag.toLowerCase())) ||
+            selectedTags.some(tag => description.toLowerCase().includes(tag.toLowerCase())) ||
+            selectedTags.some(tag => tags.some(el => el.toLowerCase().includes(tag.toLowerCase()))),
+        )
+        .sort()
+    } else {
+      newData = initialData.sort()
     }
 
     setFilterAndSortedData(newData)
-  }, [filtersAndSorters, initialData])
+  }, [selectedTags, initialData])
 
   if (error) {
     return <div>{JSON.stringify(error)}</div>
@@ -140,24 +134,6 @@ export const MarketPlace: FC = () => {
     return <div>No panels</div>
   }
 
-  const onSearchTextChange = (searchText: string) => {
-    setFiltersAndSorters({ ...filtersAndSorters, searchText })
-  }
-
-  const onTagSelect = (tag: string) => {
-    if (filtersAndSorters.selectedTag === tag) {
-      setFiltersAndSorters({
-        ...filtersAndSorters,
-        selectedTag: undefined,
-      })
-    } else {
-      setFiltersAndSorters({
-        ...filtersAndSorters,
-        selectedTag: tag,
-      })
-    }
-  }
-
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode)
   }
@@ -165,20 +141,31 @@ export const MarketPlace: FC = () => {
   return (
     <>
       {contextHolder}
-      <Flex justify="space-between" align="center" style={{ marginTop: '30px' }}>
-        <Typography.Title level={4} style={{ marginTop: 0 }}>
-          Marketplace
-        </Typography.Title>
+      <Flex justify="space-between">
         <div>
-          {(createPermission.data?.status.allowed ||
-            updatePermission.data?.status.allowed ||
-            deletePermission.data?.status.allowed) && (
+          <Flex gap={12} vertical>
             <div>
-              <Switch defaultChecked checked={isEditMode} onClick={toggleEditMode} /> Edit Mode
+              <Typography.Text type="secondary">Available Products</Typography.Text>
             </div>
-          )}
+            <div>
+              <Styled.BigValue>Marketplace</Styled.BigValue>
+            </div>
+          </Flex>
+        </div>
+        <div>
+          <Flex gap={12} vertical>
+            <SearchTextInput uniqueTags={uniqueTags} selectedTags={selectedTags} onSelectedTags={setSelectedTags} />
+            {(createPermission.data?.status.allowed ||
+              updatePermission.data?.status.allowed ||
+              deletePermission.data?.status.allowed) && (
+              <Flex align="center" gap={8}>
+                <Switch defaultChecked checked={isEditMode} onClick={toggleEditMode} /> Edit Mode
+              </Flex>
+            )}
+          </Flex>
         </div>
       </Flex>
+      <Spacer $space={20} $samespace />
       {createUpdateError && (
         <Alert
           description={JSON.stringify(createUpdateError)}
@@ -195,84 +182,43 @@ export const MarketPlace: FC = () => {
           type="error"
         />
       )}
-      <Flex>
-        <Card style={{ maxWidth: '255px', marginRight: '8px' }}>
-          <Flex justify="center" align="center" vertical>
-            <SearchTextInput searchText={filtersAndSorters.searchText} onSearchTextChange={onSearchTextChange} />
-            <Divider style={{ borderColor: token.colorBorder }} />
-            <Flex justify="center" align="center" vertical style={{ width: '100%' }}>
-              <Typography.Text
-                style={{ width: '100%', marginBottom: '8px', cursor: 'pointer' }}
-                type={!filtersAndSorters.selectedTag ? 'success' : undefined}
-                onClick={() =>
-                  setFiltersAndSorters({
-                    ...filtersAndSorters,
-                    selectedTag: undefined,
-                  })
-                }
-              >
-                All Items
-              </Typography.Text>
-              {uniqueTags.map(tag => (
-                <Typography.Text
-                  style={{ width: '100%', marginBottom: '8px', cursor: 'pointer' }}
-                  type={filtersAndSorters.selectedTag === tag ? 'success' : undefined}
-                  key={tag}
-                  onClick={() => onTagSelect(tag)}
-                >
-                  {tag}
-                </Typography.Text>
-              ))}
-            </Flex>
-          </Flex>
-        </Card>
-        <div>
-          <Flex wrap gap="small">
-            {clusterName &&
-              namespace &&
-              filteredAndSortedData.map(
-                ({ name, description, icon, type, pathToNav, typeName, apiGroup, apiVersion, tags, disabled }) => (
-                  <CardInProject
-                    description={description}
-                    disabled={disabled}
-                    icon={icon}
-                    isEditMode={isEditMode}
-                    key={name}
-                    name={name}
-                    clusterName={clusterName}
-                    namespace={namespace}
-                    type={type}
-                    pathToNav={pathToNav}
-                    typeName={typeName}
-                    apiGroup={apiGroup}
-                    apiVersion={apiVersion}
-                    // pathToNav={pathToNav}
-                    tags={tags}
-                    onDeleteClick={() => {
-                      const entry = marketplacePanels.items.find(({ spec }) => spec.name === name)
-                      setIsDeleteOpen(
-                        entry
-                          ? {
-                              name: entry.metadata.name,
-                            }
-                          : false,
-                      )
-                    }}
-                    onEditClick={() => {
-                      setIsAddEditOpen(marketplacePanels.items.find(({ spec }) => spec.name === name) || false)
-                    }}
-                  />
-                ),
-              )}
-            {isEditMode && (
-              <AddCard
-                onAddClick={() => {
-                  setIsAddEditOpen(true)
+      <Flex gap={22}>
+        {clusterName &&
+          namespace &&
+          filteredAndSortedData.map(
+            ({ name, description, icon, type, pathToNav, typeName, apiGroup, apiVersion, tags, disabled }) => (
+              <CardInProject
+                key={name}
+                description={description}
+                disabled={disabled}
+                icon={icon}
+                isEditMode={isEditMode}
+                name={name}
+                clusterName={clusterName}
+                namespace={namespace}
+                type={type}
+                pathToNav={pathToNav}
+                typeName={typeName}
+                apiGroup={apiGroup}
+                apiVersion={apiVersion}
+                tags={tags}
+                onDeleteClick={() => {
+                  const entry = marketplacePanels.items.find(({ spec }) => spec.name === name)
+                  setIsDeleteOpen(entry ? { name: entry.metadata.name } : false)
+                }}
+                onEditClick={() => {
+                  setIsAddEditOpen(marketplacePanels.items.find(({ spec }) => spec.name === name) || false)
                 }}
               />
-            )}
-          </Flex>
-        </div>
+            ),
+          )}
+        {isEditMode && (
+          <AddCard
+            onAddClick={() => {
+              setIsAddEditOpen(true)
+            }}
+          />
+        )}
       </Flex>
       {isAddEditOpen && (
         <AddEditFormModal

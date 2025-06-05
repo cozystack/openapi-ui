@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
-import { Button, Dropdown } from 'antd'
+import { Button, Dropdown, Flex } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
+import { EditIcon, DeleteIcon } from 'components/atoms'
 
 type TDropdownActionsProps = {
   onDelete?: () => void
@@ -20,7 +21,10 @@ export const DropdownActions: FC<TDropdownActionsProps> = ({ onDelete, onUpdate 
               onUpdate()
             }}
           >
-            Edit
+            <Flex align="center" gap={8}>
+              <EditIcon />
+              Edit
+            </Flex>
           </div>
         ),
       })
@@ -35,7 +39,10 @@ export const DropdownActions: FC<TDropdownActionsProps> = ({ onDelete, onUpdate 
               onDelete()
             }}
           >
-            Delete
+            <Flex align="center" gap={8}>
+              <DeleteIcon />
+              Delete
+            </Flex>
           </div>
         ),
       })
@@ -44,7 +51,7 @@ export const DropdownActions: FC<TDropdownActionsProps> = ({ onDelete, onUpdate 
   }
 
   return (
-    <Dropdown placement="bottom" menu={{ items: getDropdownItems() }} trigger={['click']}>
+    <Dropdown placement="bottomRight" menu={{ items: getDropdownItems() }} trigger={['click']}>
       <Button
         type="text"
         onClick={e => {

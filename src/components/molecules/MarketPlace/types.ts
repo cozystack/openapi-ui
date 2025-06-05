@@ -1,8 +1,3 @@
-export type TMarketPlaceFiltersAndSorters = {
-  searchText: string
-  selectedTag?: string
-}
-
 export type TMarketPlacePanel = {
   name: string
   description: string
