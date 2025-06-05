@@ -4,19 +4,20 @@ import { useNavigate } from 'react-router-dom'
 import { Typography, Flex, theme } from 'antd'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { TMarketPlacePanel } from '../../types'
+import { TMarketPlacePanel } from 'localTypes/marketplace'
 import { getPathToNav } from './utils'
 import { Styled } from './styled'
 
-type TCardInProjectProps = {
+type TMarketplaceCardProps = {
   clusterName: string
   namespace: string
   isEditMode?: boolean
-  onDeleteClick: () => void
-  onEditClick: () => void
+  onDeleteClick?: () => void
+  onEditClick?: () => void
+  addedMode?: boolean
 } & Omit<TMarketPlacePanel, 'hidden'>
 
-export const CardInProject: FC<TCardInProjectProps> = ({
+export const MarketplaceCard: FC<TMarketplaceCardProps> = ({
   description,
   name,
   icon,
@@ -71,7 +72,9 @@ export const CardInProject: FC<TCardInProjectProps> = ({
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation()
-                onDeleteClick()
+                if (onDeleteClick) {
+                  onDeleteClick()
+                }
               }}
             >
               <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +103,9 @@ export const CardInProject: FC<TCardInProjectProps> = ({
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation()
-                onEditClick()
+                if (onEditClick) {
+                  onEditClick()
+                }
               }}
             >
               <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">

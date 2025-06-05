@@ -5,7 +5,7 @@ import { createNewEntry, updateEntry } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
-import { TMarketPlacePanel, TMarketPlacePanelResource } from '../../types'
+import { TMarketPlacePanel, TMarketPlacePanelResource } from 'localTypes/marketplace'
 
 type TAddEditFormModalProps = {
   isOpen: boolean | TMarketPlacePanelResource

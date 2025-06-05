@@ -1,3 +1,3 @@
 export * from './AddEditFormModal'
-export * from './CardInProject'
+export * from './MarketplaceCard'
 export * from './SearchTextInput'

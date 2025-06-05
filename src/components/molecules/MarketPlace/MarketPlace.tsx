@@ -5,9 +5,9 @@ import { AxiosError } from 'axios'
 import { usePermissions, useDirectUnknownResource, DeleteModal, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { notification, Typography, Flex, Switch, Spin, Alert } from 'antd'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { TMarketPlacePanelResponse, TMarketPlacePanelResource, TMarketPlacePanel } from 'localTypes/marketplace'
 import { AddCard } from './atoms'
-import { AddEditFormModal, CardInProject, SearchTextInput } from './molecules'
-import { TMarketPlacePanelResponse, TMarketPlacePanelResource, TMarketPlacePanel } from './types'
+import { AddEditFormModal, MarketplaceCard, SearchTextInput } from './molecules'
 import { Styled } from './styled'
 
 export const MarketPlace: FC = () => {
@@ -187,7 +187,7 @@ export const MarketPlace: FC = () => {
           namespace &&
           filteredAndSortedData.map(
             ({ name, description, icon, type, pathToNav, typeName, apiGroup, apiVersion, tags, disabled }) => (
-              <CardInProject
+              <MarketplaceCard
                 key={name}
                 description={description}
                 disabled={disabled}
