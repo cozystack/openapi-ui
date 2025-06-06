@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { Card, Spin, Alert, Button, Flex } from 'antd'
+import { Spin, Alert, Button, Flex } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
   EnrichedTableProvider,
   useDirectUnknownResource,
-  Spacer,
   DeleteModal,
   DeleteModalMany,
   TAdditionalPrinterColumns,
@@ -16,6 +16,8 @@ import {
   parseCustomOverrides,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { FlexGrow } from 'components'
+import { TABLE_PROPS } from 'constants/tableProps'
 
 type TResourceInfoProps = {
   clusterName: string
@@ -135,77 +137,77 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
   }
 
   return (
-    <Card title="Resources Info">
+    <>
       {isPending && <Spin />}
+      {error && <Alert message={`An error has occurred: ${error?.message} `} type="error" />}
       {!error && data && (
-        <>
-          <Flex justify="space-between">
-            <Button
-              type="primary"
-              onClick={() =>
-                navigate(
-                  `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
-                    params.syntheticProject ? `/${params.syntheticProject}` : ''
-                  }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}/${cluster}${
-                    namespace ? `/${namespace}` : ''
-                  }${
-                    params.syntheticProject ? `/${params.syntheticProject}` : ''
-                  }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
-                )
-              }
-              loading={permissions.canCreate === undefined}
-              disabled={permissions.canCreate === false}
-            >
-              Add
-            </Button>
-            {selectedRowKeys.length > 0 && (
-              <Flex gap={8}>
-                <Button onClick={clearSelected}>Clear</Button>
-                <Button onClick={() => setIsDeleteModalManyOpen(selectedRowsData)} danger>
-                  Delete
-                </Button>
-              </Flex>
-            )}
-          </Flex>
-          <Spacer $space={8} $samespace />
-          <EnrichedTableProvider
-            theme={theme}
-            baseprefix={baseprefix}
-            dataItems={data.items}
-            resourceSchema={resourceSchema}
-            additionalPrinterColumns={ensuredCustomOverrides || crdAdditionalPrinterColumns}
-            additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
-            additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
-            additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
-            dataForControls={{
-              cluster,
-              syntheticProject: params.syntheticProject,
-              pathPrefix: 'forms/crds',
-              typeName: crdPluralName,
-              apiVersion: `${apiGroup}/${apiVersion}`,
-              backlink: `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+        <EnrichedTableProvider
+          theme={theme}
+          baseprefix={baseprefix}
+          dataItems={data.items}
+          resourceSchema={resourceSchema}
+          additionalPrinterColumns={ensuredCustomOverrides || crdAdditionalPrinterColumns}
+          additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
+          additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
+          additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
+          dataForControls={{
+            cluster,
+            syntheticProject: params.syntheticProject,
+            pathPrefix: 'forms/crds',
+            typeName: crdPluralName,
+            apiVersion: `${apiGroup}/${apiVersion}`,
+            backlink: `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+              params.syntheticProject ? `/${params.syntheticProject}` : ''
+            }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
+            deletePathPrefix: `/api/clusters/${clusterName}/k8s/apis`,
+            onDeleteHandle,
+            permissions: {
+              canUpdate: permissions.canUpdate,
+              canDelete: permissions.canDelete,
+            },
+          }}
+          pathToNavigate={tableMappingSpecific?.pathToNavigate}
+          recordKeysForNavigation={tableMappingSpecific?.keysToParse}
+          selectData={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
+              setSelectedRowKeys(selectedRowKeys)
+              setSelectedRowsData(selectedRowsData)
+            },
+          }}
+          tableProps={TABLE_PROPS}
+        />
+      )}
+      <FlexGrow />
+      <Flex justify="space-between">
+        <Button
+          type="primary"
+          onClick={() =>
+            navigate(
+              `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+                params.syntheticProject ? `/${params.syntheticProject}` : ''
+              }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}/${cluster}${
+                namespace ? `/${namespace}` : ''
+              }${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
               }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
-              deletePathPrefix: `/api/clusters/${clusterName}/k8s/apis`,
-              onDeleteHandle,
-              permissions: {
-                canUpdate: permissions.canUpdate,
-                canDelete: permissions.canDelete,
-              },
-            }}
-            pathToNavigate={tableMappingSpecific?.pathToNavigate}
-            recordKeysForNavigation={tableMappingSpecific?.keysToParse}
-            selectData={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
-                setSelectedRowKeys(selectedRowKeys)
-                setSelectedRowsData(selectedRowsData)
-              },
-            }}
-          />
-        </>
-      )}
-      {error && <Alert message={`An error has occurred: ${error?.message} `} type="error" />}
+            )
+          }
+          loading={permissions.canCreate === undefined}
+          disabled={permissions.canCreate === false}
+        >
+          <PlusOutlined />
+          Add
+        </Button>
+        {selectedRowKeys.length > 0 && (
+          <Flex gap={8}>
+            <Button onClick={clearSelected}>Clear</Button>
+            <Button onClick={() => setIsDeleteModalManyOpen(selectedRowsData)} danger>
+              Delete
+            </Button>
+          </Flex>
+        )}
+      </Flex>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}
@@ -216,6 +218,6 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
       {isDeleteModalManyOpen !== false && (
         <DeleteModalMany data={isDeleteModalManyOpen} onClose={() => setIsDeleteModalManyOpen(false)} />
       )}
-    </Card>
+    </>
   )
 }

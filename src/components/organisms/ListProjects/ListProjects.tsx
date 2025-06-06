@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import {
   EnrichedTableProvider,
   useDirectUnknownResource,
   usePermissions,
-  Spacer,
   DeleteModal,
   DeleteModalMany,
   TTableMappingResponse,
@@ -17,7 +17,9 @@ import {
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_API_VERSION, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { BASE_API_GROUP, BASE_API_VERSION, BASE_PROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { FlexGrow } from 'components'
+import { TABLE_PROPS } from 'constants/tableProps'
 
 export const ListProjects: FC = () => {
   const navigate = useNavigate()
@@ -29,7 +31,7 @@ export const ListProjects: FC = () => {
   const path = pathname
   const cluster = clusterName || ''
   const apiGroup = BASE_API_GROUP
-  const apiVersion = BASE_RPROJECTS_VERSION
+  const apiVersion = BASE_PROJECTS_VERSION
   const typeName = 'projects'
   const isNamespaced = false
 
@@ -134,66 +136,66 @@ export const ListProjects: FC = () => {
   return (
     <>
       {isPending && <Spin />}
-      {!error && data && (
-        <>
-          <Flex justify="space-between">
-            <Button
-              type="primary"
-              onClick={() =>
-                navigate(
-                  `${baseprefix}/${cluster}/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}/clusters/${cluster}`,
-                )
-              }
-              loading={isNamespaced ? false : createPermission.isPending}
-              disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
-            >
-              Add
-            </Button>
-            {selectedRowKeys.length > 0 && (
-              <Flex gap={8}>
-                <Button onClick={clearSelected}>Clear</Button>
-                <Button onClick={() => setIsDeleteModalManyOpen(selectedRowsData)} danger>
-                  Delete
-                </Button>
-              </Flex>
-            )}
-          </Flex>
-          <Spacer $space={8} $samespace />
-          <EnrichedTableProvider
-            theme={theme}
-            baseprefix={baseprefix}
-            dataItems={data.items}
-            additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
-            additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
-            additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
-            additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
-            dataForControls={{
-              cluster,
-              syntheticProject: undefined,
-              pathPrefix: 'forms/apis',
-              typeName,
-              apiVersion: `${apiGroup}/${apiVersion}`,
-              backlink: `${baseprefix}/clusters/${cluster}`,
-              deletePathPrefix: `/api/clusters/${cluster}/k8s/apis`,
-              onDeleteHandle,
-              permissions: {
-                canUpdate: isNamespaced ? true : updatePermission.data?.status.allowed,
-                canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
-              },
-            }}
-            pathToNavigate={tableMappingSpecific?.pathToNavigate}
-            recordKeysForNavigation={tableMappingSpecific?.keysToParse}
-            selectData={{
-              selectedRowKeys,
-              onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
-                setSelectedRowKeys(selectedRowKeys)
-                setSelectedRowsData(selectedRowsData)
-              },
-            }}
-          />
-        </>
-      )}
       {error && <Alert message={`An error has occurred: ${error?.message} `} type="error" />}
+      {!error && data && (
+        <EnrichedTableProvider
+          theme={theme}
+          baseprefix={baseprefix}
+          dataItems={data.items}
+          additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
+          additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
+          additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
+          additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
+          dataForControls={{
+            cluster,
+            syntheticProject: undefined,
+            pathPrefix: 'forms/apis',
+            typeName,
+            apiVersion: `${apiGroup}/${apiVersion}`,
+            backlink: `${baseprefix}/clusters/${cluster}`,
+            deletePathPrefix: `/api/clusters/${cluster}/k8s/apis`,
+            onDeleteHandle,
+            permissions: {
+              canUpdate: isNamespaced ? true : updatePermission.data?.status.allowed,
+              canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
+            },
+          }}
+          pathToNavigate={tableMappingSpecific?.pathToNavigate}
+          recordKeysForNavigation={tableMappingSpecific?.keysToParse}
+          selectData={{
+            selectedRowKeys,
+            onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
+              setSelectedRowKeys(selectedRowKeys)
+              setSelectedRowsData(selectedRowsData)
+            },
+          }}
+          tableProps={TABLE_PROPS}
+        />
+      )}
+      <FlexGrow />
+      <Flex justify="space-between">
+        <Button
+          type="primary"
+          onClick={() =>
+            navigate(
+              `${baseprefix}/${cluster}/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}/clusters/${cluster}`,
+            )
+          }
+          loading={isNamespaced ? false : createPermission.isPending}
+          disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+        >
+          <PlusOutlined />
+          Add
+        </Button>
+        {selectedRowKeys.length > 0 && (
+          <Flex gap={8}>
+            <Button onClick={clearSelected}>Clear</Button>
+            <Button onClick={() => setIsDeleteModalManyOpen(selectedRowsData)} danger>
+              Delete
+            </Button>
+          </Flex>
+        )}
+      </Flex>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}

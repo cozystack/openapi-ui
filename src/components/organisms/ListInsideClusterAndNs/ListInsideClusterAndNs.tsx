@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Card, Button, Alert, Spin, Typography } from 'antd'
+import { Button, Alert, Spin, Typography } from 'antd'
 import { filterSelectOptions, Spacer, useBuiltinResources } from '@prorobotech/openapi-k8s-toolkit'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,7 +24,7 @@ export const ListInsideClusterAndNs: FC = () => {
   })
 
   return (
-    <Card title="Choose Cluster and/or Namespace">
+    <>
       <Typography.Text>
         Cluster<Typography.Text type="danger">*</Typography.Text>
       </Typography.Text>
@@ -88,6 +88,6 @@ export const ListInsideClusterAndNs: FC = () => {
       >
         Go
       </Button>
-    </Card>
+    </>
   )
 }

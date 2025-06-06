@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Col, Row } from 'antd'
+import { Flex } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
@@ -51,37 +51,31 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   }, [projectName, instanceName, clusterName])
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={8}>
-        <EntrySelect
-          placeholder="Cluster"
-          options={clustersInSidebar}
-          value={selectedClusterName}
-          onChange={handleClusterChange}
-        />
-      </Col>
-      <Col span={8}>
-        <EntrySelect
-          placeholder="Project"
-          options={projectsInSidebar}
-          value={selectedProjectName}
-          onChange={handleProjectChange}
-          disabled={selectedClusterName === undefined || projectsInSidebar.length === 0}
-        />
-      </Col>
-      <Col span={8}>
-        <EntrySelect
-          placeholder="Intance"
-          options={instancesInSidebar}
-          value={selectedInstanceName}
-          onChange={handleInstanceChange}
-          disabled={
-            selectedClusterName === undefined ||
-            selectedProjectName === undefined ||
-            (allInstancesLoadingSuccess && instancesInSidebar.length === 0)
-          }
-        />
-      </Col>
-    </Row>
+    <Flex gap={18} justify="center">
+      <EntrySelect
+        placeholder="Cluster"
+        options={clustersInSidebar}
+        value={selectedClusterName}
+        onChange={handleClusterChange}
+      />
+      <EntrySelect
+        placeholder="Project"
+        options={projectsInSidebar}
+        value={selectedProjectName}
+        onChange={handleProjectChange}
+        disabled={selectedClusterName === undefined || projectsInSidebar.length === 0}
+      />
+      <EntrySelect
+        placeholder="Intance"
+        options={instancesInSidebar}
+        value={selectedInstanceName}
+        onChange={handleInstanceChange}
+        disabled={
+          selectedClusterName === undefined ||
+          selectedProjectName === undefined ||
+          (allInstancesLoadingSuccess && instancesInSidebar.length === 0)
+        }
+      />
+    </Flex>
   )
 }

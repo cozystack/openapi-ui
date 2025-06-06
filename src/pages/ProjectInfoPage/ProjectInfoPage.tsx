@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
-import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
-import { ProjectInfo, ManageableBreadcrumbs } from 'components'
+import { RedirectProjectInfo } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TProjectInfoPageProps = {
@@ -10,9 +9,7 @@ type TProjectInfoPageProps = {
 export const ProjectInfoPage: FC<TProjectInfoPageProps> = ({ forcedTheme }) => {
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
-      <ManageableBreadcrumbs />
-      <Spacer $space={16} $samespace />
-      <ProjectInfo />
+      <RedirectProjectInfo />
     </BaseTemplate>
   )
 }

@@ -16,11 +16,11 @@ export const EntrySelect: FC<TEntrySelectProps> = ({ placeholder, value, disable
   return (
     <Select
       placeholder={placeholder}
-      value={value || ''}
+      value={value}
       options={options.map(({ value, label }) => ({ label, value }))}
       onChange={(selectedValue: string) => onChange(selectedValue)}
       disabled={disabled}
-      style={{ width: '100%' }}
+      style={{ width: '150px' }}
     />
   )
 }

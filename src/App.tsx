@@ -29,6 +29,7 @@ import {
   FormApiPage,
   FormCrdPage,
   FactoryPage,
+  FactoryAdminPage,
 } from 'pages'
 import { getBasePrefix } from 'utils/getBaseprefix'
 import { colorsLight, colorsDark, sizes } from 'constants/colors'
@@ -126,7 +127,11 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/forms/crds/:apiGroup/:apiVersion/:typeName/:entryName?/`}
         element={<FormCrdPage forcedTheme={forcedTheme} />}
       />
-      <Route path={`${prefix}/:clusterName/factory/:key/*`} element={<FactoryPage forcedTheme={forcedTheme} />} />
+      <Route
+        path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/factory/:key/*`}
+        element={<FactoryPage forcedTheme={forcedTheme} />}
+      />
+      <Route path={`${prefix}/factory-admin/*`} element={<FactoryAdminPage />} />
     </Routes>
   )
 
@@ -146,6 +151,18 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
           components: {
             Layout: {
               ...colors,
+            },
+            Button: {
+              colorPrimary: theme === 'dark' ? '#fff' : '#000',
+              primaryColor: theme === 'dark' ? '#000' : '#fff',
+            },
+            Tooltip: {
+              colorBgSpotlight: colors?.colorBgLayout,
+              colorText: colors?.colorText,
+              colorTextLightSolid: colors?.colorText,
+            },
+            Table: {
+              headerBg: colors?.colorBgLayout,
             },
           },
         }}

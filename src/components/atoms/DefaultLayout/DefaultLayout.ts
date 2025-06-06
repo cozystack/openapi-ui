@@ -20,8 +20,10 @@ type TContentPaddingProps = {
 }
 
 const ContentPadding = styled.div<TContentPaddingProps>`
-  padding: ${({ $isFederation }) => ($isFederation ? 0 : '24px')};
-  min-height: 100vh;
+  padding: ${({ $isFederation }) => ($isFederation ? 0 : '20px 48px')};
+  min-height: calc(100vh - 53px - 52px - 70px);
+  display: flex;
+  flex-flow: column;
 `
 
 export const DefaultLayout = {

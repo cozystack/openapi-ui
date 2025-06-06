@@ -39,7 +39,7 @@ export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> 
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
-      <Spacer $space={16} $samespace />
+      <Spacer $space={20} $samespace />
       {apiGroup && apiVersion && apiExtensionVersion && (
         <ListInsideCrdsByApiGroup
           namespace={namespace}

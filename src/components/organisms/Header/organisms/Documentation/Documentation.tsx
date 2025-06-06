@@ -1,14 +1,13 @@
 import React, { FC } from 'react'
-import { FileTextOutlined } from '@ant-design/icons'
-import { Styled } from './styled'
+import { Button } from 'antd'
+import { QuestionCircleOutlined } from '@ant-design/icons'
 
 export const Documentation: FC = () => {
   const platformDocumentationUrl = '/docs'
 
   return (
-    <Styled.FullWidthButton type="text" onClick={() => window.open(platformDocumentationUrl, '_blank')}>
-      <FileTextOutlined />
-      Documentaion
-    </Styled.FullWidthButton>
+    <Button type="text" onClick={() => window.open(platformDocumentationUrl, '_blank')}>
+      <QuestionCircleOutlined />
+    </Button>
   )
 }

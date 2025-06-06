@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
@@ -28,16 +28,18 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${crdName}`} />
-      <Spacer $space={16} $samespace />
-      {crdName && apiGroup && apiVersion && apiExtensionVersion && (
-        <TableCrdInfo
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          crdName={crdName}
-          apiExtensionVersion={apiExtensionVersion}
-        />
-      )}
+      <Spacer $space={20} $samespace />
+      <ContentCard flexGrow={1} displayFlex flexFlow="column">
+        {crdName && apiGroup && apiVersion && apiExtensionVersion && (
+          <TableCrdInfo
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            crdName={crdName}
+            apiExtensionVersion={apiExtensionVersion}
+          />
+        )}
+      </ContentCard>
     </BaseTemplate>
   )
 }
