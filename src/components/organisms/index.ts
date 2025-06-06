@@ -1,6 +1,5 @@
 export * from './ListClusters'
 export * from './ListProjects'
-export * from './ProjectInfo'
 export * from './ListInsideClusterAndNs'
 export * from './ListInsideAllResources'
 export * from './ListInsideCrdsByApiGroup'

@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
-import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { ContentCard, TableNonCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
 import { BASE_API_GROUP, BASE_INSTANCES_VERSION } from 'constants/customizationApiGroupAndVersion'
 

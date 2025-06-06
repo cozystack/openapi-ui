@@ -17,7 +17,7 @@ import {
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_API_VERSION, BASE_RPROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import { BASE_API_GROUP, BASE_API_VERSION, BASE_PROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { FlexGrow } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 
@@ -31,7 +31,7 @@ export const ListProjects: FC = () => {
   const path = pathname
   const cluster = clusterName || ''
   const apiGroup = BASE_API_GROUP
-  const apiVersion = BASE_RPROJECTS_VERSION
+  const apiVersion = BASE_PROJECTS_VERSION
   const typeName = 'projects'
   const isNamespaced = false
 

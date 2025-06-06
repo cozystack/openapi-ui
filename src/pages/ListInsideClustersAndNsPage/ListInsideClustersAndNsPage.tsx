@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { Breadcrumb } from 'antd'
-import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { ContentCard, ListInsideClusterAndNs } from 'components'
+import { ListInsideClusterAndNs } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TListInsideClustersAndNsPageProps = {
