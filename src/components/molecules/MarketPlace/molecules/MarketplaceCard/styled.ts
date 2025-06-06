@@ -12,9 +12,9 @@ const CustomCard = styled(Card)<TCustomCardProps>`
   overflow-x: auto;
   cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
   box-shadow:
-    0px 6px 16px 0px #00000014,
-    0px 3px 6px -4px #0000001f,
-    0px 9px 28px 8px #0000000d;
+    0 6px 16px 0 #00000014,
+    0 3px 6px -4px #0000001f,
+    0 9px 28px 8px #0000000d;
 
   &:hover {
     border-color: ${({ $hoverColor, $isDisabled }) => !$isDisabled && $hoverColor};

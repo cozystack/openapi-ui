@@ -8,9 +8,9 @@ const CustomCard = styled(Card)`
   cursor: pointer;
   width: 238px;
   box-shadow:
-    0px 6px 16px 0px #00000014,
-    0px 3px 6px -4px #0000001f,
-    0px 9px 28px 8px #0000000d;
+    0 6px 16px 0 #00000014,
+    0 3px 6px -4px #0000001f,
+    0 9px 28px 8px #0000000d;
 
   .ant-card-body {
     display: flex;
