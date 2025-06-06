@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import React, { FC, useCallback, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Spacer, useDirectUnknownResource, DeleteModal, usePermissions } from '@prorobotech/openapi-k8s-toolkit'
@@ -97,8 +98,7 @@ export const ProjectInfoCard: FC = () => {
     return null
   }
 
-  // const readyCondition = project.status.conditions.find(({ type }) => type === 'Ready')
-  const readyCondition = project.status.conditions.find(({ type }) => type !== 'Ready')
+  const readyCondition = project.status.conditions.find(({ type }) => type === 'Ready')
 
   return (
     <>
@@ -196,7 +196,7 @@ export const ProjectInfoCard: FC = () => {
       <Spacer $space={24} $samespace />
       <Typography.Text type="secondary">Added Products</Typography.Text>
       <Spacer $space={12} $samespace />
-      <Flex gap={22}>
+      <Flex gap={22} wrap>
         {marketplaceIsLoading && <Spin />}
         {clusterName &&
           namespace &&

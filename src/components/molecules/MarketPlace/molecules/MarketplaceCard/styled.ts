@@ -49,6 +49,10 @@ const TitleContainer = styled(Typography.Text)`
   padding-right: 6px;
   font-size: 16px;
   line-height: 24px;
+
+  span {
+    font-weight: 700;
+  }
 `
 
 const TagsContainer = styled.div`

@@ -33,3 +33,33 @@ export const getPathToNav = ({
 
   return `${baseprefix}/${clusterName}/${namespace}/builtin-table/${typeName}`
 }
+
+export const getListPath = ({
+  clusterName,
+  namespace,
+  type,
+  typeName,
+  apiGroup,
+  apiVersion,
+}: {
+  clusterName: string
+  namespace: string
+  type: string
+  typeName?: string
+  apiGroup?: string
+  apiVersion?: string
+}): string | undefined => {
+  if (type === 'crd') {
+    return `/api/clusters/${clusterName}/k8s/apis/${apiGroup}/${apiVersion}${
+      namespace ? `/namespaces/${namespace}` : ''
+    }/${typeName}`
+  }
+
+  if (type === 'nonCrd') {
+    return `/api/clusters/${clusterName}/k8s/apis/${apiGroup}/${apiVersion}${
+      namespace ? `/namespaces/${namespace}` : ''
+    }/${typeName}`
+  }
+
+  return `/api/clusters/${clusterName}/k8s/api/v1${namespace ? `/namespaces/${namespace}` : ''}/${typeName}`
+}

@@ -182,7 +182,7 @@ export const MarketPlace: FC = () => {
           type="error"
         />
       )}
-      <Flex gap={22}>
+      <Flex gap={22} wrap>
         {clusterName &&
           namespace &&
           filteredAndSortedData.map(

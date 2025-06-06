@@ -2,10 +2,11 @@
 import React, { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Typography, Flex, theme } from 'antd'
+import { useDirectUnknownResource } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { TMarketPlacePanel } from 'localTypes/marketplace'
-import { getPathToNav } from './utils'
+import { getPathToNav, getListPath } from './utils'
 import { Styled } from './styled'
 
 type TMarketplaceCardProps = {
@@ -33,6 +34,7 @@ export const MarketplaceCard: FC<TMarketplaceCardProps> = ({
   isEditMode,
   onDeleteClick,
   onEditClick,
+  addedMode,
 }) => {
   const { useToken } = theme
   const { token } = useToken()
@@ -57,6 +59,29 @@ export const MarketplaceCard: FC<TMarketplaceCardProps> = ({
     apiVersion,
     baseprefix,
   })
+
+  const listUrl: string | undefined =
+    addedMode && type !== 'direct'
+      ? getListPath({
+          clusterName,
+          namespace,
+          type,
+          typeName,
+          apiGroup,
+          apiVersion,
+        })
+      : undefined
+
+  const { data: k8sList, error: k8sListError } = useDirectUnknownResource<{ items?: [] }>({
+    uri: listUrl || '',
+    queryKey: [listUrl || ''],
+    refetchInterval: false,
+    isEnabled: addedMode && listUrl !== undefined,
+  })
+
+  if (addedMode && (k8sListError || type === 'direct')) {
+    return null
+  }
 
   return (
     <Styled.CustomCard
@@ -87,7 +112,9 @@ export const MarketplaceCard: FC<TMarketplaceCardProps> = ({
           )}
         </Flex>
         <Styled.OverflowContainer>
-          <Styled.TitleContainer>{name}</Styled.TitleContainer>
+          <Styled.TitleContainer>
+            {name} {addedMode && <span>x{k8sList?.items?.length}</span>}
+          </Styled.TitleContainer>
           <Styled.TagsContainer>
             {tags.map(tag => (
               <Styled.CustomTag key={tag}>{tag}</Styled.CustomTag>
