@@ -5,19 +5,26 @@ import react from '@vitejs/plugin-react-swc'
 import federation from '@originjs/vite-plugin-federation'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
-const { VITE_BASEPREFIX } = process.env
-const { parsed: options } = await dotenv.config({ path: './.env.options' })
+// const { VITE_BASEPREFIX } = process.env
+const { parsed: options } = dotenv.config({ path: './.env.options' })
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: './',
-  base: VITE_BASEPREFIX || '/openapi-ui',
+  // base: VITE_BASEPREFIX || '/openapi-ui',
   build: {
     outDir: 'build',
     modulePreload: false,
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        entryFileNames: `[name]-react.js`,
+        chunkFileNames: `[name]-react.js`,
+        assetFileNames: `[name].[ext]`,
+      },
+    },
   },
   publicDir: 'public',
   plugins: [
