@@ -63,6 +63,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 4000,
+    open: '/openapi-ui',
     proxy: {
       '^/api/clusters/.*/k8s/': {
         target: `${options?.KUBE_API_URL}/api/clusters`,
