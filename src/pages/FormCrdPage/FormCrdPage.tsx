@@ -31,13 +31,14 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme }) => {
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
+      <Spacer $space={20} $samespace />
       <BackLink
         to={backLink || customBacklink}
         title={`${entryName ? 'Update' : 'Create'} ${apiGroup}/${apiVersion}/${typeName}${
           entryName ? `/${entryName}` : ''
         }`}
       />
-      <Spacer $space={20} $samespace />
+      <Spacer $space={10} $samespace />
       {entryName ? (
         <UpdateCrdsForm
           namespace={namespace}

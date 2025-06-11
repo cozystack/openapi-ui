@@ -31,11 +31,12 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
   return (
     <BaseTemplate forcedTheme={forcedTheme}>
       <ManageableBreadcrumbs />
+      <Spacer $space={20} $samespace />
       <BackLink
         to={backLink || customBacklink}
         title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
       />
-      <Spacer $space={20} $samespace />
+      <Spacer $space={10} $samespace />
       {entryName ? (
         <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
       ) : (
