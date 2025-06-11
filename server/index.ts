@@ -20,13 +20,18 @@ const CUSTOMIZATION_API_GROUP =
   process.env.LOCAL === 'true' ? options?.CUSTOMIZATION_API_GROUP : process.env.CUSTOMIZATION_API_GROUP
 const CUSTOMIZATION_API_VERSION =
   process.env.LOCAL === 'true' ? options?.CUSTOMIZATION_API_VERSION : process.env.CUSTOMIZATION_API_VERSION
-const RPROJECTS_VERSION = process.env.LOCAL === 'true' ? options?.RPROJECTS_VERSION : process.env.RPROJECTS_VERSION
+const PROJECTS_API_GROUP = process.env.LOCAL === 'true' ? options?.PROJECTS_API_GROUP : process.env.PROJECTS_API_GROUP
+const PROJECTS_VERSION = process.env.LOCAL === 'true' ? options?.PROJECTS_VERSION : process.env.PROJECTS_VERSION
 const PROJECTS_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.PROJECTS_RESOURCE_NAME : process.env.PROJECTS_RESOURCE_NAME
 const MARKETPLACE_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.MARKETPLACE_RESOURCE_NAME : process.env.MARKETPLACE_RESOURCE_NAME
 const MARKETPLACE_KIND = process.env.LOCAL === 'true' ? options?.MARKETPLACE_KIND : process.env.MARKETPLACE_KIND
+const INSTANCES_API_GROUP =
+  process.env.LOCAL === 'true' ? options?.INSTANCES_API_GROUP : process.env.INSTANCES_API_GROUP
 const INSTANCES_VERSION = process.env.LOCAL === 'true' ? options?.INSTANCES_VERSION : process.env.INSTANCES_VERSION
+const INSTANCES_RESOURCE_NAME =
+  process.env.LOCAL === 'true' ? options?.INSTANCES_RESOURCE_NAME : process.env.INSTANCES_RESOURCE_NAME
 
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
@@ -105,11 +110,14 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
     ${basePrefix ? `  BASEPREFIX: "${basePrefix}",` : ''}
       CUSTOMIZATION_API_GROUP: ${JSON.stringify(CUSTOMIZATION_API_GROUP) || '"check envs"'},
       CUSTOMIZATION_API_VERSION: ${JSON.stringify(CUSTOMIZATION_API_VERSION) || '"check envs"'},
-      RPROJECTS_VERSION: ${JSON.stringify(RPROJECTS_VERSION) || '"check envs"'},
+      PROJECTS_API_GROUP: ${JSON.stringify(PROJECTS_API_GROUP) || '"check envs"'},
+      PROJECTS_VERSION: ${JSON.stringify(PROJECTS_VERSION) || '"check envs"'},
       PROJECTS_RESOURCE_NAME: ${JSON.stringify(PROJECTS_RESOURCE_NAME) || '"check envs"'},
       MARKETPLACE_RESOURCE_NAME: ${JSON.stringify(MARKETPLACE_RESOURCE_NAME) || '"check envs"'},
       MARKETPLACE_KIND: ${JSON.stringify(MARKETPLACE_KIND) || '"check envs"'},
-      INSTANCES_VERSION: ${JSON.stringify(INSTANCES_VERSION) || '"check envs"'}
+      INSTANCES_API_GROUP: ${JSON.stringify(INSTANCES_API_GROUP) || '"check envs"'},
+      INSTANCES_VERSION: ${JSON.stringify(INSTANCES_VERSION) || '"check envs"'},
+      INSTANCES_RESOURCE_NAME: ${JSON.stringify(INSTANCES_RESOURCE_NAME) || '"check envs"'}
     }
     `,
   )

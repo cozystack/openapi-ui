@@ -5,7 +5,11 @@ import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 import { TableCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
-import { BASE_API_GROUP, BASE_INSTANCES_VERSION } from 'constants/customizationApiGroupAndVersion'
+import {
+  BASE_INSTANCES_API_GROUP,
+  BASE_INSTANCES_VERSION,
+  BASE_INSTANCES_RESOURCE_NAME,
+} from 'constants/customizationApiGroupAndVersion'
 
 type TTableCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
@@ -19,7 +23,7 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
 
   const customBacklink = possibleInstance
-    ? `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_API_GROUP}/${BASE_INSTANCES_VERSION}/instances`
+    ? `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`
     : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
 
   const clustererBacklink = `${baseprefix}/clusters`

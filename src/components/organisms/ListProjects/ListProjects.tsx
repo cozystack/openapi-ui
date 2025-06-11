@@ -17,7 +17,13 @@ import {
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_API_VERSION, BASE_PROJECTS_VERSION } from 'constants/customizationApiGroupAndVersion'
+import {
+  BASE_API_GROUP,
+  BASE_API_VERSION,
+  BASE_PROJECTS_API_GROUP,
+  BASE_PROJECTS_VERSION,
+  BASE_PROJECTS_RESOURCE_NAME,
+} from 'constants/customizationApiGroupAndVersion'
 import { FlexGrow } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 
@@ -30,9 +36,9 @@ export const ListProjects: FC = () => {
   const { clusterName } = useParams()
   const path = pathname
   const cluster = clusterName || ''
-  const apiGroup = BASE_API_GROUP
+  const apiGroup = BASE_PROJECTS_API_GROUP
   const apiVersion = BASE_PROJECTS_VERSION
-  const typeName = 'projects'
+  const typeName = BASE_PROJECTS_RESOURCE_NAME
   const isNamespaced = false
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<false | { name: string; endpoint: string }>(false)
