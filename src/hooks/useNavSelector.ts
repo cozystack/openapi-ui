@@ -2,9 +2,12 @@ import { useApiResources, TClusterList, TSingleResource } from '@prorobotech/ope
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
-  BASE_API_GROUP,
+  BASE_PROJECTS_API_GROUP,
   BASE_PROJECTS_VERSION,
+  BASE_PROJECTS_RESOURCE_NAME,
+  BASE_INSTANCES_API_GROUP,
   BASE_INSTANCES_VERSION,
+  BASE_INSTANCES_RESOURCE_NAME,
 } from 'constants/customizationApiGroupAndVersion'
 
 const mappedClusterToOptionInSidebar = ({ name }: TClusterList[number]): { value: string; label: string } => ({
@@ -23,18 +26,18 @@ export const useNavSelector = (clusterName?: string, projectName?: string) => {
   const { data: projects } = useApiResources({
     clusterName: clusterName || '',
     namespace: '',
-    apiGroup: BASE_API_GROUP,
+    apiGroup: BASE_PROJECTS_API_GROUP,
     apiVersion: BASE_PROJECTS_VERSION,
-    typeName: 'projects',
+    typeName: BASE_PROJECTS_RESOURCE_NAME,
     limit: null,
   })
 
   const { data: instances, isSuccess: allInstancesLoadingSuccess } = useApiResources({
     clusterName: clusterName || '',
     namespace: '',
-    apiGroup: BASE_API_GROUP,
+    apiGroup: BASE_INSTANCES_API_GROUP,
     apiVersion: BASE_INSTANCES_VERSION,
-    typeName: 'instances',
+    typeName: BASE_INSTANCES_RESOURCE_NAME,
     limit: null,
   })
 
