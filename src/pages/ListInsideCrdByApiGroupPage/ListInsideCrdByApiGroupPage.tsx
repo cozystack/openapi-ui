@@ -1,10 +1,7 @@
 import React, { FC } from 'react'
-import { Breadcrumb } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
-import { useParams, Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import type { RootState } from 'store/store'
-import { ListInsideCrdsByApiGroup } from 'components'
+import { useParams } from 'react-router-dom'
+import { ListInsideCrdsByApiGroup, ManageableBreadcrumbs } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TListInsideCrdByApiGroupPageProps = {
@@ -13,33 +10,11 @@ type TListInsideCrdByApiGroupPageProps = {
 }
 
 export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> = ({ forcedTheme, inside }) => {
-  const { clusterName, namespace, apiGroup, apiVersion, apiExtensionVersion } = useParams()
-  const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
-
-  const breadcrumbItems = [
-    {
-      title: <Link to={`${baseprefix}/inside/clusters`}>In-Cloud: inside</Link>,
-      key: 'home',
-    },
-    {
-      title: (
-        <Link to={`${baseprefix}/inside/${clusterName}${namespace ? `/${namespace}` : ''}/apis`}>API Resources</Link>
-      ),
-      key: 'list-api',
-    },
-    {
-      title: 'CRD by Group',
-      key: 'crd-by-group',
-    },
-    {
-      title: apiGroup,
-      key: 'api-group',
-    },
-  ]
+  const { namespace, apiGroup, apiVersion, apiExtensionVersion } = useParams()
 
   return (
     <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <Breadcrumb items={breadcrumbItems} separator=">" />
+      <ManageableBreadcrumbs inside />
       <Spacer $space={20} $samespace />
       {apiGroup && apiVersion && apiExtensionVersion && (
         <ListInsideCrdsByApiGroup

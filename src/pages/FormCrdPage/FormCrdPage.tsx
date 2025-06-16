@@ -32,7 +32,7 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
 
   return (
     <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <ManageableBreadcrumbs />
+      <ManageableBreadcrumbs inside={inside} />
       <Spacer $space={20} $samespace />
       <BackLink
         to={backLink || customBacklink}
