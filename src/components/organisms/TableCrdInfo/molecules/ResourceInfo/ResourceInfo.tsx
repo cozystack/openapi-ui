@@ -33,6 +33,7 @@ type TResourceInfoProps = {
     canUpdate?: boolean
     canDelete?: boolean
   }
+  inside?: boolean
 }
 
 export const ResourceInfo: FC<TResourceInfoProps> = ({
@@ -45,6 +46,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
   apiExtensionVersion,
   crdAdditionalPrinterColumns,
   permissions,
+  inside,
 }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -143,7 +145,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
       {!error && data && (
         <EnrichedTableProvider
           theme={theme}
-          baseprefix={baseprefix}
+          baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
           dataItems={data.items}
           resourceSchema={resourceSchema}
           additionalPrinterColumns={ensuredCustomOverrides || crdAdditionalPrinterColumns}
@@ -156,7 +158,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
             pathPrefix: 'forms/crds',
             typeName: crdPluralName,
             apiVersion: `${apiGroup}/${apiVersion}`,
-            backlink: `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+            backlink: `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
               params.syntheticProject ? `/${params.syntheticProject}` : ''
             }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
             deletePathPrefix: `/api/clusters/${clusterName}/k8s/apis`,
@@ -184,11 +186,11 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
           type="primary"
           onClick={() =>
             navigate(
-              `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}/${cluster}${
-                namespace ? `/${namespace}` : ''
-              }${
+              }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}${
+                inside ? '/inside' : ''
+              }/${cluster}${namespace ? `/${namespace}` : ''}${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
               }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
             )

@@ -12,6 +12,7 @@ type TTableCrdInfoProps = {
   apiVersion: string
   apiExtensionVersion: string
   crdName: string
+  inside?: boolean
 }
 
 export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
@@ -20,6 +21,7 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
   apiVersion,
   apiExtensionVersion,
   crdName,
+  inside,
 }) => {
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const swagger = useSelector((state: RootState) => state.swagger.swagger)
@@ -94,6 +96,7 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
             canUpdate: isNamespaced ? true : updatePermission.data?.status.allowed,
             canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
           }}
+          inside={inside}
         />
       )}
     </>

@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TListInsideCrdByApiGroupPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> = ({ forcedTheme }) => {
+export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, namespace, apiGroup, apiVersion, apiExtensionVersion } = useParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
@@ -37,7 +38,7 @@ export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> 
   ]
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
       <Spacer $space={20} $samespace />
       {apiGroup && apiVersion && apiExtensionVersion && (

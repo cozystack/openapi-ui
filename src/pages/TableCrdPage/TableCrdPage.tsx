@@ -14,9 +14,10 @@ import {
 
 type TTableCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
+export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, namespace, syntheticProject, apiGroup, apiVersion, apiExtensionVersion, crdName } = useParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
@@ -30,7 +31,7 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
   const clustererBacklink = `${baseprefix}/clusters`
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${crdName}`} />
       <Spacer $space={20} $samespace />
@@ -47,6 +48,7 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
                 apiVersion={apiVersion}
                 crdName={crdName}
                 apiExtensionVersion={apiExtensionVersion}
+                inside={inside}
               />
             )}
           </FlexCol>

@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TFormCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme }) => {
+export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, syntheticProject, apiGroup, apiVersion, namespace, typeName, entryName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -30,7 +31,7 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme }) => {
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <Spacer $space={20} $samespace />
       <BackLink

@@ -14,9 +14,10 @@ import {
 
 type TTableBuiltinPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) => {
+export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, namespace, syntheticProject, typeName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -31,7 +32,7 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) =>
   const clustererBacklink = `${baseprefix}/clusters`
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={typeName} />
       <Spacer $space={20} $samespace />
@@ -42,7 +43,12 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) =>
           </Col>
           <FlexCol flex="auto">
             {typeName && (
-              <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />
+              <TableBuiltinInfo
+                namespace={namespace}
+                typeName={typeName}
+                limit={searchParams.get('limit')}
+                inside={inside}
+              />
             )}
           </FlexCol>
         </RowFlexGrow>

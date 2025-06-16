@@ -85,23 +85,26 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
       <Route path={`${prefix}/`} element={<MainPage forcedTheme={forcedTheme} />} />
       <Route path={`${prefix}/clusters`} element={<ListClustersPage forcedTheme={forcedTheme} />} />
       <Route path={`${prefix}/clusters/:clusterName`} element={<ListProjectsPage forcedTheme={forcedTheme} />} />
+      <Route path={`${prefix}/inside/`} element={<MainPage forcedTheme={forcedTheme} />} />
       <Route
         path={`${prefix}/clusters/:clusterName/projects/:namespace`}
         element={<ProjectInfoPage forcedTheme={forcedTheme} />}
       />
-      <Route path={`${prefix}/inside/`} element={<MainPage forcedTheme={forcedTheme} />} />
-      <Route path={`${prefix}/inside/clusters`} element={<ListInsideClustersAndNsPage forcedTheme={forcedTheme} />} />
+      <Route
+        path={`${prefix}/inside/clusters`}
+        element={<ListInsideClustersAndNsPage forcedTheme={forcedTheme} inside />}
+      />
       <Route
         path={`${prefix}/inside/:clusterName/:namespace?/apis`}
-        element={<ListInsideApiPage forcedTheme={forcedTheme} />}
+        element={<ListInsideApiPage forcedTheme={forcedTheme} inside />}
       />
       <Route
         path={`${prefix}/inside/:clusterName/:namespace?/crds-by-api/:apiGroup/:apiVersion/:apiExtensionVersion`}
-        element={<ListInsideCrdByApiGroupPage forcedTheme={forcedTheme} />}
+        element={<ListInsideCrdByApiGroupPage forcedTheme={forcedTheme} inside />}
       />
       <Route
         path={`${prefix}/inside/:clusterName/:namespace?/apis-by-api/:apiGroup/:apiVersion/`}
-        element={<ListInsideApiByApiGroupPage forcedTheme={forcedTheme} />}
+        element={<ListInsideApiByApiGroupPage forcedTheme={forcedTheme} inside />}
       />
       <Route
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/crd-table/:apiGroup/:apiVersion/:apiExtensionVersion/:crdName`}
@@ -126,6 +129,30 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
       <Route
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/forms/crds/:apiGroup/:apiVersion/:typeName/:entryName?/`}
         element={<FormCrdPage forcedTheme={forcedTheme} />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/crd-table/:apiGroup/:apiVersion/:apiExtensionVersion/:crdName`}
+        element={<TableCrdPage forcedTheme={forcedTheme} inside />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/api-table/:apiGroup/:apiVersion/:typeName`}
+        element={<TableApiPage forcedTheme={forcedTheme} inside />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/builtin-table/:typeName`}
+        element={<TableBuiltinPage forcedTheme={forcedTheme} inside />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/forms/builtin/:apiVersion/:typeName/:entryName?/`}
+        element={<FormBuiltinPage forcedTheme={forcedTheme} inside />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/forms/apis/:apiGroup/:apiVersion/:typeName/:entryName?/`}
+        element={<FormApiPage forcedTheme={forcedTheme} inside />}
+      />
+      <Route
+        path={`${prefix}/inside/:clusterName/:namespace?/:syntheticProject?/forms/crds/:apiGroup/:apiVersion/:typeName/:entryName?/`}
+        element={<FormCrdPage forcedTheme={forcedTheme} inside />}
       />
       <Route
         path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/factory/:key/*`}

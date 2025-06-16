@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TFormApiPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
+export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, syntheticProject, namespace, apiGroup, apiVersion, typeName, entryName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -30,7 +31,7 @@ export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <Spacer $space={20} $samespace />
       <BackLink

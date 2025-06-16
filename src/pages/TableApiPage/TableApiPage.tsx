@@ -14,9 +14,10 @@ import {
 
 type TTableApiPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme }) => {
+export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, namespace, syntheticProject, apiGroup, apiVersion, typeName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -39,7 +40,7 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme }) => {
   // const nonInstanceBackLink = namespace ? customBacklink : clustererBacklink
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${typeName}`} />
       <Spacer $space={20} $samespace />
@@ -56,6 +57,7 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme }) => {
                 apiVersion={apiVersion}
                 typeName={typeName}
                 limit={searchParams.get('limit')}
+                inside={inside}
               />
             )}
           </FlexCol>

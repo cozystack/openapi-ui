@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TFormBuiltinPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
+export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, syntheticProject, namespace, typeName, entryName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -30,7 +31,7 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <Spacer $space={20} $samespace />
       <BackLink
