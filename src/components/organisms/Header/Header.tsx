@@ -1,11 +1,14 @@
 import React, { FC } from 'react'
 import { Flex, theme } from 'antd'
 import { useParams } from 'react-router-dom'
-// import { ManageableSidebar, Logo, Documentation ThemeSelector, User, Selector, } from './organisms'
-import { Logo, Documentation, ThemeSelector, User, Selector } from './organisms'
+import { Logo, Documentation, ThemeSelector, User, Selector, SelectorInside } from './organisms'
 import { Styled } from './styled'
 
-export const Header: FC = () => {
+type THeaderProps = {
+  inside?: boolean
+}
+
+export const Header: FC<THeaderProps> = ({ inside }) => {
   // const { projectName, instanceName, clusterName, entryType, namespace, syntheticProject } = useParams()
   const { projectName, instanceName, clusterName, namespace, syntheticProject } = useParams()
   const { token } = theme.useToken()
@@ -22,12 +25,6 @@ export const Header: FC = () => {
           </div>
           <div>
             <Flex gap={10}>
-              {/* <ManageableSidebar
-                clusterName={clusterName}
-                entryType={entryType}
-                instanceName={instanceName}
-                projectName={projectName}
-              /> */}
               <Documentation key="SidebarDocumentation" />
               <ThemeSelector />
               <User key="SidebarUser" />
@@ -37,11 +34,15 @@ export const Header: FC = () => {
       </Styled.PaddingContainer>
       <Styled.BackgroundContainer $bgColor={token.colorFillSecondary} $borderColor={token.colorBorder}>
         <Styled.PaddingContainer>
-          <Selector
-            clusterName={clusterName}
-            projectName={projectName || possibleProject}
-            instanceName={instanceName || possibleInstance}
-          />
+          {inside ? (
+            <SelectorInside clusterName={clusterName} namespace={namespace} />
+          ) : (
+            <Selector
+              clusterName={clusterName}
+              projectName={projectName || possibleProject}
+              instanceName={instanceName || possibleInstance}
+            />
+          )}
         </Styled.PaddingContainer>
       </Styled.BackgroundContainer>
     </>

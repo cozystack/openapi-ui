@@ -14,9 +14,10 @@ type TBaseTemplateProps = {
   withNoCluster?: boolean
   children?: ReactNode | undefined
   forcedTheme?: 'dark' | 'light'
+  inside?: boolean
 }
 
-export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, forcedTheme }) => {
+export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, forcedTheme, inside }) => {
   const navigate = useNavigate()
   const { clusterName } = useParams()
   const { useToken } = antdtheme
@@ -84,7 +85,7 @@ export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, 
         <Layout>
           <DefaultLayout.Layout $bgColor={token.colorBgLayout}>
             <DefaultLayout.ContentContainer>
-              <Header />
+              <Header inside={inside} />
               <DefaultLayout.ContentPadding $isFederation={isFederation}>
                 {clusterListQuery.error && (
                   <Alert message={`Cluster List Error: ${clusterListQuery.error?.message} `} type="error" />

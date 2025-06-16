@@ -26,9 +26,10 @@ type TTableBuiltinInfoProps = {
   namespace?: string
   typeName: string
   limit: string | null
+  inside?: boolean
 }
 
-export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeName, limit }) => {
+export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeName, limit, inside }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const params = useParams()
@@ -162,7 +163,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
       {!error && data && (
         <EnrichedTableProvider
           theme={theme}
-          baseprefix={baseprefix}
+          baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
           dataItems={data.items}
           additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
           additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
@@ -174,7 +175,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
             pathPrefix: 'forms/builtin',
             typeName,
             apiVersion: 'v1',
-            backlink: `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+            backlink: `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
               params.syntheticProject ? `/${params.syntheticProject}` : ''
             }/builtin-table/${typeName}`,
             deletePathPrefix: `/api/clusters/${cluster}/k8s/api`,
@@ -202,11 +203,11 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
           type="primary"
           onClick={() =>
             navigate(
-              `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/builtin/v1/${typeName}?backlink=${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/builtin-table/${typeName}`,
+              }/forms/builtin/v1/${typeName}?backlink=${baseprefix}${inside ? '/inside' : ''}/${cluster}${
+                namespace ? `/${namespace}` : ''
+              }${params.syntheticProject ? `/${params.syntheticProject}` : ''}/builtin-table/${typeName}`,
             )
           }
           loading={isNamespaced ? false : createPermission.isPending}

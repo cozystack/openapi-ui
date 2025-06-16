@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Col } from 'antd'
 import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, RowFlexGrow, FlexCol } from 'components'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -13,9 +14,10 @@ import {
 
 type TTableBuiltinPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) => {
+export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, namespace, syntheticProject, typeName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -30,12 +32,26 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) =>
   const clustererBacklink = `${baseprefix}/clusters`
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={typeName} />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        {typeName && <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />}
+        <RowFlexGrow>
+          <Col span="auto">
+            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+          </Col>
+          <FlexCol flex="auto">
+            {typeName && (
+              <TableBuiltinInfo
+                namespace={namespace}
+                typeName={typeName}
+                limit={searchParams.get('limit')}
+                inside={inside}
+              />
+            )}
+          </FlexCol>
+        </RowFlexGrow>
       </ContentCard>
     </BaseTemplate>
   )

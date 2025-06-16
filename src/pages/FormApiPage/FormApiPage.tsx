@@ -1,16 +1,18 @@
 import React, { FC } from 'react'
+import { Flex } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { CreateApisForm, UpdateApisForm, BackLink, ManageableBreadcrumbs } from 'components'
+import { CreateApisForm, UpdateApisForm, BackLink, ManageableBreadcrumbs, ManageableSidebar } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TFormApiPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
+export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, syntheticProject, namespace, apiGroup, apiVersion, typeName, entryName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -29,33 +31,37 @@ export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
+      <Spacer $space={20} $samespace />
       <BackLink
         to={backLink || customBacklink}
         title={`${entryName ? 'Update' : 'Create'} ${apiGroup}/${apiVersion}/${typeName}${
           entryName ? `/${entryName}` : ''
         }`}
       />
-      <Spacer $space={20} $samespace />
-      {entryName ? (
-        <UpdateApisForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          entryName={entryName}
-          backLink={backLink}
-        />
-      ) : (
-        <CreateApisForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          backLink={backLink}
-        />
-      )}
+      <Spacer $space={10} $samespace />
+      <Flex>
+        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+        {entryName ? (
+          <UpdateApisForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            entryName={entryName}
+            backLink={backLink}
+          />
+        ) : (
+          <CreateApisForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            backLink={backLink}
+          />
+        )}
+      </Flex>
     </BaseTemplate>
   )
 }

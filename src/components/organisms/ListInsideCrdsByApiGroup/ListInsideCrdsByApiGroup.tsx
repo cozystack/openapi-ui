@@ -52,7 +52,7 @@ export const ListInsideCrdsByApiGroup: FC<TListInsideCrdsByApiGroupProps> = ({
                 <Typography.Link
                   onClick={() =>
                     navigate(
-                      `${baseprefix}/${cluster}${
+                      `${baseprefix}/inside/${cluster}${
                         namespace ? `/${namespace}` : ''
                       }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${name}.${apiGroup}`,
                     )

@@ -1,16 +1,18 @@
 import React, { FC } from 'react'
+import { Flex } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { CreateBuiltinForm, UpdateBuiltinForm, BackLink, ManageableBreadcrumbs } from 'components'
+import { CreateBuiltinForm, UpdateBuiltinForm, BackLink, ManageableBreadcrumbs, ManageableSidebar } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TFormBuiltinPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
+export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside }) => {
   const { clusterName, syntheticProject, namespace, typeName, entryName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -29,18 +31,22 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <ManageableBreadcrumbs />
+      <Spacer $space={20} $samespace />
       <BackLink
         to={backLink || customBacklink}
         title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
       />
-      <Spacer $space={20} $samespace />
-      {entryName ? (
-        <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
-      ) : (
-        <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
-      )}
+      <Spacer $space={10} $samespace />
+      <Flex>
+        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+        {entryName ? (
+          <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
+        ) : (
+          <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
+        )}
+      </Flex>
     </BaseTemplate>
   )
 }

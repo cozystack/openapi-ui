@@ -15,8 +15,13 @@ const mappedClusterToOptionInSidebar = ({ name }: TClusterList[number]): { value
   label: name,
 })
 
-const mappedToOptionInSidebar = ({ metadata }: TSingleResource): { value: string; label: string } => ({
+const mappedProjectToOptionInSidebar = ({ metadata }: TSingleResource): { value: string; label: string } => ({
   value: metadata.name,
+  label: metadata.name,
+})
+
+const mappedInstanceToOptionInSidebar = ({ metadata }: TSingleResource): { value: string; label: string } => ({
+  value: `${metadata.namespace}-${metadata.name}`,
   label: metadata.name,
 })
 
@@ -42,10 +47,10 @@ export const useNavSelector = (clusterName?: string, projectName?: string) => {
   })
 
   const clustersInSidebar = clusterList ? clusterList.map(mappedClusterToOptionInSidebar) : []
-  const projectsInSidebar = clusterName && projects ? projects.items.map(mappedToOptionInSidebar) : []
+  const projectsInSidebar = clusterName && projects ? projects.items.map(mappedProjectToOptionInSidebar) : []
   const instancesInSidebar =
     clusterName && instances
-      ? instances.items.filter(item => item.metadata.namespace === projectName).map(mappedToOptionInSidebar)
+      ? instances.items.filter(item => item.metadata.namespace === projectName).map(mappedInstanceToOptionInSidebar)
       : []
 
   return { clustersInSidebar, projectsInSidebar, instancesInSidebar, allInstancesLoadingSuccess }

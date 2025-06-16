@@ -28,9 +28,17 @@ type TTableNonCrdInfoProps = {
   apiVersion: string
   typeName: string
   limit: string | null
+  inside?: boolean
 }
 
-export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({ namespace, apiGroup, apiVersion, typeName, limit }) => {
+export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
+  namespace,
+  apiGroup,
+  apiVersion,
+  typeName,
+  limit,
+  inside,
+}) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const params = useParams()
@@ -170,7 +178,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({ namespace, apiGroup
       {!error && data && (
         <EnrichedTableProvider
           theme={theme}
-          baseprefix={baseprefix}
+          baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
           dataItems={data.items}
           additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
           additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
@@ -182,7 +190,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({ namespace, apiGroup
             pathPrefix: 'forms/apis',
             typeName,
             apiVersion: `${apiGroup}/${apiVersion}`,
-            backlink: `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+            backlink: `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
               params.syntheticProject ? `/${params.syntheticProject}` : ''
             }/api-table/${apiGroup}/${apiVersion}/${typeName}`,
             deletePathPrefix: `/api/clusters/${cluster}/k8s/apis`,
@@ -210,11 +218,11 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({ namespace, apiGroup
           type="primary"
           onClick={() =>
             navigate(
-              `${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}${
+              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}/${cluster}${
-                namespace ? `/${namespace}` : ''
-              }${
+              }/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}${
+                inside ? '/inside' : ''
+              }/${cluster}${namespace ? `/${namespace}` : ''}${
                 params.syntheticProject ? `/${params.syntheticProject}` : ''
               }/api-table/${apiGroup}/${apiVersion}/${typeName}`,
             )

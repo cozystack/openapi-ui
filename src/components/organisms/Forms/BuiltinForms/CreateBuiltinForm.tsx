@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
-import { Card, Flex, Segmented } from 'antd'
-import { BlackholeForm, FlexEnd } from 'components'
+import { Segmented } from 'antd'
+import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { BlackholeForm } from 'components'
 
 type TCreateBuiltinFormProps = {
   namespace?: string
@@ -27,23 +28,16 @@ export const CreateBuiltinForm: FC<TCreateBuiltinFormProps> = ({ namespace, type
   }
 
   return (
-    <Card
-      title={
-        <Flex>
-          Create {namespace ? `${namespace}/` : ''}v1/{typeName}
-          <FlexEnd>
-            <Segmented<string>
-              options={['OpenAPI', 'Manual']}
-              value={currentMode}
-              onChange={value => {
-                setCurrentMode(value)
-              }}
-              disabled={currentModeDisabled}
-            />
-          </FlexEnd>
-        </Flex>
-      }
-    >
+    <ContentCard>
+      <Segmented<string>
+        options={['OpenAPI', 'Manual']}
+        value={currentMode}
+        onChange={value => {
+          setCurrentMode(value)
+        }}
+        disabled={currentModeDisabled}
+      />
+      <Spacer $space={10} $samespace />
       <BlackholeForm
         data={{
           type: 'builtin',
@@ -54,6 +48,6 @@ export const CreateBuiltinForm: FC<TCreateBuiltinFormProps> = ({ namespace, type
         backlink={backLink}
         modeData={modeData}
       />
-    </Card>
+    </ContentCard>
   )
 }

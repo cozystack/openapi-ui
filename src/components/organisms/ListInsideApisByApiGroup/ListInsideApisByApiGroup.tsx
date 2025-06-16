@@ -50,7 +50,7 @@ export const ListInsideApisByApiGroup: FC<TListInsideApisByApiGroupProps> = ({ n
                       <Typography.Link
                         onClick={() =>
                           navigate(
-                            `${baseprefix}/${cluster}${
+                            `${baseprefix}/inside/${cluster}${
                               namespace ? `/${namespace}` : ''
                             }/api-table/${apiGroup}/${apiVersion}/${name}`,
                           )
@@ -68,7 +68,7 @@ export const ListInsideApisByApiGroup: FC<TListInsideApisByApiGroupProps> = ({ n
                         placeholder="Limit"
                         onSearch={() =>
                           navigate(
-                            `${baseprefix}/${cluster}${
+                            `${baseprefix}/inside/${cluster}${
                               namespace ? `/${namespace}` : ''
                             }/api-table/${apiGroup}/${apiVersion}/${name}${limit ? `?limit=${limit}` : ''}`,
                           )

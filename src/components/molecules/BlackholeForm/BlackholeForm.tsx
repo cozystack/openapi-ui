@@ -93,6 +93,7 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       isCreate={isCreate}
       backlink={backlink}
       modeData={modeData}
+      designNewLayout
     />
   )
 }

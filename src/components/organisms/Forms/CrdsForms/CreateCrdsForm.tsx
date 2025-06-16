@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
-import { Card, Flex, Segmented } from 'antd'
-import { BlackholeForm, FlexEnd } from 'components'
+import { Segmented } from 'antd'
+import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { BlackholeForm } from 'components'
 
 type TCreateCrdsFormProps = {
   namespace?: string
@@ -29,24 +30,16 @@ export const CreateCrdsForm: FC<TCreateCrdsFormProps> = ({ namespace, apiGroup, 
   }
 
   return (
-    <Card
-      title={
-        <Flex>
-          Create {namespace ? `${namespace}/` : ''}
-          {apiGroup}/{apiVersion}/{typeName}
-          <FlexEnd>
-            <Segmented<string>
-              options={['OpenAPI', 'Manual']}
-              value={currentMode}
-              onChange={value => {
-                setCurrentMode(value)
-              }}
-              disabled={currentModeDisabled}
-            />
-          </FlexEnd>
-        </Flex>
-      }
-    >
+    <ContentCard>
+      <Segmented<string>
+        options={['OpenAPI', 'Manual']}
+        value={currentMode}
+        onChange={value => {
+          setCurrentMode(value)
+        }}
+        disabled={currentModeDisabled}
+      />
+      <Spacer $space={10} $samespace />
       <BlackholeForm
         data={{
           type: 'apis',
@@ -59,6 +52,6 @@ export const CreateCrdsForm: FC<TCreateCrdsFormProps> = ({ namespace, apiGroup, 
         backlink={backLink}
         modeData={modeData}
       />
-    </Card>
+    </ContentCard>
   )
 }

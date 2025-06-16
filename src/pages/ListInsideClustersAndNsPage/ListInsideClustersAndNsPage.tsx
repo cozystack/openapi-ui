@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TListInsideClustersAndNsPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const ListInsideClustersAndNsPage: FC<TListInsideClustersAndNsPageProps> = ({ forcedTheme }) => {
+export const ListInsideClustersAndNsPage: FC<TListInsideClustersAndNsPageProps> = ({ forcedTheme, inside }) => {
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   const breadcrumbItems = [
@@ -26,7 +27,7 @@ export const ListInsideClustersAndNsPage: FC<TListInsideClustersAndNsPageProps> 
   ]
 
   return (
-    <BaseTemplate withNoCluster forcedTheme={forcedTheme}>
+    <BaseTemplate withNoCluster forcedTheme={forcedTheme} inside={inside}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1}>

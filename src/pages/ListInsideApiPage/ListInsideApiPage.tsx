@@ -9,9 +9,10 @@ import { BaseTemplate } from 'templates'
 
 type TListInsideApiPageProps = {
   forcedTheme?: 'light' | 'dark'
+  inside?: boolean
 }
 
-export const ListInsideApiPage: FC<TListInsideApiPageProps> = ({ forcedTheme }) => {
+export const ListInsideApiPage: FC<TListInsideApiPageProps> = ({ forcedTheme, inside }) => {
   const { namespace } = useParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
@@ -27,7 +28,7 @@ export const ListInsideApiPage: FC<TListInsideApiPageProps> = ({ forcedTheme }) 
   ]
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme}>
+    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
       <Breadcrumb items={breadcrumbItems} separator=">" />
       <Spacer $space={20} $samespace />
       <ListInsideAllResources namespace={namespace} />

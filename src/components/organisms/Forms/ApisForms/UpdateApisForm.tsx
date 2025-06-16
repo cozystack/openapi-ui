@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
-import { Spin, Alert, Card, Flex, Segmented } from 'antd'
-import { useApiResourceSingle } from '@prorobotech/openapi-k8s-toolkit'
+import { Spin, Alert, Segmented } from 'antd'
+import { useApiResourceSingle, ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BlackholeForm, FlexEnd } from 'components'
+import { BlackholeForm } from 'components'
 
 type TUpdateApisFormProps = {
   apiGroup: string
@@ -65,24 +65,16 @@ export const UpdateApisForm: FC<TUpdateApisFormProps> = ({
   const { managedFields: __, ...metadata } = data.metadata
 
   return (
-    <Card
-      title={
-        <Flex>
-          Edit {apiGroup}/{apiVersion}
-          {data.metadata.namespace ? `/namespaces/${data.metadata.namespace}` : ''}/{typeName}/{entryName}
-          <FlexEnd>
-            <Segmented<string>
-              options={['OpenAPI', 'Manual']}
-              value={currentMode}
-              onChange={value => {
-                setCurrentMode(value)
-              }}
-              disabled={currentModeDisabled}
-            />
-          </FlexEnd>
-        </Flex>
-      }
-    >
+    <ContentCard>
+      <Segmented<string>
+        options={['OpenAPI', 'Manual']}
+        value={currentMode}
+        onChange={value => {
+          setCurrentMode(value)
+        }}
+        disabled={currentModeDisabled}
+      />
+      <Spacer $space={10} $samespace />
       <BlackholeForm
         data={{
           type: 'apis',
@@ -95,6 +87,6 @@ export const UpdateApisForm: FC<TUpdateApisFormProps> = ({
         backlink={backLink}
         modeData={modeData}
       />
-    </Card>
+    </ContentCard>
   )
 }

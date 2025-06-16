@@ -102,7 +102,9 @@ export const ListInsideAllResources: FC<TListInsideAllResourcesProps> = ({ names
             )}
             onSelect={(_, info) => {
               if (info.node.isLeaf) {
-                navigate(`${baseprefix}/${cluster}${namespace ? `/${namespace}` : ''}/builtin-table/${info.node.key}`)
+                navigate(
+                  `${baseprefix}/inside/${cluster}${namespace ? `/${namespace}` : ''}/builtin-table/${info.node.key}`,
+                )
               }
             }}
           />
