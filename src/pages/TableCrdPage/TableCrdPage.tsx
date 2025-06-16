@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Col } from 'antd'
 import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { TableCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, RowFlexGrow, FlexCol } from 'components'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -34,15 +35,22 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme }) => {
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${crdName}`} />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        {crdName && apiGroup && apiVersion && apiExtensionVersion && (
-          <TableCrdInfo
-            namespace={namespace}
-            apiGroup={apiGroup}
-            apiVersion={apiVersion}
-            crdName={crdName}
-            apiExtensionVersion={apiExtensionVersion}
-          />
-        )}
+        <RowFlexGrow>
+          <Col span="auto">
+            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+          </Col>
+          <FlexCol flex="auto">
+            {crdName && apiGroup && apiVersion && apiExtensionVersion && (
+              <TableCrdInfo
+                namespace={namespace}
+                apiGroup={apiGroup}
+                apiVersion={apiVersion}
+                crdName={crdName}
+                apiExtensionVersion={apiExtensionVersion}
+              />
+            )}
+          </FlexCol>
+        </RowFlexGrow>
       </ContentCard>
     </BaseTemplate>
   )

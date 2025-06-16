@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Flex } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { CreateBuiltinForm, UpdateBuiltinForm, BackLink, ManageableBreadcrumbs } from 'components'
+import { CreateBuiltinForm, UpdateBuiltinForm, BackLink, ManageableBreadcrumbs, ManageableSidebar } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TFormBuiltinPageProps = {
@@ -37,11 +38,14 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme }) => {
         title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
       />
       <Spacer $space={10} $samespace />
-      {entryName ? (
-        <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
-      ) : (
-        <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
-      )}
+      <Flex>
+        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+        {entryName ? (
+          <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
+        ) : (
+          <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
+        )}
+      </Flex>
     </BaseTemplate>
   )
 }

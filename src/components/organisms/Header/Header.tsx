@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import { Flex, theme } from 'antd'
 import { useParams } from 'react-router-dom'
-// import { ManageableSidebar, Logo, Documentation ThemeSelector, User, Selector, } from './organisms'
 import { Logo, Documentation, ThemeSelector, User, Selector } from './organisms'
 import { Styled } from './styled'
 
@@ -22,12 +21,6 @@ export const Header: FC = () => {
           </div>
           <div>
             <Flex gap={10}>
-              {/* <ManageableSidebar
-                clusterName={clusterName}
-                entryType={entryType}
-                instanceName={instanceName}
-                projectName={projectName}
-              /> */}
               <Documentation key="SidebarDocumentation" />
               <ThemeSelector />
               <User key="SidebarUser" />

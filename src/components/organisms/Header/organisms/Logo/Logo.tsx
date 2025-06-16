@@ -8,7 +8,11 @@ import { Styled } from './styled'
 export const Logo: FC = () => {
   const navigate = useNavigate()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
+  const clusterList = useSelector((state: RootState) => state.clusterList.clusterList)
+  const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const { token } = antdtheme.useToken()
+
+  const tenant = clusterList?.find(item => item.name === cluster)?.tenant
 
   return (
     <Styled.CursorPointer $svgHoverFill={token.colorInfoActive}>
@@ -20,7 +24,7 @@ export const Logo: FC = () => {
           />
         </svg>
         <Styled.LogoText onClick={() => navigate(`${baseprefix}`)}>In-Cloud</Styled.LogoText>
-        <Styled.TenantText $color={token.colorTextDescription}>Prod</Styled.TenantText>
+        <Styled.TenantText $color={token.colorTextDescription}>{tenant}</Styled.TenantText>
       </Flex>
     </Styled.CursorPointer>
   )

@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Col } from 'antd'
 import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, RowFlexGrow, FlexCol } from 'components'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -43,15 +44,22 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme }) => {
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${typeName}`} />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        {typeName && apiGroup && apiVersion && (
-          <TableNonCrdInfo
-            namespace={namespace}
-            apiGroup={apiGroup}
-            apiVersion={apiVersion}
-            typeName={typeName}
-            limit={searchParams.get('limit')}
-          />
-        )}
+        <RowFlexGrow>
+          <Col span="auto">
+            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+          </Col>
+          <FlexCol flex="auto">
+            {typeName && apiGroup && apiVersion && (
+              <TableNonCrdInfo
+                namespace={namespace}
+                apiGroup={apiGroup}
+                apiVersion={apiVersion}
+                typeName={typeName}
+                limit={searchParams.get('limit')}
+              />
+            )}
+          </FlexCol>
+        </RowFlexGrow>
       </ContentCard>
     </BaseTemplate>
   )

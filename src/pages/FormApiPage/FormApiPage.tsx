@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Flex } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { CreateApisForm, UpdateApisForm, BackLink, ManageableBreadcrumbs } from 'components'
+import { CreateApisForm, UpdateApisForm, BackLink, ManageableBreadcrumbs, ManageableSidebar } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TFormApiPageProps = {
@@ -39,24 +40,27 @@ export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme }) => {
         }`}
       />
       <Spacer $space={10} $samespace />
-      {entryName ? (
-        <UpdateApisForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          entryName={entryName}
-          backLink={backLink}
-        />
-      ) : (
-        <CreateApisForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          backLink={backLink}
-        />
-      )}
+      <Flex>
+        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+        {entryName ? (
+          <UpdateApisForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            entryName={entryName}
+            backLink={backLink}
+          />
+        ) : (
+          <CreateApisForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            backLink={backLink}
+          />
+        )}
+      </Flex>
     </BaseTemplate>
   )
 }

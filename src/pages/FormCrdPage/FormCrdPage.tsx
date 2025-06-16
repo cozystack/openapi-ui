@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Flex } from 'antd'
 import { Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { CreateCrdsForm, UpdateCrdsForm, BackLink, ManageableBreadcrumbs } from 'components'
+import { CreateCrdsForm, UpdateCrdsForm, BackLink, ManageableBreadcrumbs, ManageableSidebar } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TFormCrdPageProps = {
@@ -39,24 +40,27 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme }) => {
         }`}
       />
       <Spacer $space={10} $samespace />
-      {entryName ? (
-        <UpdateCrdsForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          entryName={entryName}
-          backLink={backLink}
-        />
-      ) : (
-        <CreateCrdsForm
-          namespace={namespace}
-          apiGroup={apiGroup}
-          apiVersion={apiVersion}
-          typeName={typeName}
-          backLink={backLink}
-        />
-      )}
+      <Flex>
+        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+        {entryName ? (
+          <UpdateCrdsForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            entryName={entryName}
+            backLink={backLink}
+          />
+        ) : (
+          <CreateCrdsForm
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            typeName={typeName}
+            backLink={backLink}
+          />
+        )}
+      </Flex>
     </BaseTemplate>
   )
 }

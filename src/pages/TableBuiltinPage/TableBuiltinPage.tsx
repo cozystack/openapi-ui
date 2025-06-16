@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
+import { Col } from 'antd'
 import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs } from 'components'
+import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, RowFlexGrow, FlexCol } from 'components'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -35,7 +36,16 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme }) =>
       <BackLink to={namespace ? customBacklink : clustererBacklink} title={typeName} />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        {typeName && <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />}
+        <RowFlexGrow>
+          <Col span="auto">
+            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} />
+          </Col>
+          <FlexCol flex="auto">
+            {typeName && (
+              <TableBuiltinInfo namespace={namespace} typeName={typeName} limit={searchParams.get('limit')} />
+            )}
+          </FlexCol>
+        </RowFlexGrow>
       </ContentCard>
     </BaseTemplate>
   )
