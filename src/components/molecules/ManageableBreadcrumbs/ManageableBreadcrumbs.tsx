@@ -3,7 +3,11 @@ import { useLocation, useParams } from 'react-router-dom'
 import { ManageableBreadcrumbsWithDataProvider } from '@prorobotech/openapi-k8s-toolkit'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 
-export const ManageableBreadcrumbs: FC = () => {
+type TManageableBreadCrumbsProps = {
+  inside?: boolean
+}
+
+export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ inside }) => {
   const { pathname } = useLocation()
   const params = useParams()
   const clusterName = params?.clusterName || ''
@@ -18,7 +22,9 @@ export const ManageableBreadcrumbs: FC = () => {
 
   return (
     <ManageableBreadcrumbsWithDataProvider
-      uri={`/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/breadcrumbs/`}
+      uri={`/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/${
+        inside ? 'breadcrumbsinside' : 'breadcrumbs'
+      }/`}
       refetchInterval={5000}
       isEnabled={clusterName !== undefined}
       replaceValues={{

@@ -30,7 +30,11 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
       `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`
     : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
 
-  const clustererBacklink = `${baseprefix}/clusters`
+  const customBacklinkWithInside = inside
+    ? `${baseprefix}/inside/${clusterName}${namespace ? `/${namespace}` : ''}/apis`
+    : customBacklink
+
+  const clustererBacklink = inside ? customBacklinkWithInside : `${baseprefix}/clusters`
 
   // const instancesBacklink =
   //   apiGroup === 'apps' && apiVersion === 'v1' && typeName === 'deployments'
@@ -41,8 +45,11 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
 
   return (
     <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <ManageableBreadcrumbs />
-      <BackLink to={namespace ? customBacklink : clustererBacklink} title={`${apiGroup}/${apiVersion}/${typeName}`} />
+      <ManageableBreadcrumbs inside={inside} />
+      <BackLink
+        to={namespace ? customBacklinkWithInside : clustererBacklink}
+        title={`${apiGroup}/${apiVersion}/${typeName}`}
+      />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <RowFlexGrow>

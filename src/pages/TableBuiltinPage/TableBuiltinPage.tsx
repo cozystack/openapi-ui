@@ -29,12 +29,16 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
     ? `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`
     : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
 
-  const clustererBacklink = `${baseprefix}/clusters`
+  const customBacklinkWithInside = inside
+    ? `${baseprefix}/inside/${clusterName}${namespace ? `/${namespace}` : ''}/apis`
+    : customBacklink
+
+  const clustererBacklink = inside ? customBacklinkWithInside : `${baseprefix}/clusters`
 
   return (
     <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <ManageableBreadcrumbs />
-      <BackLink to={namespace ? customBacklink : clustererBacklink} title={typeName} />
+      <ManageableBreadcrumbs inside={inside} />
+      <BackLink to={namespace ? customBacklinkWithInside : clustererBacklink} title={typeName} />
       <Spacer $space={20} $samespace />
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <RowFlexGrow>
