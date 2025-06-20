@@ -191,6 +191,10 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
             Table: {
               headerBg: colors?.colorBgLayout,
             },
+            Slider: {
+              trackBg: colors?.colorText,
+              trackHoverBg: colors?.colorText,
+            },
           },
         }}
       >

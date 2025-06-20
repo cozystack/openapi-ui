@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   BlackholeFormDataProvider,
@@ -43,6 +43,23 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const params = useParams()
+
+  const [height, setHeight] = useState(0)
+
+  useEffect(() => {
+    const height = window.innerHeight - 52 - 52 - 20 * 2 - 26 - 20 - 38 - 10 - 24 * 2 - 28 - 10 - 46 - 50 - 33
+    setHeight(height)
+
+    const handleResize = () => {
+      setHeight(height)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const urlParams = {
     clusterName: params.clusterName,
@@ -94,6 +111,7 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       backlink={backlink}
       modeData={modeData}
       designNewLayout
+      designNewLayoutHeight={height}
     />
   )
 }
