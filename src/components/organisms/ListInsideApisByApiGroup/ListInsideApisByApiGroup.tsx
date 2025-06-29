@@ -1,7 +1,12 @@
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Spin, Alert, Input, Typography } from 'antd'
-import { Spacer, useApiResourceTypesByGroup, checkIfApiInstanceNamespaceScoped } from '@prorobotech/openapi-k8s-toolkit'
+import {
+  Spacer,
+  useApiResourceTypesByGroup,
+  TApiGroupResourceTypeList,
+  filterIfApiInstanceNamespaceScoped,
+} from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { TitleWithNoTopMargin } from 'components/atoms'
@@ -15,8 +20,8 @@ type TListInsideApisByApiGroupProps = {
 
 export const ListInsideApisByApiGroup: FC<TListInsideApisByApiGroupProps> = ({ namespace, apiGroup, apiVersion }) => {
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
+  const [filteredResources, setFilteredResources] = useState<TApiGroupResourceTypeList['resources']>()
 
   const [limit, setLimit] = useState('')
   const navigate = useNavigate()
@@ -27,13 +32,11 @@ export const ListInsideApisByApiGroup: FC<TListInsideApisByApiGroupProps> = ({ n
     apiVersion,
   })
 
-  const filteredResources =
-    namespace && swagger
-      ? data?.resources.filter(
-          ({ name }) =>
-            checkIfApiInstanceNamespaceScoped({ typeName: name, apiGroup, apiVersion, swagger }).isNamespaceScoped,
-        )
-      : data?.resources
+  useEffect(() => {
+    filterIfApiInstanceNamespaceScoped({ namespace, data, apiGroup, apiVersion, clusterName: cluster }).then(data =>
+      setFilteredResources(data),
+    )
+  }, [namespace, data, apiGroup, apiVersion, cluster])
 
   return (
     <>

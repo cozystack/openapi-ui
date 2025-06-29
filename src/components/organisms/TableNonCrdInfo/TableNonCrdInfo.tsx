@@ -43,7 +43,6 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
   const { pathname } = useLocation()
   const params = useParams()
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
@@ -56,18 +55,17 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
   const [isNamespaced, setIsNamespaced] = useState<boolean>()
 
   useEffect(() => {
-    if (swagger) {
-      const { isNamespaceScoped } = checkIfApiInstanceNamespaceScoped({
-        apiGroup,
-        apiVersion,
-        typeName,
-        swagger,
-      })
+    checkIfApiInstanceNamespaceScoped({
+      apiGroup,
+      apiVersion,
+      typeName,
+      clusterName: cluster,
+    }).then(({ isNamespaceScoped }) => {
       if (isNamespaceScoped) {
         setIsNamespaced(true)
       }
-    }
-  }, [swagger, typeName, apiGroup, apiVersion])
+    })
+  }, [cluster, typeName, apiGroup, apiVersion])
 
   const createPermission = usePermissions({
     apiGroup,

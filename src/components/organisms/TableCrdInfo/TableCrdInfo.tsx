@@ -24,7 +24,6 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
   inside,
 }) => {
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
 
   const [isNamespaced, setIsNamespaced] = useState<boolean>()
 
@@ -35,18 +34,19 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
   })
 
   useEffect(() => {
-    if (swagger && data && !isPending && !error) {
-      const { isNamespaceScoped } = checkIfApiInstanceNamespaceScoped({
+    if (data && !isPending && !error) {
+      checkIfApiInstanceNamespaceScoped({
         apiGroup,
         apiVersion,
         typeName: data.spec.names.plural,
-        swagger,
+        clusterName: cluster,
+      }).then(({ isNamespaceScoped }) => {
+        if (isNamespaceScoped) {
+          setIsNamespaced(true)
+        }
       })
-      if (isNamespaceScoped) {
-        setIsNamespaced(true)
-      }
     }
-  }, [swagger, data, isPending, error, apiGroup, apiVersion])
+  }, [cluster, data, isPending, error, apiGroup, apiVersion])
 
   const createPermission = usePermissions({
     apiGroup,

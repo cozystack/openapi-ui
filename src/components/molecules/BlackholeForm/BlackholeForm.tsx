@@ -56,7 +56,6 @@ type TBlackholeFormProps = {
 export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlink, modeData }) => {
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const params = useParams()
 
   const [height, setHeight] = useState(0)
@@ -132,7 +131,6 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       urlParams={urlParams}
       urlParamsForPermissions={urlParamsForPermissions}
       formsPrefillsData={formsPrefillsData.data}
-      swagger={swagger}
       namespacesData={namespacesData.data}
       formsOverridesData={formsOverridesData.data}
       data={data}
