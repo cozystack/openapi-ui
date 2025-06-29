@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   getGroupsByCategory,
@@ -8,6 +8,8 @@ import {
   useApisResourceTypes,
   useBuiltinResourceTypes,
   Spacer,
+  TApiGroupList,
+  TBuiltinResourceTypeList,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { Spin, Alert, Flex } from 'antd'
 import { useSelector } from 'react-redux'
@@ -22,8 +24,13 @@ type TListInsideAllResourcesProps = {
 export const ListInsideAllResources: FC<TListInsideAllResourcesProps> = ({ namespace }) => {
   const navigate = useNavigate()
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
+  const [groupsByCategory, setGroupsByCategory] = useState<{
+    crdGroups?: TApiGroupList['groups']
+    nonCrdGroups?: TApiGroupList['groups']
+    builtinGroups?: TBuiltinResourceTypeList['resources']
+    apiExtensionVersion?: string
+  }>()
 
   const apiGroupList = useApisResourceTypes({
     clusterName: cluster,
@@ -33,12 +40,18 @@ export const ListInsideAllResources: FC<TListInsideAllResourcesProps> = ({ names
     clusterName: cluster,
   })
 
-  const { crdGroups, nonCrdGroups, builtinGroups, apiExtensionVersion } = getGroupsByCategory({
-    swagger,
-    namespace,
-    apiGroupListData: apiGroupList.data,
-    builtinResourceTypesData: builtInData.data,
-  })
+  useEffect(() => {
+    getGroupsByCategory({
+      clusterName: cluster,
+      namespace,
+      apiGroupListData: apiGroupList.data,
+      builtinResourceTypesData: builtInData.data,
+    }).then(data => {
+      setGroupsByCategory(data)
+    })
+  }, [cluster, namespace, apiGroupList.data, builtInData.data])
+
+  const { crdGroups, nonCrdGroups, builtinGroups, apiExtensionVersion } = groupsByCategory || {}
 
   return (
     <Styled.Grid>

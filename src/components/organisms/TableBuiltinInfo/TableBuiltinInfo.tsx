@@ -35,7 +35,6 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
   const params = useParams()
 
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
-  const swagger = useSelector((state: RootState) => state.swagger.swagger)
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
@@ -75,16 +74,15 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
   })
 
   useEffect(() => {
-    if (swagger) {
-      const { isNamespaceScoped } = checkIfBuiltInInstanceNamespaceScoped({
-        typeName,
-        swagger,
-      })
+    checkIfBuiltInInstanceNamespaceScoped({
+      typeName,
+      clusterName: cluster,
+    }).then(({ isNamespaceScoped }) => {
       if (isNamespaceScoped) {
         setIsNamespaced(isNamespaceScoped)
       }
-    }
-  }, [swagger, typeName])
+    })
+  }, [cluster, typeName])
 
   const { isPending, error, data } = useBuiltinResources({
     clusterName: cluster,

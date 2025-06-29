@@ -5,10 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ConfigProvider, theme as antdtheme } from 'antd'
-import { getSwagger } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector, useDispatch } from 'react-redux'
 import type { RootState } from 'store/store'
-import { setSwagger } from 'store/swagger/swagger/swagger'
 import { setIsFederation } from 'store/federation/federation/federation'
 import { setBaseprefix } from 'store/federation/federation/baseprefix'
 import {
@@ -42,7 +40,6 @@ const queryClient = new QueryClient()
 export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
-  const cluster = useSelector((state: RootState) => state.cluster.cluster)
 
   const basePrefix = getBasePrefix(isFederation)
 
@@ -53,20 +50,6 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
     const basePrefix = getBasePrefix(isFederation)
     dispatch(setBaseprefix(basePrefix))
   }, [dispatch, isFederation])
-
-  useEffect(() => {
-    if (!cluster) {
-      return
-    }
-    getSwagger({ clusterName: cluster })
-      .then(({ data }) => {
-        dispatch(setSwagger(data))
-      })
-
-      .catch(error => {
-        console.log('Swagger: fetch error', error)
-      })
-  }, [cluster, dispatch])
 
   const renderRoutes = (prefix = '') => (
     <Routes>

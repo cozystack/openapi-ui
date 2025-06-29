@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs').promises
 import express, { Express } from 'express'
+import http from 'http'
 const { createProxyMiddleware } = require('http-proxy-middleware')
 import dotenv from 'dotenv'
 import { getDynamicIndex } from './getDynamicIndex'
@@ -66,6 +67,16 @@ if (process.env.LOGGER === 'true') {
   )
 }
 
+const bffFormProxy =
+  process.env.LOCAL === 'true'
+    ? createProxyMiddleware({
+        target: BFF_URL,
+        changeOrigin: true,
+        secure: false,
+        ws: false,
+      })
+    : undefined
+
 // Only add proxies if LOCAL=true
 if (process.env.LOCAL === 'true') {
   console.log('✅ Proxies are enabled.')
@@ -114,6 +125,9 @@ if (process.env.LOCAL === 'true') {
       // },
     }),
   )
+
+  // Proxy: bffFormProxy
+  app.use('/openapi-bff-ws/forms', bffFormProxy)
 } else {
   console.log('🚫 Proxies are disabled.')
 }
@@ -177,6 +191,16 @@ app.get('*', (req, res, next) => {
   tryFiles(req, res, next)
 })
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`)
+// app.listen(port, () => {
+//   console.log(`Server is running on http://localhost:${port}`)
+// })
+const server = http.createServer(app)
+server.listen(port, () => {
+  console.log(`[server]: Server is running at port: ${port}`)
+})
+
+server.on('upgrade', (req, socket, head) => {
+  if (process.env.LOCAL === 'true' && req.url?.indexOf('/openapi-bff-ws/forms') === 0) {
+    bffFormProxy.upgrade(req, socket, head)
+  }
 })
