@@ -32,6 +32,7 @@ const INSTANCES_API_GROUP =
 const INSTANCES_VERSION = process.env.LOCAL === 'true' ? options?.INSTANCES_VERSION : process.env.INSTANCES_VERSION
 const INSTANCES_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.INSTANCES_RESOURCE_NAME : process.env.INSTANCES_RESOURCE_NAME
+const BFF_URL = process.env.LOCAL === 'true' ? options?.BFF_URL : process.env.BFF_URL
 
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
@@ -92,6 +93,21 @@ if (process.env.LOCAL === 'true') {
       changeOrigin: true,
       secure: false,
       pathRewrite: (path, req) => path.replace(/^\/clusterlist/, ''),
+      // logLevel: 'debug',
+      // onProxyReq: (proxyReq, req, res) => {
+      //   console.debug(`[PROXY] ${req.method} ${req.originalUrl} -> ${proxyReq.getHeader('host')}${proxyReq.path}`)
+      // },
+    }),
+  )
+
+  // Proxy: /openapi-bff
+  app.use(
+    '/openapi-bff',
+    createProxyMiddleware({
+      target: BFF_URL,
+      changeOrigin: true,
+      secure: false,
+      // pathRewrite: (path, req) => path.replace(/^\/bff/, ''),
       // logLevel: 'debug',
       // onProxyReq: (proxyReq, req, res) => {
       //   console.debug(`[PROXY] ${req.method} ${req.originalUrl} -> ${proxyReq.getHeader('host')}${proxyReq.path}`)

@@ -24,9 +24,15 @@ type TManageableSidebarProps = {
   instanceName?: string
   projectName?: string
   idToCompare: string
+  currentTags?: string[]
 }
 
-export const ManageableSidebar: FC<TManageableSidebarProps> = ({ projectName, instanceName, idToCompare }) => {
+export const ManageableSidebar: FC<TManageableSidebarProps> = ({
+  projectName,
+  instanceName,
+  idToCompare,
+  currentTags,
+}) => {
   const { pathname } = useLocation()
   const params = useParams()
   const clusterName = params?.clusterName || ''
@@ -86,6 +92,7 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({ projectName, in
         }}
         pathname={pathname}
         idToCompare={idToCompare}
+        currentTags={currentTags}
         noMarginTop
       />
     </Styled.Container>

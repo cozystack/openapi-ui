@@ -50,7 +50,12 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <RowFlexGrow wrap={false}>
           <Col span="auto">
-            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} idToCompare={sidebarId} />
+            <ManageableSidebar
+              instanceName={possibleInstance}
+              projectName={possibleProject}
+              idToCompare={sidebarId}
+              currentTags={[`${apiGroup}/${apiVersion}/${crdName}`]}
+            />
           </Col>
           <FlexCol flex="auto">
             {crdName && apiGroup && apiVersion && apiExtensionVersion && (

@@ -4,8 +4,6 @@ import React, { FC, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { dereference } from '@readme/openapi-parser'
-import { OpenAPIV2 } from 'openapi-types'
 import { ConfigProvider, theme as antdtheme } from 'antd'
 import { getSwagger } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector, useDispatch } from 'react-redux'
@@ -62,19 +60,9 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
     }
     getSwagger({ clusterName: cluster })
       .then(({ data }) => {
-        dereference(data, {
-          dereference: {
-            circular: 'ignore',
-          },
-        })
-          .then(data => {
-            // deference is a cruel thing
-            dispatch(setSwagger(data as OpenAPIV2.Document))
-          })
-          .catch(error => {
-            console.log('Swagger: deref error', error)
-          })
+        dispatch(setSwagger(data))
       })
+
       .catch(error => {
         console.log('Swagger: fetch error', error)
       })

@@ -78,6 +78,12 @@ export default defineConfig({
         secure: false,
         rewrite: path => path.replace(/^\/clusterlist/, ''),
       },
+      '/openapi-bff': {
+        target: options?.BFF_URL,
+        changeOrigin: true,
+        secure: false,
+        // rewrite: path => path.replace(/^\/bff/, ''),
+      },
     },
   },
 })

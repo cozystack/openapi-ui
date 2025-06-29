@@ -54,7 +54,12 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <RowFlexGrow wrap={false}>
           <Col span="auto">
-            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} idToCompare={sidebarId} />
+            <ManageableSidebar
+              instanceName={possibleInstance}
+              projectName={possibleProject}
+              idToCompare={sidebarId}
+              currentTags={[typeName]}
+            />
           </Col>
           <FlexCol flex="auto">
             {entryName ? (

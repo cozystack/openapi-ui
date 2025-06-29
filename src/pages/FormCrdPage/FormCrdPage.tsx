@@ -56,7 +56,12 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <RowFlexGrow wrap={false}>
           <Col span="auto">
-            <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} idToCompare={sidebarId} />
+            <ManageableSidebar
+              instanceName={possibleInstance}
+              projectName={possibleProject}
+              idToCompare={sidebarId}
+              currentTags={[`${apiGroup}/${apiVersion}/${typeName}`]}
+            />
           </Col>
           <FlexCol flex="auto">
             {entryName ? (
