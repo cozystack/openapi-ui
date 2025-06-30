@@ -10,6 +10,18 @@ const PaddingContainer = styled.div<TPaddingContainerProps>`
   height: ${({ $height }) => $height}px;
 `
 
+type TBackgroundContainerProps = {
+  $bgColor: string
+  $borderRadius: number
+}
+
+const BackgroundContainer = styled.div<TBackgroundContainerProps>`
+  background-color: ${({ $bgColor }) => $bgColor};
+  border-radius: ${({ $borderRadius }) => $borderRadius}px;
+  width: 100%;
+`
+
 export const Styled = {
   PaddingContainer,
+  BackgroundContainer,
 }

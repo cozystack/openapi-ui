@@ -7,7 +7,6 @@ import {
   useCrdResources,
   TJSON,
   TFormsPrefillsData,
-  TFormsOverridesData,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
@@ -15,14 +14,8 @@ import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGrou
 import {
   HEAD_FIRST_ROW,
   HEAD_SECOND_ROW,
-  HEAD_BORDER_BOTTOM,
   FOOTER_HEIGHT,
-  MAIN_CONTENT_VERTICAL_PADDING,
-  BREADCRUMBS_HEIGHT,
-  AFTER_BREADCRUMBS_SPACE,
-  BACKLINK_HEIGHT,
-  BACKLINK_MARGIN_TOP,
-  AFTER_BACKLINK_SPACE,
+  NAV_HEIGHT,
   CONTENT_CARD_PADDING,
   BLACKHOLE_FORM_VIEW_SWITCH_HEIGHT,
   BLACKHOLE_FORM_SUBMIT_ROW_HEIGHT,
@@ -65,17 +58,12 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       window.innerHeight -
       HEAD_FIRST_ROW -
       HEAD_SECOND_ROW -
-      HEAD_BORDER_BOTTOM -
-      MAIN_CONTENT_VERTICAL_PADDING * 2 -
-      BREADCRUMBS_HEIGHT -
-      AFTER_BREADCRUMBS_SPACE -
-      BACKLINK_HEIGHT -
-      BACKLINK_MARGIN_TOP -
-      AFTER_BACKLINK_SPACE -
+      NAV_HEIGHT -
       CONTENT_CARD_PADDING * 2 -
       FOOTER_HEIGHT -
       BLACKHOLE_FORM_VIEW_SWITCH_HEIGHT -
-      BLACKHOLE_FORM_SUBMIT_ROW_HEIGHT
+      BLACKHOLE_FORM_SUBMIT_ROW_HEIGHT -
+      1
     setHeight(height)
 
     const handleResize = () => {
@@ -116,14 +104,6 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
     refetchInterval: false,
   })
 
-  const formsOverridesData = useCrdResources<TFormsOverridesData['items']>({
-    clusterName: cluster,
-    crdName: 'customformsoverrides',
-    apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_API_VERSION,
-    refetchInterval: false,
-  })
-
   return (
     <BlackholeFormDataProvider
       theme={theme}
@@ -132,7 +112,6 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       urlParamsForPermissions={urlParamsForPermissions}
       formsPrefillsData={formsPrefillsData.data}
       namespacesData={namespacesData.data}
-      formsOverridesData={formsOverridesData.data}
       data={data}
       isCreate={isCreate}
       backlink={backlink}

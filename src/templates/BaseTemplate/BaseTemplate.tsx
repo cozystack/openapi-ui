@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useCallback } from 'react'
-import { Layout, theme as antdtheme, Alert } from 'antd'
+import { Layout, theme as antdtheme, Alert, Col } from 'antd'
 import { useClusterList } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -7,7 +7,16 @@ import type { RootState } from 'store/store'
 import { setTheme } from 'store/theme/theme/theme'
 import { setCluster } from 'store/cluster/cluster/cluster'
 import { setClusterList } from 'store/clusterList/clusterList/clusterList'
-import { DefaultLayout, DefaultColorProvider, Header, Footer } from 'components'
+import {
+  DefaultLayout,
+  DefaultColorProvider,
+  Header,
+  HeaderSecond,
+  Footer,
+  Sidebar,
+  RowFlexGrow,
+  FlexCol,
+} from 'components'
 import { Styled } from './styled'
 
 type TBaseTemplateProps = {
@@ -15,9 +24,10 @@ type TBaseTemplateProps = {
   children?: ReactNode | undefined
   forcedTheme?: 'dark' | 'light'
   inside?: boolean
+  sidebar?: ReactNode
 }
 
-export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, forcedTheme, inside }) => {
+export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, forcedTheme, inside, sidebar }) => {
   const navigate = useNavigate()
   const { clusterName } = useParams()
   const { useToken } = antdtheme
@@ -85,14 +95,22 @@ export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, 
         <Layout>
           <DefaultLayout.Layout $bgColor={token.colorBgLayout}>
             <DefaultLayout.ContentContainer>
-              <Header inside={inside} />
-              <DefaultLayout.ContentPadding $isFederation={isFederation}>
-                {clusterListQuery.error && (
-                  <Alert message={`Cluster List Error: ${clusterListQuery.error?.message} `} type="error" />
-                )}
-                {children}
-              </DefaultLayout.ContentPadding>
-              <Footer />
+              <Header />
+              <RowFlexGrow wrap={false}>
+                <Col span="250px">
+                  <Sidebar inside={inside} sidebar={sidebar} />
+                </Col>
+                <FlexCol flex="auto">
+                  <DefaultLayout.ContentPadding $isFederation={isFederation}>
+                    <HeaderSecond inside={inside} />
+                    {clusterListQuery.error && (
+                      <Alert message={`Cluster List Error: ${clusterListQuery.error?.message} `} type="error" />
+                    )}
+                    {children}
+                  </DefaultLayout.ContentPadding>
+                  <Footer />
+                </FlexCol>
+              </RowFlexGrow>
             </DefaultLayout.ContentContainer>
           </DefaultLayout.Layout>
         </Layout>

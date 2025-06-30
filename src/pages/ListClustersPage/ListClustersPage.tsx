@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { Breadcrumb } from 'antd'
-import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { ListClusters } from 'components'
+import { ListClusters, NavigationContainer } from 'components'
 import { BaseTemplate } from 'templates'
 
 type TListClustersPageProps = {
@@ -27,9 +27,10 @@ export const ListClustersPage: FC<TListClustersPageProps> = ({ forcedTheme }) =>
 
   return (
     <BaseTemplate withNoCluster forcedTheme={forcedTheme}>
-      <Breadcrumb items={breadcrumbItems} separator=">" />
-      <Spacer $space={20} $samespace />
-      <ContentCard flexGrow={1}>
+      <NavigationContainer>
+        <Breadcrumb items={breadcrumbItems} separator=">" />
+      </NavigationContainer>
+      <ContentCard flexGrow={1} displayFlex flexFlow="column">
         <ListClusters />
       </ContentCard>
     </BaseTemplate>

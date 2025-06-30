@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
-import { Col } from 'antd'
-import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, RowFlexGrow, FlexCol } from 'components'
+import { TableCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { BaseTemplate } from 'templates'
 import {
@@ -12,7 +11,6 @@ import {
   BASE_INSTANCES_VERSION,
   BASE_INSTANCES_RESOURCE_NAME,
 } from 'constants/customizationApiGroupAndVersion'
-import { AFTER_BACKLINK_SPACE, AFTER_BREADCRUMBS_SPACE } from 'constants/blocksSizes'
 
 type TTableCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
@@ -39,37 +37,36 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}crd-table`
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <ManageableBreadcrumbs inside={inside} />
-      <Spacer $space={AFTER_BREADCRUMBS_SPACE} $samespace />
-      <BackLink
-        to={namespace ? customBacklinkWithInside : clustererBacklink}
-        title={`${apiGroup}/${apiVersion}/${crdName}`}
-      />
-      <Spacer $space={AFTER_BACKLINK_SPACE} $samespace />
+    <BaseTemplate
+      forcedTheme={forcedTheme}
+      inside={inside}
+      sidebar={
+        <ManageableSidebar
+          instanceName={possibleInstance}
+          projectName={possibleProject}
+          idToCompare={sidebarId}
+          currentTags={[`${apiGroup}/${apiVersion}/${crdName}`]}
+        />
+      }
+    >
+      <NavigationContainer>
+        <ManageableBreadcrumbs inside={inside} />
+        <BackLink
+          to={namespace ? customBacklinkWithInside : clustererBacklink}
+          title={`${apiGroup}/${apiVersion}/${crdName}`}
+        />
+      </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        <RowFlexGrow wrap={false}>
-          <Col span="auto">
-            <ManageableSidebar
-              instanceName={possibleInstance}
-              projectName={possibleProject}
-              idToCompare={sidebarId}
-              currentTags={[`${apiGroup}/${apiVersion}/${crdName}`]}
-            />
-          </Col>
-          <FlexCol flex="auto">
-            {crdName && apiGroup && apiVersion && apiExtensionVersion && (
-              <TableCrdInfo
-                namespace={namespace}
-                apiGroup={apiGroup}
-                apiVersion={apiVersion}
-                crdName={crdName}
-                apiExtensionVersion={apiExtensionVersion}
-                inside={inside}
-              />
-            )}
-          </FlexCol>
-        </RowFlexGrow>
+        {crdName && apiGroup && apiVersion && apiExtensionVersion && (
+          <TableCrdInfo
+            namespace={namespace}
+            apiGroup={apiGroup}
+            apiVersion={apiVersion}
+            crdName={crdName}
+            apiExtensionVersion={apiExtensionVersion}
+            inside={inside}
+          />
+        )}
       </ContentCard>
     </BaseTemplate>
   )
