@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { To } from 'react-router-dom'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { TitleWithNoTopMargin } from '../TitleWithNoTopMargin'
+import { TitleWithNoMargin } from '../TitleWithNoMargin'
 import { Styled } from './styled'
 
 type TBackLinkProps = {
@@ -14,11 +14,11 @@ export const BackLink: FC<TBackLinkProps> = ({ to, title }) => {
   return (
     <Styled.Container>
       <Styled.CustomLink to={to}>
-        <TitleWithNoTopMargin level={4}>
+        <TitleWithNoMargin level={5}>
           <ArrowLeftOutlined />
-        </TitleWithNoTopMargin>
+        </TitleWithNoMargin>
       </Styled.CustomLink>
-      <TitleWithNoTopMargin level={4}>{title}</TitleWithNoTopMargin>
+      <TitleWithNoMargin level={5}>{title}</TitleWithNoMargin>
     </Styled.Container>
   )
 }

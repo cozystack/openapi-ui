@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { useNavSelectorInside } from 'hooks/useNavSelectorInside'
 import { useMountEffect } from 'hooks/useMountEffect'
-import { EntrySelect } from './molecules'
+import { EntrySelect } from 'components/atoms'
 
 type TSelectorInsideProps = {
   clusterName?: string
@@ -19,13 +19,13 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespac
   const [selectedClusterName, setSelectedClusterName] = useState(clusterName)
   const [selectedNamespace, setSelectedNamespace] = useState(namespace)
 
-  const { namespacesInSidebar, clustersInSidebar } = useNavSelectorInside(selectedClusterName)
+  // const { namespacesInSidebar, clustersInSidebar } = useNavSelectorInside(selectedClusterName)
+  const { namespacesInSidebar } = useNavSelectorInside(selectedClusterName)
 
-  const handleClusterChange = (value: string) => {
-    setSelectedClusterName(value)
-    navigate(`${baseprefix}/inside/${value}/apis`)
-    setSelectedNamespace(undefined)
-  }
+  // const handleClusterChange = (value: string) => {
+  //   setSelectedClusterName(value)
+  //   navigate(`${baseprefix}/inside/${value}/apis`)
+  // }
 
   const handleNamepsaceChange = (value: string) => {
     setSelectedNamespace(value)
@@ -38,13 +38,13 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespac
   }, [namespace, clusterName])
 
   return (
-    <Flex gap={18} justify="center">
-      <EntrySelect
+    <Flex gap={18} justify="start">
+      {/* <EntrySelect
         placeholder="Cluster"
         options={clustersInSidebar}
         value={selectedClusterName}
         onChange={handleClusterChange}
-      />
+      /> */}
       <EntrySelect
         placeholder="Namespace"
         options={namespacesInSidebar}

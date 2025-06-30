@@ -10,9 +10,10 @@ type TEntrySelectProps = {
   value?: string
   onChange: (val: string) => void
   disabled?: boolean
+  fullwidth?: boolean
 }
 
-export const EntrySelect: FC<TEntrySelectProps> = ({ placeholder, value, disabled, options, onChange }) => {
+export const EntrySelect: FC<TEntrySelectProps> = ({ placeholder, value, disabled, options, onChange, fullwidth }) => {
   return (
     <Select
       placeholder={placeholder}
@@ -20,7 +21,7 @@ export const EntrySelect: FC<TEntrySelectProps> = ({ placeholder, value, disable
       options={options.map(({ value, label }) => ({ label, value }))}
       onChange={(selectedValue: string) => onChange(selectedValue)}
       disabled={disabled}
-      style={{ width: '150px' }}
+      style={{ width: fullwidth ? '100%' : '200px' }}
     />
   )
 }

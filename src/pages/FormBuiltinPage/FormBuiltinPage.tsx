@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
-import { Col } from 'antd'
-import { ContentCard, Spacer } from '@prorobotech/openapi-k8s-toolkit'
+import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
@@ -10,11 +9,9 @@ import {
   BackLink,
   ManageableBreadcrumbs,
   ManageableSidebar,
-  RowFlexGrow,
-  FlexCol,
+  NavigationContainer,
 } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
-import { AFTER_BACKLINK_SPACE, AFTER_BREADCRUMBS_SPACE } from 'constants/blocksSizes'
 import { BaseTemplate } from 'templates'
 
 type TFormBuiltinPageProps = {
@@ -43,32 +40,31 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}builtin-form`
 
   return (
-    <BaseTemplate forcedTheme={forcedTheme} inside={inside}>
-      <ManageableBreadcrumbs inside={inside} />
-      <Spacer $space={AFTER_BREADCRUMBS_SPACE} $samespace />
-      <BackLink
-        to={backLink || customBacklink}
-        title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
-      />
-      <Spacer $space={AFTER_BACKLINK_SPACE} $samespace />
+    <BaseTemplate
+      forcedTheme={forcedTheme}
+      inside={inside}
+      sidebar={
+        <ManageableSidebar
+          instanceName={possibleInstance}
+          projectName={possibleProject}
+          idToCompare={sidebarId}
+          currentTags={[typeName]}
+        />
+      }
+    >
+      <NavigationContainer>
+        <ManageableBreadcrumbs inside={inside} />
+        <BackLink
+          to={backLink || customBacklink}
+          title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}
+        />
+      </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
-        <RowFlexGrow wrap={false}>
-          <Col span="auto">
-            <ManageableSidebar
-              instanceName={possibleInstance}
-              projectName={possibleProject}
-              idToCompare={sidebarId}
-              currentTags={[typeName]}
-            />
-          </Col>
-          <FlexCol flex="auto">
-            {entryName ? (
-              <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
-            ) : (
-              <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
-            )}
-          </FlexCol>
-        </RowFlexGrow>
+        {entryName ? (
+          <UpdateBuiltinForm namespace={namespace} typeName={typeName} entryName={entryName} backLink={backLink} />
+        ) : (
+          <CreateBuiltinForm namespace={namespace} typeName={typeName} backLink={backLink} />
+        )}
       </ContentCard>
     </BaseTemplate>
   )

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 type TContainerProps = {
   $isDark?: boolean
   $colorInfoBg?: string
+  $colorBgContainer?: string
   $colorFillQuaternary?: string
   $colorPrimaryHover?: string
   $colorBorder?: string
@@ -11,11 +12,12 @@ type TContainerProps = {
 
 const Container = styled.div<TContainerProps>`
   width: 250px;
-  padding-right: 20px;
+  padding-right: 1px;
   overflow-y: auto;
   scrollbar-width: thin;
   direction: rtl;
   max-height: ${({ $maxHeight }) => $maxHeight || 'initial'};
+  user-select: none;
 
   & ul {
     direction: ltr;
@@ -54,20 +56,25 @@ const Container = styled.div<TContainerProps>`
 
   /* selected header bgcolor */
 
-  /* && .ant-menu-submenu-selected div {
-    background-color: ${({ $colorInfoBg }) => $colorInfoBg || 'initial'};
+  && .ant-menu-submenu-selected div {
+    background-color: ${({ $colorBgContainer }) => $colorBgContainer || 'initial'};
   }
 
   && .ant-menu-submenu-selected div:hover {
-    background-color: ${({ $colorInfoBg }) => $colorInfoBg || 'initial'};
-  } */
+    background-color: ${({ $colorBgContainer }) => $colorBgContainer || 'initial'};
+  }
 
   /* selected shift to right */
 
+  && .ant-menu-sub .ant-menu-item {
+    transition: padding 0s;
+  }
+
   && .ant-menu-sub .ant-menu-item.ant-menu-item-selected {
-    width: 205px;
+    width: 225px;
     margin-left: 25px !important;
-    padding-left: 20px !important;
+    padding-left: 23px !important;
+    transition: padding 0s;
   }
 
   /* line before */

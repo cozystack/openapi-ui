@@ -4,19 +4,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { ManageableSidebarWithDataProvider } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import {
-  HEAD_FIRST_ROW,
-  HEAD_SECOND_ROW,
-  HEAD_BORDER_BOTTOM,
-  FOOTER_HEIGHT,
-  MAIN_CONTENT_VERTICAL_PADDING,
-  BREADCRUMBS_HEIGHT,
-  AFTER_BREADCRUMBS_SPACE,
-  BACKLINK_HEIGHT,
-  BACKLINK_MARGIN_TOP,
-  AFTER_BACKLINK_SPACE,
-  CONTENT_CARD_PADDING,
-} from 'constants/blocksSizes'
+import { HEAD_FIRST_ROW, SIDEBAR_CLUSTER_HEIGHT } from 'constants/blocksSizes'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { Styled } from './styled'
 
@@ -44,19 +32,7 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const height =
-      window.innerHeight -
-      HEAD_FIRST_ROW -
-      HEAD_SECOND_ROW -
-      HEAD_BORDER_BOTTOM -
-      MAIN_CONTENT_VERTICAL_PADDING * 2 -
-      BREADCRUMBS_HEIGHT -
-      AFTER_BREADCRUMBS_SPACE -
-      BACKLINK_HEIGHT -
-      BACKLINK_MARGIN_TOP -
-      AFTER_BACKLINK_SPACE -
-      CONTENT_CARD_PADDING * 2 -
-      FOOTER_HEIGHT
+    const height = window.innerHeight - HEAD_FIRST_ROW - SIDEBAR_CLUSTER_HEIGHT - 2
     setHeight(height)
 
     const handleResize = () => {
@@ -74,6 +50,7 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
     <Styled.Container
       $isDark={theme === 'dark'}
       $colorInfoBg={token.colorInfoBg}
+      $colorBgContainer={token.colorBgContainer}
       $colorFillQuaternary={token.colorFillQuaternary}
       $colorPrimaryHover={token.colorPrimaryHover}
       $colorBorder={token.colorBorder}

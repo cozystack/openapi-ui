@@ -167,7 +167,7 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
               trackHoverBg: colors?.colorText,
             },
             Menu: {
-              itemBg: colors?.colorBgContainer,
+              itemBg: colors?.colorBgLayout,
               itemHoverBg: colors?.colorBgContainer,
               itemActiveBg: colors?.colorInfoBg,
               itemSelectedBg: colors?.colorInfoBg,
