@@ -7,7 +7,6 @@ import {
   useCrdResources,
   TJSON,
   TFormsPrefillsData,
-  TFormsOverridesData,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
@@ -105,14 +104,6 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
     refetchInterval: false,
   })
 
-  const formsOverridesData = useCrdResources<TFormsOverridesData['items']>({
-    clusterName: cluster,
-    crdName: 'customformsoverrides',
-    apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_API_VERSION,
-    refetchInterval: false,
-  })
-
   return (
     <BlackholeFormDataProvider
       theme={theme}
@@ -121,7 +112,6 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
       urlParamsForPermissions={urlParamsForPermissions}
       formsPrefillsData={formsPrefillsData.data}
       namespacesData={namespacesData.data}
-      formsOverridesData={formsOverridesData.data}
       data={data}
       isCreate={isCreate}
       backlink={backlink}
