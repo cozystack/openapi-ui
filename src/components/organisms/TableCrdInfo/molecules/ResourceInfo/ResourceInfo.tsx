@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, ClearOutlined, MinusOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
@@ -16,8 +16,16 @@ import {
   parseCustomOverrides,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
-import { FlexGrow } from 'components'
+import { FlexGrow, OverflowMaxHeightContainer, MarginTopContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
+import {
+  HEAD_FIRST_ROW,
+  HEAD_SECOND_ROW,
+  FOOTER_HEIGHT,
+  NAV_HEIGHT,
+  CONTENT_CARD_PADDING,
+  TABLE_ADD_BUTTON_HEIGHT,
+} from 'constants/blocksSizes'
 
 type TResourceInfoProps = {
   clusterName: string
@@ -61,6 +69,30 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
   )
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedRowsData, setSelectedRowsData] = useState<{ name: string; endpoint: string }[]>([])
+
+  const [height, setHeight] = useState(0)
+
+  useEffect(() => {
+    const height =
+      window.innerHeight -
+      HEAD_FIRST_ROW -
+      HEAD_SECOND_ROW -
+      NAV_HEIGHT -
+      CONTENT_CARD_PADDING * 2 -
+      FOOTER_HEIGHT -
+      TABLE_ADD_BUTTON_HEIGHT
+    setHeight(height)
+
+    const handleResize = () => {
+      setHeight(height)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const { isPending, error, data } = useCrdResources({
     clusterName,
@@ -142,44 +174,60 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
     <>
       {isPending && <Spin />}
       {error && <Alert message={`An error has occurred: ${error?.message} `} type="error" />}
-      {!error && data && (
-        <EnrichedTableProvider
-          theme={theme}
-          baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
-          dataItems={data.items}
-          resourceSchema={resourceSchema}
-          additionalPrinterColumns={ensuredCustomOverrides || crdAdditionalPrinterColumns}
-          additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
-          additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
-          additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
-          dataForControls={{
-            cluster,
-            syntheticProject: params.syntheticProject,
-            pathPrefix: 'forms/crds',
-            typeName: crdPluralName,
-            apiVersion: `${apiGroup}/${apiVersion}`,
-            backlink: `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
-              params.syntheticProject ? `/${params.syntheticProject}` : ''
-            }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
-            deletePathPrefix: `/api/clusters/${clusterName}/k8s/apis`,
-            onDeleteHandle,
-            permissions: {
-              canUpdate: permissions.canUpdate,
-              canDelete: permissions.canDelete,
-            },
-          }}
-          pathToNavigate={tableMappingSpecific?.pathToNavigate}
-          recordKeysForNavigation={tableMappingSpecific?.keysToParse}
-          selectData={{
-            selectedRowKeys,
-            onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
-              setSelectedRowKeys(selectedRowKeys)
-              setSelectedRowsData(selectedRowsData)
-            },
-          }}
-          tableProps={TABLE_PROPS}
-        />
-      )}
+      <OverflowMaxHeightContainer $maxHeight={height}>
+        {!error && data && (
+          <EnrichedTableProvider
+            theme={theme}
+            baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
+            dataItems={data.items}
+            resourceSchema={resourceSchema}
+            additionalPrinterColumns={ensuredCustomOverrides || crdAdditionalPrinterColumns}
+            additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
+            additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
+            additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
+            dataForControls={{
+              cluster,
+              syntheticProject: params.syntheticProject,
+              pathPrefix: 'forms/crds',
+              typeName: crdPluralName,
+              apiVersion: `${apiGroup}/${apiVersion}`,
+              backlink: `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
+                params.syntheticProject ? `/${params.syntheticProject}` : ''
+              }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
+              deletePathPrefix: `/api/clusters/${clusterName}/k8s/apis`,
+              onDeleteHandle,
+              permissions: {
+                canUpdate: permissions.canUpdate,
+                canDelete: permissions.canDelete,
+              },
+            }}
+            pathToNavigate={tableMappingSpecific?.pathToNavigate}
+            recordKeysForNavigation={tableMappingSpecific?.keysToParse}
+            selectData={{
+              selectedRowKeys,
+              onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
+                setSelectedRowKeys(selectedRowKeys)
+                setSelectedRowsData(selectedRowsData)
+              },
+            }}
+            tableProps={TABLE_PROPS}
+          />
+        )}
+        {selectedRowKeys.length > 0 && (
+          <MarginTopContainer $top={-40}>
+            <Flex gap={16}>
+              <Button type="primary" onClick={clearSelected}>
+                <ClearOutlined />
+                Clear
+              </Button>
+              <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+                <MinusOutlined />
+                Delete
+              </Button>
+            </Flex>
+          </MarginTopContainer>
+        )}
+      </OverflowMaxHeightContainer>
       <FlexGrow />
       <Flex justify="space-between">
         <Button
@@ -201,14 +249,6 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
           <PlusOutlined />
           Add
         </Button>
-        {selectedRowKeys.length > 0 && (
-          <Flex gap={8}>
-            <Button onClick={clearSelected}>Clear</Button>
-            <Button onClick={() => setIsDeleteModalManyOpen(selectedRowsData)} danger>
-              Delete
-            </Button>
-          </Flex>
-        )}
       </Flex>
       {isDeleteModalOpen && (
         <DeleteModal

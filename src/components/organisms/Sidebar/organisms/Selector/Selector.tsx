@@ -19,9 +19,13 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName }) => {
 
   const { clustersInSidebar } = useNavSelector(selectedClusterName, projectName)
 
-  const handleClusterChange = (value: string) => {
-    setSelectedClusterName(value)
-    navigate(`${baseprefix}/clusters/${value}`)
+  const handleClusterChange = (value?: string) => {
+    if (value) {
+      setSelectedClusterName(value)
+      navigate(`${baseprefix}/clusters/${value}`)
+    } else {
+      navigate(`${baseprefix}/clusters/`)
+    }
   }
 
   useMountEffect(() => {

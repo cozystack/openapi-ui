@@ -18,9 +18,13 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName }) => {
 
   const { clustersInSidebar } = useNavSelectorInside(selectedClusterName)
 
-  const handleClusterChange = (value: string) => {
-    setSelectedClusterName(value)
-    navigate(`${baseprefix}/inside/${value}/apis`)
+  const handleClusterChange = (value?: string) => {
+    if (value) {
+      setSelectedClusterName(value)
+      navigate(`${baseprefix}/inside/${value}/apis`)
+    } else {
+      navigate(`${baseprefix}/inside/`)
+    }
   }
 
   useMountEffect(() => {

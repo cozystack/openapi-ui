@@ -51,11 +51,12 @@ export const ListInsideAllResources: FC<TListInsideAllResourcesProps> = ({ names
     })
   }, [cluster, namespace, apiGroupList.data, builtInData.data])
 
-  const { crdGroups, nonCrdGroups, builtinGroups, apiExtensionVersion } = groupsByCategory || {}
+  // const { crdGroups, nonCrdGroups, builtinGroups, apiExtensionVersion } = groupsByCategory || {}
+  const { nonCrdGroups, builtinGroups } = groupsByCategory || {}
 
   return (
     <Styled.Grid>
-      <div>
+      {/* <div>
         <Flex justify="center">
           <TitleWithNoTopMargin level={3}>CRD Groups</TitleWithNoTopMargin>
         </Flex>
@@ -83,7 +84,7 @@ export const ListInsideAllResources: FC<TListInsideAllResourcesProps> = ({ names
             }}
           />
         )}
-      </div>
+      </div> */}
       <div>
         <Flex justify="center">
           <TitleWithNoTopMargin level={3}>API Groups</TitleWithNoTopMargin>
