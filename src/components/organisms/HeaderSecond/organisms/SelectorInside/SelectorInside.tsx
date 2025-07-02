@@ -1,8 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Flex } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store/store'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useNavSelectorInside } from 'hooks/useNavSelectorInside'
 import { useMountEffect } from 'hooks/useMountEffect'
 import { EntrySelect } from 'components/atoms'
@@ -14,7 +12,7 @@ type TSelectorInsideProps = {
 
 export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespace }) => {
   const navigate = useNavigate()
-  const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
+  const params = useParams()
 
   const [selectedClusterName, setSelectedClusterName] = useState(clusterName)
   const [selectedNamespace, setSelectedNamespace] = useState(namespace)
@@ -27,9 +25,22 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespac
   //   navigate(`${baseprefix}/inside/${value}/apis`)
   // }
 
-  const handleNamepsaceChange = (value: string) => {
-    setSelectedNamespace(value)
-    navigate(`${baseprefix}/inside/${selectedClusterName}/${value}/apis`)
+  const handleNamepsaceChange = (value?: string) => {
+    if (value && params.namespace) {
+      setSelectedNamespace(value)
+      const pathnames = window.location.pathname.split('/')
+      const newPathNames = [...pathnames.slice(0, 4), value, ...pathnames.slice(5)]
+      navigate(newPathNames.join('/'))
+    } else if (value && !params.namespace) {
+      setSelectedNamespace(value)
+      const pathnames = window.location.pathname.split('/')
+      const newPathNames = [...pathnames.slice(0, 4), value, ...pathnames.slice(4)]
+      navigate(newPathNames.join('/'))
+    } else {
+      const pathnames = window.location.pathname.split('/')
+      const newPathnames = pathnames.filter((_, i) => i !== 4)
+      navigate(newPathnames.join('/'))
+    }
   }
 
   useMountEffect(() => {

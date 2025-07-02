@@ -6,6 +6,11 @@ import { RootState } from 'store/store'
 import { useNavSelector } from 'hooks/useNavSelector'
 import { useMountEffect } from 'hooks/useMountEffect'
 import { EntrySelect } from 'components/atoms'
+import {
+  BASE_INSTANCES_API_GROUP,
+  BASE_INSTANCES_VERSION,
+  BASE_INSTANCES_RESOURCE_NAME,
+} from 'constants/customizationApiGroupAndVersion'
 
 type TSelectorProps = {
   clusterName?: string
@@ -32,14 +37,24 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   //   navigate(`${baseprefix}/clusters/${value}`)
   // }
 
-  const handleProjectChange = (value: string) => {
-    setSelectedProjectName(value)
-    navigate(`${baseprefix}/clusters/${selectedClusterName}/projects/${value}`)
+  const handleProjectChange = (value?: string) => {
+    if (value) {
+      setSelectedProjectName(value)
+      navigate(`${baseprefix}/clusters/${selectedClusterName}/projects/${value}`)
+    } else {
+      navigate(`${baseprefix}/clusters/${selectedClusterName}/`)
+    }
   }
 
-  const handleInstanceChange = (value: string) => {
-    setSelectedInstanceName(value)
-    navigate(`${baseprefix}/${selectedClusterName}/${value}/${selectedProjectName}/api-table/apps/v1/deployments`)
+  const handleInstanceChange = (value?: string) => {
+    if (value) {
+      setSelectedInstanceName(value)
+      navigate(`${baseprefix}/${selectedClusterName}/${value}/${selectedProjectName}/api-table/apps/v1/deployments`)
+    } else {
+      navigate(
+        `${baseprefix}/${selectedClusterName}/${selectedProjectName}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`,
+      )
+    }
   }
 
   useMountEffect(() => {
