@@ -4,10 +4,11 @@ import { ManageableBreadcrumbsWithDataProvider } from '@prorobotech/openapi-k8s-
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 
 type TManageableBreadCrumbsProps = {
+  idToCompare: string
   inside?: boolean
 }
 
-export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ inside }) => {
+export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ idToCompare, inside }) => {
   const { pathname } = useLocation()
   const params = useParams()
   const clusterName = params?.clusterName || ''
@@ -22,6 +23,7 @@ export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ inside 
 
   return (
     <ManageableBreadcrumbsWithDataProvider
+      idToCompare={idToCompare}
       uri={`/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/${
         inside ? 'breadcrumbsinside' : 'breadcrumbs'
       }/`}

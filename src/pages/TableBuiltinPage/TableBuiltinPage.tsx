@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
+import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -36,6 +37,11 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
   const clustererBacklink = inside ? customBacklinkWithInside : `${baseprefix}/clusters`
 
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}builtin-table`
+  const breadcrumbsId = `${getBreadcrumbsIdPrefix({
+    instance: !!syntheticProject,
+    project: !!namespace,
+    inside,
+  })}builtin-table`
 
   return (
     <BaseTemplate
@@ -51,7 +57,7 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
       }
     >
       <NavigationContainer>
-        <ManageableBreadcrumbs inside={inside} />
+        <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
         <BackLink to={namespace ? customBacklinkWithInside : clustererBacklink} title={typeName} />
       </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">

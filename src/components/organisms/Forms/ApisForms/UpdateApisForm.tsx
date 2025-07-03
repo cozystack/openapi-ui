@@ -84,6 +84,7 @@ export const UpdateApisForm: FC<TUpdateApisFormProps> = ({
           // prefillValuesSchema: { ...noStatusData, metadata },
           prefillValuesSchema: { ...data, metadata },
         }}
+        customizationId={`default-${apiGroup}/${apiVersion}/${typeName}`}
         backlink={backLink}
         modeData={modeData}
       />

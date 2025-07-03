@@ -71,6 +71,7 @@ export const UpdateBuiltinForm: FC<TUpdateBuiltinFormProps> = ({ typeName, entry
           // prefillValuesSchema: { ...noStatusData, metadata },
           prefillValuesSchema: { ...data, metadata },
         }}
+        customizationId={`default-v1/${typeName}`}
         backlink={backLink}
         modeData={modeData}
       />

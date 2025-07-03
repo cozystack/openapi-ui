@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
+import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { BaseTemplate } from 'templates'
 import {
   BASE_INSTANCES_API_GROUP,
@@ -44,6 +45,11 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
   // const nonInstanceBackLink = namespace ? customBacklink : clustererBacklink
 
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}api-table`
+  const breadcrumbsId = `${getBreadcrumbsIdPrefix({
+    instance: !!syntheticProject,
+    project: !!namespace,
+    inside,
+  })}api-table`
 
   return (
     <BaseTemplate
@@ -59,7 +65,7 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
       }
     >
       <NavigationContainer>
-        <ManageableBreadcrumbs inside={inside} />
+        <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
         <BackLink
           to={namespace ? customBacklinkWithInside : clustererBacklink}
           title={`${apiGroup}/${apiVersion}/${typeName}`}

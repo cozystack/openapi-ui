@@ -10,7 +10,7 @@ export const FactoryPage: FC<TFactoryPageProps> = ({ forcedTheme }) => {
   return (
     <BaseTemplate forcedTheme={forcedTheme} withNoCluster>
       <NavigationContainer>
-        <ManageableBreadcrumbs />
+        <ManageableBreadcrumbs idToCompare={`factory-${window.location.pathname}`} />
       </NavigationContainer>
       <Factory />
     </BaseTemplate>
