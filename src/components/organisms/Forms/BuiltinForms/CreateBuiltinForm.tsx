@@ -44,7 +44,7 @@ export const CreateBuiltinForm: FC<TCreateBuiltinFormProps> = ({ namespace, type
           typeName,
           prefillValueNamespaceOnly: namespace,
         }}
-        customizationId={`default-v1/${typeName}`}
+        customizationId={`default-/v1/${typeName}`}
         isCreate
         backlink={backLink}
         modeData={modeData}
