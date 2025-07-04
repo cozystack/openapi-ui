@@ -43,7 +43,7 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside
     instance: !!syntheticProject,
     project: !!namespace,
     inside,
-  })}builtin-form`
+  })}builtin-form${entryName ? '-edit' : ''}`
 
   return (
     <BaseTemplate

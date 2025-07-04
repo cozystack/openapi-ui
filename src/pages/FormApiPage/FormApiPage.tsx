@@ -43,7 +43,7 @@ export const FormApiPage: FC<TFormApiPageProps> = ({ forcedTheme, inside }) => {
     instance: !!syntheticProject,
     project: !!namespace,
     inside,
-  })}api-form`
+  })}api-form${entryName ? '-edit' : ''}`
 
   return (
     <BaseTemplate

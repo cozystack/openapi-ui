@@ -43,7 +43,7 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
     instance: !!syntheticProject,
     project: !!namespace,
     inside,
-  })}crd-form`
+  })}crd-form${entryName ? '-edit' : ''}`
 
   return (
     <BaseTemplate
