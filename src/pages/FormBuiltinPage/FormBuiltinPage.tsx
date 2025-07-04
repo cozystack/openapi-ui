@@ -12,6 +12,7 @@ import {
   NavigationContainer,
 } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
+import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { BaseTemplate } from 'templates'
 
 type TFormBuiltinPageProps = {
@@ -38,6 +39,11 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
 
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}builtin-form`
+  const breadcrumbsId = `${getBreadcrumbsIdPrefix({
+    instance: !!syntheticProject,
+    project: !!namespace,
+    inside,
+  })}builtin-form`
 
   return (
     <BaseTemplate
@@ -53,7 +59,7 @@ export const FormBuiltinPage: FC<TFormBuiltinPageProps> = ({ forcedTheme, inside
       }
     >
       <NavigationContainer>
-        <ManageableBreadcrumbs inside={inside} />
+        <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
         <BackLink
           to={backLink || customBacklink}
           title={`${entryName ? 'Update' : 'Create'} ${typeName}${entryName ? `/${entryName}` : ''}`}

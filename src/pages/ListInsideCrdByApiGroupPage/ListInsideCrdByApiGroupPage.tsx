@@ -3,6 +3,7 @@ import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams } from 'react-router-dom'
 import { ListInsideCrdsByApiGroup, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
+import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { BaseTemplate } from 'templates'
 
 type TListInsideCrdByApiGroupPageProps = {
@@ -14,11 +15,12 @@ export const ListInsideCrdByApiGroupPage: FC<TListInsideCrdByApiGroupPageProps> 
   const { namespace, apiGroup, apiVersion, apiExtensionVersion } = useParams()
 
   const sidebarId = `${getSidebarIdPrefix({ namespace: !!namespace, inside })}crd-by-api`
+  const breadcrumbsId = `${getBreadcrumbsIdPrefix({ namespace: !!namespace, inside })}crd-by-api`
 
   return (
     <BaseTemplate forcedTheme={forcedTheme} inside={inside} sidebar={<ManageableSidebar idToCompare={sidebarId} />}>
       <NavigationContainer>
-        <ManageableBreadcrumbs inside />
+        <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside />
       </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         {apiGroup && apiVersion && apiExtensionVersion && (

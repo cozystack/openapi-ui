@@ -1,16 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  BlackholeFormDataProvider,
-  useBuiltinResources,
-  useCrdResources,
-  TJSON,
-  TFormsPrefillsData,
-} from '@prorobotech/openapi-k8s-toolkit'
+import { BlackholeFormDataProvider, TJSON } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import {
   HEAD_FIRST_ROW,
   HEAD_SECOND_ROW,
@@ -37,6 +29,7 @@ type TBlackholeFormProps = {
         prefillValuesSchema?: TJSON
         prefillValueNamespaceOnly?: string
       }
+  customizationId: string
   isCreate?: boolean
   backlink?: string | null
   modeData?: {
@@ -46,7 +39,7 @@ type TBlackholeFormProps = {
   }
 }
 
-export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlink, modeData }) => {
+export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, customizationId, isCreate, backlink, modeData }) => {
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const params = useParams()
@@ -89,30 +82,14 @@ export const BlackholeForm: FC<TBlackholeFormProps> = ({ data, isCreate, backlin
     typeName: params.typeName,
   }
 
-  const namespacesData = useBuiltinResources({
-    clusterName: cluster,
-    typeName: 'namespaces',
-    refetchInterval: false,
-    limit: null,
-  })
-
-  const formsPrefillsData = useCrdResources<TFormsPrefillsData['items']>({
-    clusterName: cluster,
-    crdName: 'customformsprefills',
-    apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_API_VERSION,
-    refetchInterval: false,
-  })
-
   return (
     <BlackholeFormDataProvider
       theme={theme}
       cluster={cluster}
       urlParams={urlParams}
       urlParamsForPermissions={urlParamsForPermissions}
-      formsPrefillsData={formsPrefillsData.data}
-      namespacesData={namespacesData.data}
       data={data}
+      customizationId={customizationId}
       isCreate={isCreate}
       backlink={backlink}
       modeData={modeData}
