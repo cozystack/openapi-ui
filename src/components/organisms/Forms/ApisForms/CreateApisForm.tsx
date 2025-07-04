@@ -48,7 +48,7 @@ export const CreateApisForm: FC<TCreateApisFormProps> = ({ namespace, apiGroup, 
           typeName,
           prefillValueNamespaceOnly: namespace,
         }}
-        customizationId={`default-${apiGroup}/${apiVersion}/${typeName}`}
+        customizationId={`default-/${apiGroup}/${apiVersion}/${typeName}`}
         isCreate
         backlink={backLink}
         modeData={modeData}
