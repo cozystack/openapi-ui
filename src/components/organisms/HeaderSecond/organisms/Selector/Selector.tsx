@@ -79,7 +79,7 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
         disabled={selectedClusterName === undefined || projectsInSidebar.length === 0}
       />
       <EntrySelect
-        placeholder="Intance"
+        placeholder="Instance"
         options={instancesInSidebar}
         value={selectedInstanceName}
         onChange={handleInstanceChange}
