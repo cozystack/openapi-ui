@@ -1,24 +1,17 @@
 import React, { FC, useState, useEffect } from 'react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
 import { PlusOutlined, ClearOutlined, MinusOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
   EnrichedTableProvider,
-  useDirectUnknownResource,
   usePermissions,
   DeleteModal,
   DeleteModalMany,
   checkIfBuiltInInstanceNamespaceScoped,
-  TTableMappingResponse,
-  useCrdResources,
-  prepareTableMappings,
-  parseCustomOverrides,
-  TAdditionalPrinterColumns,
   useBuiltinResources,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { FlexGrow, OverflowMaxHeightContainer, MarginTopContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 import {
@@ -39,9 +32,7 @@ type TTableBuiltinInfoProps = {
 
 export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeName, limit, inside }) => {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
   const params = useParams()
-
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -123,60 +114,6 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
     limit,
   })
 
-  const additionalPrinterColumns: TAdditionalPrinterColumns = [
-    {
-      name: 'Name',
-      type: 'string',
-      jsonPath: '.metadata.name',
-    },
-    {
-      name: 'Timestamp',
-      type: 'string',
-      jsonPath: '.metadata.creationTimestamp',
-    },
-  ]
-
-  const columnsOverrides = useCrdResources({
-    clusterName: cluster,
-    crdName: 'customcolumnsoverrides',
-    apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_API_VERSION,
-  })
-
-  const {
-    ensuredCustomOverrides,
-    ensuredCustomOverridesUndefinedValues,
-    ensuredCustomOverridesTrimLengths,
-    ensuredCustomOverridesColWidths,
-  } = parseCustomOverrides({ columnsOverridesData: columnsOverrides.data, overrideType: `v1/${typeName}` })
-
-  const { data: tableMappingsData } = useDirectUnknownResource<TTableMappingResponse>({
-    uri: `/api/clusters/${cluster}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/tableurimappings/`,
-    refetchInterval: 5000,
-    queryKey: ['tableMappings', cluster || 'no-cluster'],
-    isEnabled: cluster !== undefined,
-  })
-
-  const tableMappingsDataSpecs = tableMappingsData?.items.map(({ spec }) => spec)
-  const tableMappingSpecific = tableMappingsDataSpecs
-    ? prepareTableMappings({
-        data: tableMappingsDataSpecs,
-        clusterName: params.clusterName,
-        projectName: params.projectName,
-        instanceName: params.instanceName,
-        namespace: params.namespace,
-        syntheticProject: params.syntheticProject,
-        entryType: params.entryType,
-        apiGroup: params.apiGroup,
-        apiVersion: params.apiVersion,
-        typeName: params.typeName,
-        entryName: params.entryName,
-        apiExtensionVersion: params.apiExtensionVersion,
-        crdName: params.crdName,
-        pathname,
-      })
-    : undefined
-
   const onDeleteHandle = (name: string, endpoint: string) => {
     setIsDeleteModalOpen({ name, endpoint })
   }
@@ -193,13 +130,25 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
       <OverflowMaxHeightContainer $maxHeight={height}>
         {!error && data && (
           <EnrichedTableProvider
+            customizationId={`default-/v1/${typeName}`}
+            tableMappingsReplaceValues={{
+              clusterName: params.clusterName,
+              projectName: params.projectName,
+              instanceName: params.instanceName,
+              namespace: params.namespace,
+              syntheticProject: params.syntheticProject,
+              entryType: params.entryType,
+              apiGroup: params.apiGroup,
+              apiVersion: params.apiVersion,
+              typeName: params.typeName,
+              entryName: params.entryName,
+              apiExtensionVersion: params.apiExtensionVersion,
+              crdName: params.crdName,
+            }}
+            cluster={cluster}
             theme={theme}
             baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
             dataItems={data.items}
-            additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
-            additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
-            additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
-            additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
             dataForControls={{
               cluster,
               syntheticProject: params.syntheticProject,
@@ -216,8 +165,6 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
                 canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
               },
             }}
-            pathToNavigate={tableMappingSpecific?.pathToNavigate}
-            recordKeysForNavigation={tableMappingSpecific?.keysToParse}
             selectData={{
               selectedRowKeys,
               onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
