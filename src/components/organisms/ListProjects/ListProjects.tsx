@@ -1,25 +1,17 @@
 import React, { FC, useState } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import {
   EnrichedTableProvider,
-  useDirectUnknownResource,
   usePermissions,
   DeleteModal,
   DeleteModalMany,
-  TTableMappingResponse,
-  TAdditionalPrinterColumns,
-  prepareTableMappings,
   useApiResources,
-  useCrdResources,
-  parseCustomOverrides,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import {
-  BASE_API_GROUP,
-  BASE_API_VERSION,
   BASE_PROJECTS_API_GROUP,
   BASE_PROJECTS_VERSION,
   BASE_PROJECTS_RESOURCE_NAME,
@@ -29,12 +21,10 @@ import { TABLE_PROPS } from 'constants/tableProps'
 
 export const ListProjects: FC = () => {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   const { clusterName } = useParams()
-  const path = pathname
   const cluster = clusterName || ''
   const apiGroup = BASE_PROJECTS_API_GROUP
   const apiVersion = BASE_PROJECTS_VERSION
@@ -84,52 +74,6 @@ export const ListProjects: FC = () => {
     limit: null,
   })
 
-  const columnsOverrides = useCrdResources({
-    clusterName: cluster,
-    crdName: 'customcolumnsoverrides',
-    apiGroup: BASE_API_GROUP,
-    apiVersion: BASE_API_VERSION,
-  })
-
-  const additionalPrinterColumns: TAdditionalPrinterColumns = [
-    {
-      name: 'Name',
-      type: 'string',
-      jsonPath: '.metadata.name',
-    },
-    {
-      name: 'Timestamp',
-      type: 'string',
-      jsonPath: '.metadata.creationTimestamp',
-    },
-  ]
-
-  const {
-    ensuredCustomOverrides,
-    ensuredCustomOverridesUndefinedValues,
-    ensuredCustomOverridesTrimLengths,
-    ensuredCustomOverridesColWidths,
-  } = parseCustomOverrides({
-    columnsOverridesData: columnsOverrides.data,
-    overrideType: `${apiGroup}/${apiVersion}/${typeName}`,
-  })
-
-  const { data: tableMappingsData } = useDirectUnknownResource<TTableMappingResponse>({
-    uri: `/api/clusters/${cluster}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/tableurimappings/`,
-    refetchInterval: 5000,
-    queryKey: ['tableMappings', cluster || 'no-cluster'],
-    isEnabled: cluster !== undefined,
-  })
-
-  const tableMappingsDataSpecs = tableMappingsData?.items.map(({ spec }) => spec)
-  const tableMappingSpecific = tableMappingsDataSpecs
-    ? prepareTableMappings({
-        data: tableMappingsDataSpecs,
-        clusterName,
-        pathname: path,
-      })
-    : undefined
-
   const onDeleteHandle = (name: string, endpoint: string) => {
     setIsDeleteModalOpen({ name, endpoint })
   }
@@ -145,13 +89,12 @@ export const ListProjects: FC = () => {
       {error && <Alert message={`An error has occurred: ${error?.message} `} type="error" />}
       {!error && data && (
         <EnrichedTableProvider
+          customizationId={`default-/${apiGroup}/${apiVersion}/${typeName}`}
+          tableMappingsReplaceValues={{ clusterName }}
+          cluster={cluster}
           theme={theme}
           baseprefix={baseprefix}
           dataItems={data.items}
-          additionalPrinterColumns={ensuredCustomOverrides || additionalPrinterColumns}
-          additionalPrinterColumnsUndefinedValues={ensuredCustomOverridesUndefinedValues}
-          additionalPrinterColumnsTrimLengths={ensuredCustomOverridesTrimLengths}
-          additionalPrinterColumnsColWidths={ensuredCustomOverridesColWidths}
           dataForControls={{
             cluster,
             syntheticProject: undefined,
@@ -166,8 +109,6 @@ export const ListProjects: FC = () => {
               canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
             },
           }}
-          pathToNavigate={tableMappingSpecific?.pathToNavigate}
-          recordKeysForNavigation={tableMappingSpecific?.keysToParse}
           selectData={{
             selectedRowKeys,
             onChange: (selectedRowKeys: React.Key[], selectedRowsData: { name: string; endpoint: string }[]) => {
