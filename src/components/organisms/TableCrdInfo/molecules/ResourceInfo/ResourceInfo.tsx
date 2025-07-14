@@ -11,7 +11,7 @@ import {
   TAdditionalPrinterColumns,
   useCrdResources,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { FlexGrow, OverflowMaxHeightContainer, MarginTopContainer } from 'components'
+import { FlexGrow, OverflowMaxHeightContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 import {
   HEAD_FIRST_ROW,
@@ -172,9 +172,10 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
               },
             }}
             tableProps={TABLE_PROPS}
+            // maxHeight={height - 65}
           />
         )}
-        {selectedRowKeys.length > 0 && (
+        {/* {selectedRowKeys.length > 0 && (
           <MarginTopContainer $top={-40}>
             <Flex gap={16}>
               <Button type="primary" onClick={clearSelected}>
@@ -187,7 +188,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
               </Button>
             </Flex>
           </MarginTopContainer>
-        )}
+        )} */}
       </OverflowMaxHeightContainer>
       <FlexGrow />
       <Flex justify="space-between">
@@ -210,16 +211,37 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
           <PlusOutlined />
           Add
         </Button>
+        {selectedRowKeys.length > 0 && (
+          <Flex gap={16}>
+            <Button type="primary" onClick={clearSelected}>
+              <ClearOutlined />
+              Clear
+            </Button>
+            <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+              <MinusOutlined />
+              Delete
+            </Button>
+          </Flex>
+        )}
       </Flex>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}
-          onClose={() => setIsDeleteModalOpen(false)}
+          onClose={() => {
+            setIsDeleteModalOpen(false)
+            clearSelected()
+          }}
           endpoint={isDeleteModalOpen.endpoint}
         />
       )}
       {isDeleteModalManyOpen !== false && (
-        <DeleteModalMany data={isDeleteModalManyOpen} onClose={() => setIsDeleteModalManyOpen(false)} />
+        <DeleteModalMany
+          data={isDeleteModalManyOpen}
+          onClose={() => {
+            setIsDeleteModalManyOpen(false)
+            clearSelected()
+          }}
+        />
       )}
     </>
   )

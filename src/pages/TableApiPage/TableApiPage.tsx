@@ -11,6 +11,9 @@ import {
   BASE_INSTANCES_API_GROUP,
   BASE_INSTANCES_VERSION,
   BASE_INSTANCES_RESOURCE_NAME,
+  BASE_PROJECTS_API_GROUP,
+  BASE_PROJECTS_VERSION,
+  BASE_PROJECTS_RESOURCE_NAME,
 } from 'constants/customizationApiGroupAndVersion'
 
 type TTableApiPageProps = {
@@ -51,6 +54,14 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
     inside,
   })}api-table`
 
+  const isProjectList =
+    !namespace &&
+    apiGroup === BASE_PROJECTS_API_GROUP &&
+    apiVersion === BASE_PROJECTS_VERSION &&
+    typeName === BASE_PROJECTS_RESOURCE_NAME
+  const sidebarIdProjectList = `${getSidebarIdPrefix({})}projects-list`
+  const breadcrumbsIdProjectList = `${getBreadcrumbsIdPrefix({})}projects-list`
+
   return (
     <BaseTemplate
       forcedTheme={forcedTheme}
@@ -59,13 +70,13 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
         <ManageableSidebar
           instanceName={possibleInstance}
           projectName={possibleProject}
-          idToCompare={sidebarId}
+          idToCompare={isProjectList ? sidebarIdProjectList : sidebarId}
           currentTags={[`${apiGroup}/${apiVersion}/${typeName}`]}
         />
       }
     >
       <NavigationContainer>
-        <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
+        <ManageableBreadcrumbs idToCompare={isProjectList ? breadcrumbsIdProjectList : breadcrumbsId} inside={inside} />
         <BackLink
           to={namespace ? customBacklinkWithInside : clustererBacklink}
           title={`${apiGroup}/${apiVersion}/${typeName}`}
