@@ -186,7 +186,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
                 setSelectedRowsData(selectedRowsData)
               },
             }}
-            tableProps={TABLE_PROPS}
+            tableProps={{ ...TABLE_PROPS, disablePagination: true }}
             // maxHeight={height - 65}
           />
         )}
