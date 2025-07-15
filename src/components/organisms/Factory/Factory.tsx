@@ -12,6 +12,7 @@ import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 
 export const Factory: FC = () => {
+  const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const { key } = useParams()
 
@@ -29,6 +30,11 @@ export const Factory: FC = () => {
   }
 
   return (
-    <DynamicRendererWithProviders urlsToFetch={spec.urlsToFetch} items={spec.data} components={DynamicComponents} />
+    <DynamicRendererWithProviders
+      urlsToFetch={spec.urlsToFetch}
+      theme={theme}
+      items={spec.data}
+      components={DynamicComponents}
+    />
   )
 }

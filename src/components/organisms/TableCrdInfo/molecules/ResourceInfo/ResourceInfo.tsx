@@ -127,6 +127,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
       <OverflowMaxHeightContainer $maxHeight={height}>
         {!error && data && (
           <EnrichedTableProvider
+            key={`/${apiGroup}/${apiVersion}/${crdPluralName}`}
             customizationId={`default-/${apiGroup}/${apiVersion}/${crdPluralName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,
