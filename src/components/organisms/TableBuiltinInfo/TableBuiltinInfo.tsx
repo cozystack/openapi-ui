@@ -130,6 +130,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
       <OverflowMaxHeightContainer $maxHeight={height}>
         {!error && data && (
           <EnrichedTableProvider
+            key={`/v1/${typeName}`}
             customizationId={`default-/v1/${typeName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,

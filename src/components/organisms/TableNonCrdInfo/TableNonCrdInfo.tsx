@@ -144,6 +144,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
       <OverflowMaxHeightContainer $maxHeight={height}>
         {!error && data && (
           <EnrichedTableProvider
+            key={`/${apiGroup}/${apiVersion}/${typeName}`}
             customizationId={`default-/${apiGroup}/${apiVersion}/${typeName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,
