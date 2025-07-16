@@ -17,22 +17,41 @@ if (process.env.LOCAL === 'true') {
 }
 
 const KUBE_API_URL = process.env.LOCAL === 'true' ? options?.KUBE_API_URL : process.env.KUBE_API_URL
+
 const CUSTOMIZATION_API_GROUP =
   process.env.LOCAL === 'true' ? options?.CUSTOMIZATION_API_GROUP : process.env.CUSTOMIZATION_API_GROUP
 const CUSTOMIZATION_API_VERSION =
   process.env.LOCAL === 'true' ? options?.CUSTOMIZATION_API_VERSION : process.env.CUSTOMIZATION_API_VERSION
+
+const CUSTOMIZATION_NAVIGATION_RESOURCE_NAME =
+  process.env.LOCAL === 'true'
+    ? options?.CUSTOMIZATION_NAVIGATION_RESOURCE_NAME
+    : process.env.CUSTOMIZATION_NAVIGATION_RESOURCE_NAME
+const CUSTOMIZATION_NAVIGATION_RESOURCE =
+  process.env.LOCAL === 'true'
+    ? options?.CUSTOMIZATION_NAVIGATION_RESOURCE
+    : process.env.CUSTOMIZATION_NAVIGATION_RESOURCE
+
+const USE_NAMESPACE_NAV = process.env.LOCAL === 'true' ? options?.USE_NAMESPACE_NAV : process.env.USE_NAMESPACE_NAV
+
+const NAVIGATE_FROM_CLUSTERLIST =
+  process.env.LOCAL === 'true' ? options?.NAVIGATE_FROM_CLUSTERLIST : process.env.NAVIGATE_FROM_CLUSTERLIST
+
 const PROJECTS_API_GROUP = process.env.LOCAL === 'true' ? options?.PROJECTS_API_GROUP : process.env.PROJECTS_API_GROUP
 const PROJECTS_VERSION = process.env.LOCAL === 'true' ? options?.PROJECTS_VERSION : process.env.PROJECTS_VERSION
 const PROJECTS_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.PROJECTS_RESOURCE_NAME : process.env.PROJECTS_RESOURCE_NAME
+
 const MARKETPLACE_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.MARKETPLACE_RESOURCE_NAME : process.env.MARKETPLACE_RESOURCE_NAME
 const MARKETPLACE_KIND = process.env.LOCAL === 'true' ? options?.MARKETPLACE_KIND : process.env.MARKETPLACE_KIND
+
 const INSTANCES_API_GROUP =
   process.env.LOCAL === 'true' ? options?.INSTANCES_API_GROUP : process.env.INSTANCES_API_GROUP
 const INSTANCES_VERSION = process.env.LOCAL === 'true' ? options?.INSTANCES_VERSION : process.env.INSTANCES_VERSION
 const INSTANCES_RESOURCE_NAME =
   process.env.LOCAL === 'true' ? options?.INSTANCES_RESOURCE_NAME : process.env.INSTANCES_RESOURCE_NAME
+
 const BFF_URL = process.env.LOCAL === 'true' ? options?.BFF_URL : process.env.BFF_URL
 
 const healthcheck = require('express-healthcheck')
@@ -140,6 +159,12 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
     ${basePrefix ? `  BASEPREFIX: "${basePrefix}",` : ''}
       CUSTOMIZATION_API_GROUP: ${JSON.stringify(CUSTOMIZATION_API_GROUP) || '"check envs"'},
       CUSTOMIZATION_API_VERSION: ${JSON.stringify(CUSTOMIZATION_API_VERSION) || '"check envs"'},
+      CUSTOMIZATION_NAVIGATION_RESOURCE_NAME: ${
+        JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE_NAME) || '"check envs"'
+      },
+      CUSTOMIZATION_NAVIGATION_RESOURCE: ${JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE) || '"check envs"'},
+      USE_NAMESPACE_NAV: ${!!USE_NAMESPACE_NAV},
+      NAVIGATE_FROM_CLUSTERLIST: ${JSON.stringify(NAVIGATE_FROM_CLUSTERLIST) || '"check envs"'},
       PROJECTS_API_GROUP: ${JSON.stringify(PROJECTS_API_GROUP) || '"check envs"'},
       PROJECTS_VERSION: ${JSON.stringify(PROJECTS_VERSION) || '"check envs"'},
       PROJECTS_RESOURCE_NAME: ${JSON.stringify(PROJECTS_RESOURCE_NAME) || '"check envs"'},
