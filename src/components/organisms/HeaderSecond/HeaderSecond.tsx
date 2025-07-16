@@ -21,15 +21,17 @@ export const HeaderSecond: FC<THeaderProps> = ({ inside }) => {
   return (
     <Styled.BackgroundContainer $bgColor={token.colorFillSecondary} $borderRadius={token.borderRadius}>
       <Styled.PaddingContainer $height={HEAD_SECOND_ROW}>
-        {inside && !BASE_USE_NAMESPACE_NAV && <SelectorInside clusterName={clusterName} namespace={namespace} />}
-        {!inside && !BASE_USE_NAMESPACE_NAV && (
+        {inside && BASE_USE_NAMESPACE_NAV !== 'true' && (
+          <SelectorInside clusterName={clusterName} namespace={namespace} />
+        )}
+        {!inside && BASE_USE_NAMESPACE_NAV !== 'true' && (
           <Selector
             clusterName={clusterName}
             projectName={projectName || possibleProject}
             instanceName={instanceName || possibleInstance}
           />
         )}
-        {BASE_USE_NAMESPACE_NAV && <SelectorNamespace clusterName={clusterName} namespace={namespace} />}
+        {BASE_USE_NAMESPACE_NAV === 'true' && <SelectorNamespace clusterName={clusterName} namespace={namespace} />}
       </Styled.PaddingContainer>
     </Styled.BackgroundContainer>
   )
