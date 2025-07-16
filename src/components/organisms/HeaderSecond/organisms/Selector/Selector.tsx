@@ -1,15 +1,15 @@
 import React, { FC, useState } from 'react'
 import { Flex } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store/store'
+import { useDirectUnknownResource } from '@prorobotech/openapi-k8s-toolkit'
 import { useNavSelector } from 'hooks/useNavSelector'
 import { useMountEffect } from 'hooks/useMountEffect'
 import { EntrySelect } from 'components/atoms'
 import {
-  BASE_INSTANCES_API_GROUP,
-  BASE_INSTANCES_VERSION,
-  BASE_INSTANCES_RESOURCE_NAME,
+  BASE_API_GROUP,
+  BASE_API_VERSION,
+  BASE_CUSTOMIZATION_NAVIGATION_RESOURCE_NAME,
+  BASE_CUSTOMIZATION_NAVIGATION_RESOURCE,
 } from 'constants/customizationApiGroupAndVersion'
 
 type TSelectorProps = {
@@ -20,7 +20,6 @@ type TSelectorProps = {
 
 export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanceName }) => {
   const navigate = useNavigate()
-  const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   const [selectedClusterName, setSelectedClusterName] = useState(clusterName)
   const [selectedProjectName, setSelectedProjectName] = useState(projectName)
@@ -32,6 +31,15 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
     projectName,
   )
 
+  const { data: navigationData } = useDirectUnknownResource<{
+    spec: { projects: { clear: string; change: string }; instances: { clear: string; change: string } }
+  }>({
+    uri: `/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/${BASE_CUSTOMIZATION_NAVIGATION_RESOURCE_NAME}/${BASE_CUSTOMIZATION_NAVIGATION_RESOURCE}`,
+    refetchInterval: false,
+    queryKey: ['navigation', clusterName || 'no-cluster'],
+    isEnabled: clusterName !== undefined,
+  })
+
   // const handleClusterChange = (value: string) => {
   //   setSelectedClusterName(value)
   //   navigate(`${baseprefix}/clusters/${value}`)
@@ -40,20 +48,34 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   const handleProjectChange = (value?: string) => {
     if (value) {
       setSelectedProjectName(value)
-      navigate(`${baseprefix}/clusters/${selectedClusterName}/projects/${value}`)
+      const changeUrl =
+        navigationData?.spec.projects.change
+          .replace('{selectedCluster}', selectedClusterName || 'no-cluster')
+          .replace('{value}', value) || 'no navigation data'
+      navigate(changeUrl)
     } else {
-      navigate(`${baseprefix}/clusters/${selectedClusterName}/`)
+      const clearUrl =
+        navigationData?.spec.projects.clear.replace('{selectedCluster}', selectedClusterName || 'no-cluster') ||
+        'no navigation data'
+      navigate(clearUrl)
     }
   }
 
   const handleInstanceChange = (value?: string) => {
     if (value) {
       setSelectedInstanceName(value)
-      navigate(`${baseprefix}/${selectedClusterName}/${value}/${selectedProjectName}/api-table/apps/v1/deployments`)
+      const changeUrl =
+        navigationData?.spec.instances.change
+          .replace('{selectedCluster}', selectedClusterName || 'no-cluster')
+          .replace('{selectedProject}', selectedProjectName || 'no-project')
+          .replace('{value}', value) || 'no navigation data'
+      navigate(changeUrl)
     } else {
-      navigate(
-        `${baseprefix}/${selectedClusterName}/${selectedProjectName}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`,
-      )
+      const clearUrl =
+        navigationData?.spec.instances.clear
+          .replace('{selectedCluster}', selectedClusterName || 'no-cluster')
+          .replace('{selectedProject}', selectedProjectName || 'no-project') || 'no navigation data'
+      navigate(clearUrl)
     }
   }
 

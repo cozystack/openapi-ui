@@ -2,7 +2,8 @@ import React, { FC } from 'react'
 import { theme } from 'antd'
 import { useParams } from 'react-router-dom'
 import { HEAD_SECOND_ROW } from 'constants/blocksSizes'
-import { Selector, SelectorInside } from './organisms'
+import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
+import { Selector, SelectorInside, SelectorNamespace } from './organisms'
 import { Styled } from './styled'
 
 type THeaderProps = {
@@ -20,15 +21,15 @@ export const HeaderSecond: FC<THeaderProps> = ({ inside }) => {
   return (
     <Styled.BackgroundContainer $bgColor={token.colorFillSecondary} $borderRadius={token.borderRadius}>
       <Styled.PaddingContainer $height={HEAD_SECOND_ROW}>
-        {inside ? (
-          <SelectorInside clusterName={clusterName} namespace={namespace} />
-        ) : (
+        {inside && !BASE_USE_NAMESPACE_NAV && <SelectorInside clusterName={clusterName} namespace={namespace} />}
+        {!inside && !BASE_USE_NAMESPACE_NAV && (
           <Selector
             clusterName={clusterName}
             projectName={projectName || possibleProject}
             instanceName={instanceName || possibleInstance}
           />
         )}
+        {BASE_USE_NAMESPACE_NAV && <SelectorNamespace clusterName={clusterName} namespace={namespace} />}
       </Styled.PaddingContainer>
     </Styled.BackgroundContainer>
   )
