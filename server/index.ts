@@ -163,7 +163,7 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
         JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE_NAME) || '"check envs"'
       },
       CUSTOMIZATION_NAVIGATION_RESOURCE: ${JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE) || '"check envs"'},
-      USE_NAMESPACE_NAV: ${!!USE_NAMESPACE_NAV},
+      USE_NAMESPACE_NAV: ${!!USE_NAMESPACE_NAV ? '"true"' : '"false"'},
       NAVIGATE_FROM_CLUSTERLIST: ${JSON.stringify(NAVIGATE_FROM_CLUSTERLIST) || '"check envs"'},
       PROJECTS_API_GROUP: ${JSON.stringify(PROJECTS_API_GROUP) || '"check envs"'},
       PROJECTS_VERSION: ${JSON.stringify(PROJECTS_VERSION) || '"check envs"'},
