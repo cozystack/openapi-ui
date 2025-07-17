@@ -13,6 +13,8 @@ import {
 } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
+import { getFormsBackLink } from 'utils/getBacklink'
+import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
 import { BaseTemplate } from 'templates'
 
 type TFormCrdPageProps = {
@@ -28,15 +30,20 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
   const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
 
-  const customBacklink = possibleInstance
-    ? `${baseprefix}/${clusterName}/${possibleInstance}/${possibleProject}/api-table/apps/v1/deployments`
-    : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
-
   if (!typeName || !apiGroup || !apiVersion) {
     return null
   }
 
   const backLink = searchParams.get('backlink')?.startsWith('/') ? searchParams.get('backlink') : undefined
+
+  const preparedBacklink = getFormsBackLink({
+    backLink,
+    clusterName,
+    possibleProject,
+    possibleInstance,
+    baseprefix,
+    namespacesMode: BASE_USE_NAMESPACE_NAV === 'true',
+  })
 
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}crd-form`
   const breadcrumbsId = `${getBreadcrumbsIdPrefix({
@@ -61,7 +68,7 @@ export const FormCrdPage: FC<TFormCrdPageProps> = ({ forcedTheme, inside }) => {
       <NavigationContainer>
         <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
         <BackLink
-          to={backLink || customBacklink}
+          to={preparedBacklink}
           title={`${entryName ? 'Update' : 'Create'} ${apiGroup}/${apiVersion}/${typeName}${
             entryName ? `/${entryName}` : ''
           }`}

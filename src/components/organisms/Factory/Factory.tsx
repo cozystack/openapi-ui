@@ -67,6 +67,7 @@ export const Factory: FC = () => {
       theme={theme}
       items={spec.data}
       components={DynamicComponents}
+      key={key}
     />
   )
 }

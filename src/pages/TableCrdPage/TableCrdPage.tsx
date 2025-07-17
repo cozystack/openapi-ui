@@ -6,12 +6,9 @@ import type { RootState } from 'store/store'
 import { TableCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
+import { getTablesBackLink } from 'utils/getBacklink'
 import { BaseTemplate } from 'templates'
-import {
-  BASE_INSTANCES_API_GROUP,
-  BASE_INSTANCES_VERSION,
-  BASE_INSTANCES_RESOURCE_NAME,
-} from 'constants/customizationApiGroupAndVersion'
+import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
 
 type TTableCrdPageProps = {
   forcedTheme?: 'light' | 'dark'
@@ -25,15 +22,15 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
   const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
 
-  const customBacklink = possibleInstance
-    ? `${baseprefix}/${clusterName}/${possibleProject}/api-table/${BASE_INSTANCES_API_GROUP}/${BASE_INSTANCES_VERSION}/${BASE_INSTANCES_RESOURCE_NAME}`
-    : `${baseprefix}/clusters/${clusterName}/projects/${possibleProject}`
-
-  const customBacklinkWithInside = inside
-    ? `${baseprefix}/inside/${clusterName}${namespace ? `/${namespace}` : ''}/apis`
-    : customBacklink
-
-  const clustererBacklink = inside ? customBacklinkWithInside : `${baseprefix}/clusters`
+  const backlink = getTablesBackLink({
+    clusterName,
+    possibleProject,
+    possibleInstance,
+    namespace,
+    baseprefix,
+    inside,
+    namespacesMode: BASE_USE_NAMESPACE_NAV === 'true',
+  })
 
   const sidebarId = `${getSidebarIdPrefix({ instance: !!syntheticProject, project: !!namespace, inside })}crd-table`
   const breadcrumbsId = `${getBreadcrumbsIdPrefix({
@@ -57,10 +54,7 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
     >
       <NavigationContainer>
         <ManageableBreadcrumbs idToCompare={breadcrumbsId} inside={inside} />
-        <BackLink
-          to={namespace ? customBacklinkWithInside : clustererBacklink}
-          title={`${apiGroup}/${apiVersion}/${crdName}`}
-        />
+        <BackLink to={backlink} title={`${apiGroup}/${apiVersion}/${crdName}`} />
       </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         {crdName && apiGroup && apiVersion && apiExtensionVersion && (
