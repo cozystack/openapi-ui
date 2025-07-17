@@ -13,7 +13,11 @@ import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { HEAD_FIRST_ROW, HEAD_SECOND_ROW, FOOTER_HEIGHT, NAV_HEIGHT } from 'constants/blocksSizes'
 
-export const Factory: FC = () => {
+type TFactoryProps = {
+  setSidebarTags: (tags: string[]) => void
+}
+
+export const Factory: FC<TFactoryProps> = ({ setSidebarTags }) => {
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const { key } = useParams()
@@ -43,6 +47,10 @@ export const Factory: FC = () => {
   })
 
   const { spec } = factoryData?.items.find(({ spec }) => spec.key === key) ?? { spec: undefined }
+
+  useEffect(() => {
+    setSidebarTags(spec?.sidebarTags || [])
+  })
 
   if (!spec) {
     return null
