@@ -10,19 +10,13 @@ type TSidebarProps = {
 }
 
 export const Sidebar: FC<TSidebarProps> = ({ inside, sidebar }) => {
-  const { projectName, clusterName, namespace, syntheticProject } = useParams()
+  const { clusterName } = useParams()
   const { token } = theme.useToken()
-
-  const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
 
   return (
     <Styled.BackgroundContainer $borderRadius={token.borderRadius} $borderColor={token.colorBorder}>
       <Styled.ClusterSelectorContainer>
-        {inside ? (
-          <SelectorInside clusterName={clusterName} />
-        ) : (
-          <Selector clusterName={clusterName} projectName={projectName || possibleProject} />
-        )}
+        {inside ? <SelectorInside clusterName={clusterName} /> : <Selector clusterName={clusterName} />}
       </Styled.ClusterSelectorContainer>
       {sidebar}
     </Styled.BackgroundContainer>
