@@ -50,7 +50,7 @@ export const Factory: FC<TFactoryProps> = ({ setSidebarTags }) => {
 
   useEffect(() => {
     setSidebarTags(spec?.sidebarTags || [])
-  })
+  }, [spec?.sidebarTags, setSidebarTags])
 
   if (!spec) {
     return null
