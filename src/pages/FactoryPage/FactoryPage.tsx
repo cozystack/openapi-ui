@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ManageableBreadcrumbs, ManageableSidebar, Factory, NavigationContainer } from 'components'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
@@ -11,6 +11,8 @@ type TFactoryPageProps = {
 
 export const FactoryPage: FC<TFactoryPageProps> = ({ forcedTheme }) => {
   const { namespace, syntheticProject, key } = useParams()
+
+  const [currentTags, setCurrentTags] = useState<string[]>()
 
   const possibleProject = syntheticProject && namespace ? syntheticProject : namespace
   const possibleInstance = syntheticProject && namespace ? namespace : undefined
@@ -29,14 +31,19 @@ export const FactoryPage: FC<TFactoryPageProps> = ({ forcedTheme }) => {
     <BaseTemplate
       forcedTheme={forcedTheme}
       sidebar={
-        <ManageableSidebar instanceName={possibleInstance} projectName={possibleProject} idToCompare={sidebarId} />
+        <ManageableSidebar
+          instanceName={possibleInstance}
+          projectName={possibleProject}
+          idToCompare={sidebarId}
+          currentTags={currentTags}
+        />
       }
       withNoCluster
     >
       <NavigationContainer>
         <ManageableBreadcrumbs idToCompare={breadcrumbsId} />
       </NavigationContainer>
-      <Factory />
+      <Factory setSidebarTags={setCurrentTags} />
     </BaseTemplate>
   )
 }
