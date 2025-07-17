@@ -43,7 +43,7 @@ export const FactoryPage: FC<TFactoryPageProps> = ({ forcedTheme }) => {
       <NavigationContainer>
         <ManageableBreadcrumbs idToCompare={breadcrumbsId} />
       </NavigationContainer>
-      <Factory setSidebarTags={setCurrentTags} />
+      <Factory setSidebarTags={setCurrentTags} key={key} />
     </BaseTemplate>
   )
 }
