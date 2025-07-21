@@ -9,6 +9,7 @@ type TManageableBreadCrumbsProps = {
 }
 
 export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ idToCompare, inside }) => {
+  const location = useLocation()
   const { pathname } = useLocation()
   const params = useParams()
   const clusterName = params?.clusterName || ''
@@ -20,6 +21,13 @@ export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ idToCom
   const entryName = params?.entryName || ''
   const apiExtensionVersion = params?.apiExtensionVersion || ''
   const crdName = params?.crdName || ''
+
+  const replaceValuesPartsOfUrls = location.pathname
+    .split('/')
+    .reduce<Record<string, string | undefined>>((acc, value, index) => {
+      acc[index.toString()] = value
+      return acc
+    }, {})
 
   return (
     <ManageableBreadcrumbsWithDataProvider
@@ -42,6 +50,7 @@ export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ idToCom
         entryName,
         apiExtensionVersion,
         crdName,
+        ...replaceValuesPartsOfUrls,
       }}
       pathname={pathname}
     />
