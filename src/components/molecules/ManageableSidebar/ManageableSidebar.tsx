@@ -21,6 +21,7 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
   idToCompare,
   currentTags,
 }) => {
+  const location = useLocation()
   const { pathname } = useLocation()
   const params = useParams()
   const clusterName = params?.clusterName || ''
@@ -46,6 +47,13 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
     }
   }, [])
 
+  const replaceValuesPartsOfUrls = location.pathname
+    .split('/')
+    .reduce<Record<string, string | undefined>>((acc, value, index) => {
+      acc[index.toString()] = value
+      return acc
+    }, {})
+
   return (
     <Styled.Container
       $isDark={theme === 'dark'}
@@ -66,6 +74,7 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
           instanceName,
           namespace,
           syntheticProject,
+          ...replaceValuesPartsOfUrls,
         }}
         pathname={pathname}
         idToCompare={idToCompare}
