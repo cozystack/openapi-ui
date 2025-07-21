@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { HEAD_FIRST_ROW, HEAD_SECOND_ROW, FOOTER_HEIGHT, NAV_HEIGHT } from 'constants/blocksSizes'
-import { TestWs } from './TestWs'
+import '@xterm/xterm/css/xterm.css'
 
 type TFactoryProps = {
   setSidebarTags: (tags: string[]) => void
@@ -60,7 +60,6 @@ export const Factory: FC<TFactoryProps> = ({ setSidebarTags }) => {
   if (spec.withScrollableMainContentCard) {
     return (
       <ContentCard flexGrow={1} displayFlex flexFlow="column" maxHeight={height}>
-        <TestWs />
         <DynamicRendererWithProviders
           urlsToFetch={spec.urlsToFetch}
           theme={theme}
