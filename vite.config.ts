@@ -149,6 +149,12 @@ export default defineConfig({
         //   })
         // },
       },
+      '^/api/clusters/.*/openapi-bff-ws': {
+        target: options?.BFF_URL,
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
     },
   },
 })

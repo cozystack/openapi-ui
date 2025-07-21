@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { HEAD_FIRST_ROW, HEAD_SECOND_ROW, FOOTER_HEIGHT, NAV_HEIGHT } from 'constants/blocksSizes'
+import '@xterm/xterm/css/xterm.css'
 
 type TFactoryProps = {
   setSidebarTags: (tags: string[]) => void
