@@ -5,7 +5,7 @@ import { Styled } from './styled'
 export const Footer: FC = () => {
   return (
     <Styled.Container>
-      <Typography.Text type="secondary">PRO Robotech © {new Date().getFullYear()}</Typography.Text>
+      <Typography.Text type="secondary">Cozystack © {new Date().getFullYear()}</Typography.Text>
     </Styled.Container>
   )
 }
