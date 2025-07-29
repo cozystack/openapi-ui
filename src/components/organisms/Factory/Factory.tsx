@@ -10,7 +10,11 @@ import {
 } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
+import {
+  BASE_API_GROUP,
+  BASE_API_VERSION,
+  NODE_TERMINAL_DEFAULT_PROFILE,
+} from 'constants/customizationApiGroupAndVersion'
 import { HEAD_FIRST_ROW, HEAD_SECOND_ROW, FOOTER_HEIGHT, NAV_HEIGHT } from 'constants/blocksSizes'
 import '@xterm/xterm/css/xterm.css'
 
@@ -63,6 +67,7 @@ export const Factory: FC<TFactoryProps> = ({ setSidebarTags }) => {
         <DynamicRendererWithProviders
           urlsToFetch={spec.urlsToFetch}
           theme={theme}
+          nodeTerminalDefaultProfile={NODE_TERMINAL_DEFAULT_PROFILE}
           items={spec.data}
           components={DynamicComponents}
         />
@@ -74,6 +79,7 @@ export const Factory: FC<TFactoryProps> = ({ setSidebarTags }) => {
     <DynamicRendererWithProviders
       urlsToFetch={spec.urlsToFetch}
       theme={theme}
+      nodeTerminalDefaultProfile={NODE_TERMINAL_DEFAULT_PROFILE}
       items={spec.data}
       components={DynamicComponents}
       key={key}
