@@ -13,7 +13,7 @@ import {
   checkIfApiInstanceNamespaceScoped,
   useApiResources,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { FlexGrow, OverflowMaxHeightContainer } from 'components'
+import { FlexGrow, OverflowMaxHeightContainer, PaddingContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 import {
   HEAD_FIRST_ROW,
@@ -207,39 +207,41 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
         )} */}
       </OverflowMaxHeightContainer>
       <FlexGrow />
-      <Flex justify="space-between">
-        <Button
-          type="primary"
-          onClick={() =>
-            navigate(
-              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}${
-                inside ? '/inside' : ''
-              }/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/api-table/${apiGroup}/${apiVersion}/${typeName}`,
-            )
-          }
-          loading={isNamespaced ? false : createPermission.isPending}
-          disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
-        >
-          <PlusOutlined />
-          Add
-        </Button>
-        {selectedRowKeys.length > 0 && (
-          <Flex gap={16}>
-            <Button type="primary" onClick={clearSelected}>
-              <ClearOutlined />
-              Clear
-            </Button>
-            <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
-              <MinusOutlined />
-              Delete
-            </Button>
-          </Flex>
-        )}
-      </Flex>
+      <PaddingContainer $padding="4px">
+        <Flex justify="space-between">
+          <Button
+            type="primary"
+            onClick={() =>
+              navigate(
+                `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
+                  params.syntheticProject ? `/${params.syntheticProject}` : ''
+                }/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${baseprefix}${
+                  inside ? '/inside' : ''
+                }/${cluster}${namespace ? `/${namespace}` : ''}${
+                  params.syntheticProject ? `/${params.syntheticProject}` : ''
+                }/api-table/${apiGroup}/${apiVersion}/${typeName}`,
+              )
+            }
+            loading={isNamespaced ? false : createPermission.isPending}
+            disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+          >
+            <PlusOutlined />
+            Add
+          </Button>
+          {selectedRowKeys.length > 0 && (
+            <Flex gap={16}>
+              <Button type="primary" onClick={clearSelected}>
+                <ClearOutlined />
+                Clear
+              </Button>
+              <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+                <MinusOutlined />
+                Delete
+              </Button>
+            </Flex>
+          )}
+        </Flex>
+      </PaddingContainer>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}

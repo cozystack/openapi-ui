@@ -12,7 +12,7 @@ import {
   checkIfBuiltInInstanceNamespaceScoped,
   useBuiltinResources,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { FlexGrow, OverflowMaxHeightContainer } from 'components'
+import { FlexGrow, OverflowMaxHeightContainer, PaddingContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 import {
   HEAD_FIRST_ROW,
@@ -193,38 +193,40 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
         )} */}
       </OverflowMaxHeightContainer>
       <FlexGrow />
-      <Flex justify="space-between">
-        <Button
-          type="primary"
-          onClick={() =>
-            navigate(
-              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/builtin/v1/${typeName}?backlink=${baseprefix}${inside ? '/inside' : ''}/${cluster}${
-                namespace ? `/${namespace}` : ''
-              }${params.syntheticProject ? `/${params.syntheticProject}` : ''}/builtin-table/${typeName}`,
-            )
-          }
-          loading={isNamespaced ? false : createPermission.isPending}
-          disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
-        >
-          <PlusOutlined />
-          Add
-        </Button>
+      <PaddingContainer $padding="4px">
+        <Flex justify="space-between">
+          <Button
+            type="primary"
+            onClick={() =>
+              navigate(
+                `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
+                  params.syntheticProject ? `/${params.syntheticProject}` : ''
+                }/forms/builtin/v1/${typeName}?backlink=${baseprefix}${inside ? '/inside' : ''}/${cluster}${
+                  namespace ? `/${namespace}` : ''
+                }${params.syntheticProject ? `/${params.syntheticProject}` : ''}/builtin-table/${typeName}`,
+              )
+            }
+            loading={isNamespaced ? false : createPermission.isPending}
+            disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+          >
+            <PlusOutlined />
+            Add
+          </Button>
 
-        {selectedRowKeys.length > 0 && (
-          <Flex gap={16}>
-            <Button type="primary" onClick={clearSelected}>
-              <ClearOutlined />
-              Clear
-            </Button>
-            <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
-              <MinusOutlined />
-              Delete
-            </Button>
-          </Flex>
-        )}
-      </Flex>
+          {selectedRowKeys.length > 0 && (
+            <Flex gap={16}>
+              <Button type="primary" onClick={clearSelected}>
+                <ClearOutlined />
+                Clear
+              </Button>
+              <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+                <MinusOutlined />
+                Delete
+              </Button>
+            </Flex>
+          )}
+        </Flex>
+      </PaddingContainer>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}
