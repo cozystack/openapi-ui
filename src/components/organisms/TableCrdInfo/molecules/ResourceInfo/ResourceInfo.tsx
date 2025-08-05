@@ -11,7 +11,7 @@ import {
   TAdditionalPrinterColumns,
   useCrdResources,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { FlexGrow, OverflowMaxHeightContainer } from 'components'
+import { FlexGrow, OverflowMaxHeightContainer, PaddingContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
 import {
   HEAD_FIRST_ROW,
@@ -192,39 +192,41 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
         )} */}
       </OverflowMaxHeightContainer>
       <FlexGrow />
-      <Flex justify="space-between">
-        <Button
-          type="primary"
-          onClick={() =>
-            navigate(
-              `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}${
-                inside ? '/inside' : ''
-              }/${cluster}${namespace ? `/${namespace}` : ''}${
-                params.syntheticProject ? `/${params.syntheticProject}` : ''
-              }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
-            )
-          }
-          loading={permissions.canCreate === undefined}
-          disabled={permissions.canCreate === false}
-        >
-          <PlusOutlined />
-          Add
-        </Button>
-        {selectedRowKeys.length > 0 && (
-          <Flex gap={16}>
-            <Button type="primary" onClick={clearSelected}>
-              <ClearOutlined />
-              Clear
-            </Button>
-            <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
-              <MinusOutlined />
-              Delete
-            </Button>
-          </Flex>
-        )}
-      </Flex>
+      <PaddingContainer $padding="4px">
+        <Flex justify="space-between">
+          <Button
+            type="primary"
+            onClick={() =>
+              navigate(
+                `${baseprefix}${inside ? '/inside' : ''}/${cluster}${namespace ? `/${namespace}` : ''}${
+                  params.syntheticProject ? `/${params.syntheticProject}` : ''
+                }/forms/crds/${apiGroup}/${apiVersion}/${crdPluralName}?backlink=${baseprefix}${
+                  inside ? '/inside' : ''
+                }/${cluster}${namespace ? `/${namespace}` : ''}${
+                  params.syntheticProject ? `/${params.syntheticProject}` : ''
+                }/crd-table/${apiGroup}/${apiVersion}/${apiExtensionVersion}/${crdName}`,
+              )
+            }
+            loading={permissions.canCreate === undefined}
+            disabled={permissions.canCreate === false}
+          >
+            <PlusOutlined />
+            Add
+          </Button>
+          {selectedRowKeys.length > 0 && (
+            <Flex gap={16}>
+              <Button type="primary" onClick={clearSelected}>
+                <ClearOutlined />
+                Clear
+              </Button>
+              <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+                <MinusOutlined />
+                Delete
+              </Button>
+            </Flex>
+          )}
+        </Flex>
+      </PaddingContainer>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}
