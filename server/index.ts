@@ -57,6 +57,9 @@ const BFF_URL = process.env.LOCAL === 'true' ? options?.BFF_URL : process.env.BF
 const NODE_TERMINAL_DEFAULT_PROFILE =
   process.env.LOCAL === 'true' ? options?.NODE_TERMINAL_DEFAULT_PROFILE : process.env.NODE_TERMINAL_DEFAULT_PROFILE
 
+const LOGIN_URL = process.env.LOCAL === 'true' ? options?.LOGIN_URL : process.env.LOGIN_URL
+const LOGOUT_URL = process.env.LOCAL === 'true' ? options?.LOGOUT_URL : process.env.LOGOUT_URL
+
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
 
@@ -176,7 +179,9 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
       INSTANCES_API_GROUP: ${JSON.stringify(INSTANCES_API_GROUP) || '"check envs"'},
       INSTANCES_VERSION: ${JSON.stringify(INSTANCES_VERSION) || '"check envs"'},
       INSTANCES_RESOURCE_NAME: ${JSON.stringify(INSTANCES_RESOURCE_NAME) || '"check envs"'},
-      NODE_TERMINAL_DEFAULT_PROFILE: ${JSON.stringify(NODE_TERMINAL_DEFAULT_PROFILE) || '"general"'}
+      NODE_TERMINAL_DEFAULT_PROFILE: ${JSON.stringify(NODE_TERMINAL_DEFAULT_PROFILE) || '"general"'},
+      LOGIN_URL: ${JSON.stringify(LOGIN_URL) || '"check envs"'},
+      LOGOUT_URL: ${JSON.stringify(LOGOUT_URL) || '"check envs"'}
     }
     `,
   )

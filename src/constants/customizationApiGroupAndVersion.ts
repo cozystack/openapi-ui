@@ -28,3 +28,6 @@ export const BASE_INSTANCES_RESOURCE_NAME =
 
 export const NODE_TERMINAL_DEFAULT_PROFILE =
   window._env_.NODE_TERMINAL_DEFAULT_PROFILE || import.meta.env.VITE_NODE_TERMINAL_DEFAULT_PROFILE
+
+export const LOGIN_URL = window._env_.LOGIN_URL || import.meta.env.VITE_LOGIN_URL
+export const LOGOUT_URL = window._env_.LOGOUT_URL || import.meta.env.VITE_LOGOUT_URL
