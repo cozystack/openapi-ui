@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { login } from 'api/auth'
+import { LOGIN_USERNAME_FIELD } from 'constants/customizationApiGroupAndVersion'
 
 export const useAuth = () => {
   const [fullName, setFullName] = useState<string>()
@@ -13,8 +14,10 @@ export const useAuth = () => {
       login()
         .then(data => {
           if (data) {
-            setFullName(data.name)
-            setRequester({ name: data.name, email: data.email })
+            const userNameFieldKey = LOGIN_USERNAME_FIELD as keyof typeof data
+            const username = userNameFieldKey in data ? data[userNameFieldKey].toString() : 'No field'
+            setFullName(username)
+            setRequester({ name: username, email: data.email })
             setLoadingAuth(false)
           }
         })

@@ -9,4 +9,4 @@ export type TAuthResponse = {
   iss: string
   name: string
   sub: string
-}
+} & unknown
