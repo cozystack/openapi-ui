@@ -6,6 +6,7 @@ import type { RootState } from 'store/store'
 import { TableCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
+import { getTableCustomizationIdPrefix } from 'utils/getTableCustomizationIdPrefix'
 import { getTablesBackLink } from 'utils/getBacklink'
 import { BaseTemplate } from 'templates'
 import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
@@ -38,6 +39,12 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
     project: !!namespace,
     inside,
   })}crd-table`
+  const tableCustomizationIdPrefix = getTableCustomizationIdPrefix({
+    instance: !!syntheticProject,
+    project: BASE_USE_NAMESPACE_NAV !== 'true' && !!namespace,
+    namespace: !!namespace,
+    inside,
+  })
 
   return (
     <BaseTemplate
@@ -65,6 +72,7 @@ export const TableCrdPage: FC<TTableCrdPageProps> = ({ forcedTheme, inside }) =>
             crdName={crdName}
             apiExtensionVersion={apiExtensionVersion}
             inside={inside}
+            customizationIdPrefix={tableCustomizationIdPrefix}
           />
         )}
       </ContentCard>

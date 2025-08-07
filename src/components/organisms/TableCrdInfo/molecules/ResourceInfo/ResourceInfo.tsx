@@ -37,6 +37,7 @@ type TResourceInfoProps = {
     canDelete?: boolean
   }
   inside?: boolean
+  customizationIdPrefix: string
 }
 
 export const ResourceInfo: FC<TResourceInfoProps> = ({
@@ -50,6 +51,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
   crdAdditionalPrinterColumns,
   permissions,
   inside,
+  customizationIdPrefix,
 }) => {
   const navigate = useNavigate()
   const params = useParams()
@@ -128,7 +130,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
         {!error && data && (
           <EnrichedTableProvider
             key={`/${apiGroup}/${apiVersion}/${crdPluralName}`}
-            customizationId={`default-/${apiGroup}/${apiVersion}/${crdPluralName}`}
+            customizationId={`${customizationIdPrefix}/${apiGroup}/${apiVersion}/${crdPluralName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,
               projectName: params.projectName,
