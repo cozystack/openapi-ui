@@ -6,6 +6,7 @@ import type { RootState } from 'store/store'
 import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
+import { getTableCustomizationIdPrefix } from 'utils/getTableCustomizationIdPrefix'
 import { getTablesBackLink } from 'utils/getBacklink'
 import { BaseTemplate } from 'templates'
 import {
@@ -44,6 +45,12 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
     project: !!namespace,
     inside,
   })}api-table`
+  const tableCustomizationIdPrefix = getTableCustomizationIdPrefix({
+    instance: !!syntheticProject,
+    project: BASE_USE_NAMESPACE_NAV !== 'true' && !!namespace,
+    namespace: !!namespace,
+    inside,
+  })
 
   const isProjectList =
     !namespace &&
@@ -79,6 +86,7 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
             typeName={typeName}
             limit={searchParams.get('limit')}
             inside={inside}
+            customizationIdPrefix={tableCustomizationIdPrefix}
           />
         )}
       </ContentCard>

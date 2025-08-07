@@ -28,9 +28,16 @@ type TTableBuiltinInfoProps = {
   typeName: string
   limit: string | null
   inside?: boolean
+  customizationIdPrefix: string
 }
 
-export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeName, limit, inside }) => {
+export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({
+  namespace,
+  typeName,
+  limit,
+  inside,
+  customizationIdPrefix,
+}) => {
   const navigate = useNavigate()
   const params = useParams()
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
@@ -131,7 +138,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({ namespace, typeNa
         {!error && data && (
           <EnrichedTableProvider
             key={`/v1/${typeName}`}
-            customizationId={`default-/v1/${typeName}`}
+            customizationId={`${customizationIdPrefix}/v1/${typeName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,
               projectName: params.projectName,

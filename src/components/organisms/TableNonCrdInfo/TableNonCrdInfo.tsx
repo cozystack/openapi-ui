@@ -31,6 +31,7 @@ type TTableNonCrdInfoProps = {
   typeName: string
   limit: string | null
   inside?: boolean
+  customizationIdPrefix: string
 }
 
 export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
@@ -40,6 +41,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
   typeName,
   limit,
   inside,
+  customizationIdPrefix,
 }) => {
   const navigate = useNavigate()
   const params = useParams()
@@ -145,7 +147,7 @@ export const TableNonCrdInfo: FC<TTableNonCrdInfoProps> = ({
         {!error && data && (
           <EnrichedTableProvider
             key={`/${apiGroup}/${apiVersion}/${typeName}`}
-            customizationId={`default-/${apiGroup}/${apiVersion}/${typeName}`}
+            customizationId={`${customizationIdPrefix}/${apiGroup}/${apiVersion}/${typeName}`}
             tableMappingsReplaceValues={{
               clusterName: params.clusterName,
               projectName: params.projectName,

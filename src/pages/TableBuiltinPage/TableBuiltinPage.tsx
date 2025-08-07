@@ -6,6 +6,7 @@ import type { RootState } from 'store/store'
 import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
+import { getTableCustomizationIdPrefix } from 'utils/getTableCustomizationIdPrefix'
 import { getTablesBackLink } from 'utils/getBacklink'
 import { BaseTemplate } from 'templates'
 import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
@@ -39,6 +40,12 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
     project: !!namespace,
     inside,
   })}builtin-table`
+  const tableCustomizationIdPrefix = getTableCustomizationIdPrefix({
+    instance: !!syntheticProject,
+    project: BASE_USE_NAMESPACE_NAV !== 'true' && !!namespace,
+    namespace: !!namespace,
+    inside,
+  })
 
   return (
     <BaseTemplate
@@ -64,6 +71,7 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
             typeName={typeName}
             limit={searchParams.get('limit')}
             inside={inside}
+            customizationIdPrefix={tableCustomizationIdPrefix}
           />
         )}
       </ContentCard>

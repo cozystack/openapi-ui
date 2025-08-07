@@ -12,6 +12,7 @@ type TTableCrdInfoProps = {
   apiExtensionVersion: string
   crdName: string
   inside?: boolean
+  customizationIdPrefix: string
 }
 
 export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
@@ -21,6 +22,7 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
   apiExtensionVersion,
   crdName,
   inside,
+  customizationIdPrefix,
 }) => {
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
 
@@ -96,6 +98,7 @@ export const TableCrdInfo: FC<TTableCrdInfoProps> = ({
             canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
           }}
           inside={inside}
+          customizationIdPrefix={customizationIdPrefix}
         />
       )}
     </>
