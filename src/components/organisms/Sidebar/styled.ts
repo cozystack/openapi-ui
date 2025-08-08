@@ -19,7 +19,7 @@ const ClusterSelectorContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 12px;
+  padding: 12px;
 `
 
 export const Styled = {

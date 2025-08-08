@@ -7,17 +7,19 @@ import { Styled } from './styled'
 type TBackLinkProps = {
   title?: string
   className?: string
-  to: To
+  to?: To
 }
 
 export const BackLink: FC<TBackLinkProps> = ({ to, title }) => {
   return (
     <Styled.Container>
-      <Styled.CustomLink to={to}>
-        <TitleWithNoMargin level={5}>
-          <ArrowLeftOutlined />
-        </TitleWithNoMargin>
-      </Styled.CustomLink>
+      {to && (
+        <Styled.CustomLink to={to}>
+          <TitleWithNoMargin level={5}>
+            <ArrowLeftOutlined />
+          </TitleWithNoMargin>
+        </Styled.CustomLink>
+      )}
       <TitleWithNoMargin level={5}>{title}</TitleWithNoMargin>
     </Styled.Container>
   )
