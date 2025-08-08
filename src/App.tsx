@@ -179,6 +179,9 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
               itemSelectedColor: colors?.colorText,
               itemBorderRadius: 0,
             },
+            Tag: {
+              defaultBg: colors?.colorPrimaryBg,
+            },
           },
         }}
       >
