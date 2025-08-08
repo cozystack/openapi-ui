@@ -17,3 +17,5 @@ export { FormApiPage } from './FormApiPage'
 export { FormBuiltinPage } from './FormBuiltinPage'
 export { FactoryPage } from './FactoryPage'
 export { FactoryAdminPage } from './FactoryAdminPage'
+/* search */
+export { SearchPage } from './SearchPage'
