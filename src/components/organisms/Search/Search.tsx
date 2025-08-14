@@ -51,10 +51,8 @@ export const Search: FC = () => {
             fillOpacity="0.88"
           />
         </svg>
-      </Styled.CatContainer>
-      <Flex justify="center">
         <Typography.Title>To Be Done</Typography.Title>
-      </Flex>
+      </Styled.CatContainer>
     </>
   )
 }
