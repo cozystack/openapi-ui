@@ -33,7 +33,7 @@ export const ManageableBreadcrumbs: FC<TManageableBreadCrumbsProps> = ({ idToCom
     <ManageableBreadcrumbsWithDataProvider
       idToCompare={idToCompare}
       uri={`/api/clusters/${clusterName}/k8s/apis/${BASE_API_GROUP}/${BASE_API_VERSION}/${
-        inside ? 'breadcrumbsinside' : 'breadcrumbs'
+        inside ? 'breadcrumbsinsides' : 'breadcrumbs'
       }/`}
       refetchInterval={5000}
       isEnabled={clusterName !== undefined}
