@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import React, { FC } from 'react'
-import { theme, Flex, Typography } from 'antd'
+import { theme, Typography } from 'antd'
 import { Styled } from './styled'
 
 export const Search: FC = () => {
