@@ -5,7 +5,7 @@ export const CatContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  margin: auto auto;
+  margin: auto;
 `
 
 export const Styled = {
