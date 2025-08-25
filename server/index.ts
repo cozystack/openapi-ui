@@ -63,6 +63,8 @@ const LOGIN_USERNAME_FIELD =
   process.env.LOCAL === 'true' ? options?.LOGIN_USERNAME_FIELD : process.env.LOGIN_USERNAME_FIELD
 
 const REMOVE_BACKLINK = process.env.LOCAL === 'true' ? options?.REMOVE_BACKLINK : process.env.REMOVE_BACKLINK
+const REMOVE_BACKLINK_TEXT =
+  process.env.LOCAL === 'true' ? options?.REMOVE_BACKLINK_TEXT : process.env.REMOVE_BACKLINK_TEXT
 
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
@@ -187,7 +189,8 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
       LOGIN_URL: ${JSON.stringify(LOGIN_URL) || '"check envs"'},
       LOGOUT_URL: ${JSON.stringify(LOGOUT_URL) || '"check envs"'},
       LOGIN_USERNAME_FIELD: ${JSON.stringify(LOGIN_USERNAME_FIELD) || '"check envs"'},
-      REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? REMOVE_BACKLINK.toString().toLowerCase() : '"false"'}
+      REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? REMOVE_BACKLINK.toString().toLowerCase() : '"false"'},
+      REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? REMOVE_BACKLINK_TEXT.toString().toLowerCase() : '"false"'}
     }
     `,
   )
