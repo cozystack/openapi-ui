@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { To } from 'react-router-dom'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { BASE_REMOVE_BACKLINK } from 'constants/customizationApiGroupAndVersion'
+import { BASE_REMOVE_BACKLINK, BASE_REMOVE_BACKLINK_TEXT } from 'constants/customizationApiGroupAndVersion'
 import { TitleWithNoMargin } from '../TitleWithNoMargin'
 import { Styled } from './styled'
 
@@ -12,6 +12,10 @@ type TBackLinkProps = {
 }
 
 export const BackLink: FC<TBackLinkProps> = ({ to, title }) => {
+  if (BASE_REMOVE_BACKLINK && BASE_REMOVE_BACKLINK_TEXT) {
+    return null
+  }
+
   return (
     <Styled.Container>
       {to && !BASE_REMOVE_BACKLINK && (
@@ -21,7 +25,7 @@ export const BackLink: FC<TBackLinkProps> = ({ to, title }) => {
           </TitleWithNoMargin>
         </Styled.CustomLink>
       )}
-      <TitleWithNoMargin level={5}>{title}</TitleWithNoMargin>
+      {!BASE_REMOVE_BACKLINK_TEXT && <TitleWithNoMargin level={5}>{title}</TitleWithNoMargin>}
     </Styled.Container>
   )
 }
