@@ -32,3 +32,6 @@ export const NODE_TERMINAL_DEFAULT_PROFILE =
 export const LOGIN_URL = window._env_.LOGIN_URL || import.meta.env.VITE_LOGIN_URL
 export const LOGOUT_URL = window._env_.LOGOUT_URL || import.meta.env.VITE_LOGOUT_URL
 export const LOGIN_USERNAME_FIELD = window._env_.LOGIN_USERNAME_FIELD || import.meta.env.VITE_LOGIN_USERNAME_FIELD
+
+export const BASE_REMOVE_BACKLINK =
+  window._env_.REMOVE_BACKLINK === 'true' || import.meta.env.VITE_REMOVE_BACKLINK.toString().toLowerCase() === 'true'
