@@ -175,7 +175,7 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
         JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE_NAME) || '"check envs"'
       },
       CUSTOMIZATION_NAVIGATION_RESOURCE: ${JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE) || '"check envs"'},
-      USE_NAMESPACE_NAV: ${!!USE_NAMESPACE_NAV ? '"true"' : '"false"'},
+      USE_NAMESPACE_NAV: ${USE_NAMESPACE_NAV ? JSON.stringify(USE_NAMESPACE_NAV).toLowerCase() : '"false"'},
       NAVIGATE_FROM_CLUSTERLIST: ${JSON.stringify(NAVIGATE_FROM_CLUSTERLIST) || '"check envs"'},
       PROJECTS_API_GROUP: ${JSON.stringify(PROJECTS_API_GROUP) || '"check envs"'},
       PROJECTS_VERSION: ${JSON.stringify(PROJECTS_VERSION) || '"check envs"'},
@@ -189,8 +189,8 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
       LOGIN_URL: ${JSON.stringify(LOGIN_URL) || '"check envs"'},
       LOGOUT_URL: ${JSON.stringify(LOGOUT_URL) || '"check envs"'},
       LOGIN_USERNAME_FIELD: ${JSON.stringify(LOGIN_USERNAME_FIELD) || '"check envs"'},
-      REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? REMOVE_BACKLINK?.toString().toLowerCase() : '"false"'},
-      REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? REMOVE_BACKLINK_TEXT?.toString().toLowerCase() : '"false"'}
+      REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? JSON.stringify(REMOVE_BACKLINK).toLowerCase() : '"false"'},
+      REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? JSON.stringify(REMOVE_BACKLINK_TEXT).toLowerCase() : '"false"'}
     }
     `,
   )
