@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { To } from 'react-router-dom'
 import { ArrowLeftOutlined } from '@ant-design/icons'
+import { BASE_REMOVE_BACKLINK } from 'constants/customizationApiGroupAndVersion'
 import { TitleWithNoMargin } from '../TitleWithNoMargin'
 import { Styled } from './styled'
 
@@ -13,7 +14,7 @@ type TBackLinkProps = {
 export const BackLink: FC<TBackLinkProps> = ({ to, title }) => {
   return (
     <Styled.Container>
-      {to && (
+      {to && !BASE_REMOVE_BACKLINK && (
         <Styled.CustomLink to={to}>
           <TitleWithNoMargin level={5}>
             <ArrowLeftOutlined />
