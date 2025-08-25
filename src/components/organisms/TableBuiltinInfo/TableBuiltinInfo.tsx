@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
 import { PlusOutlined, ClearOutlined, MinusOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
@@ -38,6 +38,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({
   inside,
   customizationIdPrefix,
 }) => {
+  const location = useLocation()
   const navigate = useNavigate()
   const params = useParams()
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
@@ -130,6 +131,13 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({
     setSelectedRowsData([])
   }
 
+  const replaceValuesPartsOfUrls = location.pathname
+    .split('/')
+    .reduce<Record<string, string | undefined>>((acc, value, index) => {
+      acc[index.toString()] = value
+      return acc
+    }, {})
+
   return (
     <>
       {isPending && <Spin />}
@@ -152,6 +160,7 @@ export const TableBuiltinInfo: FC<TTableBuiltinInfoProps> = ({
               entryName: params.entryName,
               apiExtensionVersion: params.apiExtensionVersion,
               crdName: params.crdName,
+              ...replaceValuesPartsOfUrls,
             }}
             cluster={cluster}
             theme={theme}

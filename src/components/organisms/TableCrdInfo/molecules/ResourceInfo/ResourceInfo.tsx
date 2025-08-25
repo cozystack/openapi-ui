@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Spin, Alert, Button, Flex } from 'antd'
 import { PlusOutlined, ClearOutlined, MinusOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
@@ -53,6 +53,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
   inside,
   customizationIdPrefix,
 }) => {
+  const location = useLocation()
   const navigate = useNavigate()
   const params = useParams()
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
@@ -122,6 +123,13 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
     setSelectedRowsData([])
   }
 
+  const replaceValuesPartsOfUrls = location.pathname
+    .split('/')
+    .reduce<Record<string, string | undefined>>((acc, value, index) => {
+      acc[index.toString()] = value
+      return acc
+    }, {})
+
   return (
     <>
       {isPending && <Spin />}
@@ -144,6 +152,7 @@ export const ResourceInfo: FC<TResourceInfoProps> = ({
               entryName: params.entryName,
               apiExtensionVersion: params.apiExtensionVersion,
               crdName: params.crdName,
+              ...replaceValuesPartsOfUrls,
             }}
             forceDefaultAdditionalPrinterColumns={crdAdditionalPrinterColumns}
             cluster={cluster}
