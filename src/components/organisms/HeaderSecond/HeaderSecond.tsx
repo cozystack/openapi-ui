@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
-import { theme } from 'antd'
+import { Flex, theme } from 'antd'
 import { useParams } from 'react-router-dom'
 import { HEAD_SECOND_ROW } from 'constants/blocksSizes'
 import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersion'
-import { Selector, SelectorInside, SelectorNamespace } from './organisms'
+import { SelectorCluster, SelectorClusterInside, Selector, SelectorInside, SelectorNamespace } from './organisms'
 import { Styled } from './styled'
 
 type THeaderProps = {
@@ -21,17 +21,20 @@ export const HeaderSecond: FC<THeaderProps> = ({ inside }) => {
   return (
     <Styled.BackgroundContainer $bgColor={token.colorFillSecondary} $borderRadius={token.borderRadius}>
       <Styled.PaddingContainer $height={HEAD_SECOND_ROW}>
-        {inside && <SelectorInside clusterName={clusterName} namespace={namespace} />}
-        {!inside && BASE_USE_NAMESPACE_NAV !== 'true' && (
-          <Selector
-            clusterName={clusterName}
-            projectName={projectName || possibleProject}
-            instanceName={instanceName || possibleInstance}
-          />
-        )}
-        {!inside && BASE_USE_NAMESPACE_NAV === 'true' && (
-          <SelectorNamespace clusterName={clusterName} namespace={namespace} />
-        )}
+        <Flex gap={18}>
+          {inside ? <SelectorClusterInside clusterName={clusterName} /> : <SelectorCluster clusterName={clusterName} />}
+          {inside && <SelectorInside clusterName={clusterName} namespace={namespace} />}
+          {!inside && BASE_USE_NAMESPACE_NAV !== 'true' && (
+            <Selector
+              clusterName={clusterName}
+              projectName={projectName || possibleProject}
+              instanceName={instanceName || possibleInstance}
+            />
+          )}
+          {!inside && BASE_USE_NAMESPACE_NAV === 'true' && (
+            <SelectorNamespace clusterName={clusterName} namespace={namespace} />
+          )}
+        </Flex>
       </Styled.PaddingContainer>
     </Styled.BackgroundContainer>
   )

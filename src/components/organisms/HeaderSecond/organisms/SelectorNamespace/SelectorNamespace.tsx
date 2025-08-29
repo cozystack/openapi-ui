@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Flex } from 'antd'
+import { Flex, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDirectUnknownResource } from '@prorobotech/openapi-k8s-toolkit'
 import { useNavSelectorInside } from 'hooks/useNavSelectorInside'
@@ -35,7 +35,7 @@ export const SelectorNamespace: FC<TSelectorNamespaceProps> = ({ clusterName, na
   })
 
   const handleNamepsaceChange = (value?: string) => {
-    if (value) {
+    if (value && value !== 'all') {
       setSelectedNamespace(value)
       const changeUrl =
         navigationData?.spec.namespaces.change
@@ -56,11 +56,12 @@ export const SelectorNamespace: FC<TSelectorNamespaceProps> = ({ clusterName, na
   }, [namespace, clusterName])
 
   return (
-    <Flex gap={18} justify="start">
+    <Flex gap={18} justify="start" align="center">
+      <Typography.Text>Namespace: </Typography.Text>
       <EntrySelect
         placeholder="Namespace"
-        options={namespacesInSidebar}
-        value={selectedNamespace}
+        options={[{ value: 'all', label: 'All Namespaces' }, ...namespacesInSidebar]}
+        value={selectedNamespace || 'all'}
         onChange={handleNamepsaceChange}
         disabled={selectedClusterName === undefined || namespacesInSidebar.length === 0}
       />
