@@ -1,3 +1,5 @@
 export * from './Selector'
 export * from './SelectorInside'
 export * from './SelectorNamespace'
+export * from './SelectorCluster'
+export * from './SelectorClusterInside'

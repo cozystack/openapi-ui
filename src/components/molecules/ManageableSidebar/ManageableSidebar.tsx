@@ -4,7 +4,8 @@ import { useLocation, useParams } from 'react-router-dom'
 import { ManageableSidebarWithDataProvider } from '@prorobotech/openapi-k8s-toolkit'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { HEAD_FIRST_ROW, SIDEBAR_CLUSTER_HEIGHT } from 'constants/blocksSizes'
+// import { HEAD_FIRST_ROW, SIDEBAR_CLUSTER_HEIGHT } from 'constants/blocksSizes'
+import { HEAD_FIRST_ROW } from 'constants/blocksSizes'
 import { BASE_API_GROUP, BASE_API_VERSION } from 'constants/customizationApiGroupAndVersion'
 import { Styled } from './styled'
 
@@ -33,7 +34,8 @@ export const ManageableSidebar: FC<TManageableSidebarProps> = ({
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const height = window.innerHeight - HEAD_FIRST_ROW - SIDEBAR_CLUSTER_HEIGHT - 2
+    // const height = window.innerHeight - HEAD_FIRST_ROW - SIDEBAR_CLUSTER_HEIGHT - 2
+    const height = window.innerHeight - HEAD_FIRST_ROW - 2
     setHeight(height)
 
     const handleResize = () => {

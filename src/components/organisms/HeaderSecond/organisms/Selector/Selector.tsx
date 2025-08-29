@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Flex } from 'antd'
+import { Flex, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useDirectUnknownResource } from '@prorobotech/openapi-k8s-toolkit'
 import { useNavSelector } from 'hooks/useNavSelector'
@@ -46,7 +46,7 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   // }
 
   const handleProjectChange = (value?: string) => {
-    if (value) {
+    if (value && value !== 'all') {
       setSelectedProjectName(value)
       const changeUrl =
         navigationData?.spec.projects.change
@@ -62,7 +62,7 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   }
 
   const handleInstanceChange = (value?: string) => {
-    if (value) {
+    if (value && value !== 'all') {
       setSelectedInstanceName(value)
       const changeUrl =
         navigationData?.spec.instances.change
@@ -86,24 +86,26 @@ export const Selector: FC<TSelectorProps> = ({ clusterName, projectName, instanc
   }, [projectName, instanceName, clusterName])
 
   return (
-    <Flex gap={18} justify="start">
+    <Flex gap={18} justify="start" align="center">
       {/* <EntrySelect
         placeholder="Cluster"
         options={clustersInSidebar}
         value={selectedClusterName}
         onChange={handleClusterChange}
       /> */}
+      <Typography.Text>Project: </Typography.Text>
       <EntrySelect
         placeholder="Project"
-        options={projectsInSidebar}
-        value={selectedProjectName}
+        options={[{ value: 'all', label: 'All Namespaces' }, ...projectsInSidebar]}
+        value={selectedProjectName || 'all'}
         onChange={handleProjectChange}
         disabled={selectedClusterName === undefined || projectsInSidebar.length === 0}
       />
+      <Typography.Text>Instance: </Typography.Text>
       <EntrySelect
         placeholder="Instance"
-        options={instancesInSidebar}
-        value={selectedInstanceName}
+        options={[{ value: 'all', label: 'All Namespaces' }, ...instancesInSidebar]}
+        value={selectedInstanceName || 'all'}
         onChange={handleInstanceChange}
         disabled={
           selectedClusterName === undefined ||

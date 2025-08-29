@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Flex } from 'antd'
+import { Flex, Typography } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useNavSelectorInside } from 'hooks/useNavSelectorInside'
 import { useMountEffect } from 'hooks/useMountEffect'
@@ -26,12 +26,12 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespac
   // }
 
   const handleNamepsaceChange = (value?: string) => {
-    if (value && params.namespace) {
+    if (value && value !== 'all' && params.namespace) {
       setSelectedNamespace(value)
       const pathnames = window.location.pathname.split('/')
       const newPathNames = [...pathnames.slice(0, 4), value, ...pathnames.slice(5)]
       navigate(newPathNames.join('/'))
-    } else if (value && !params.namespace) {
+    } else if (value && value !== 'all' && !params.namespace) {
       setSelectedNamespace(value)
       const pathnames = window.location.pathname.split('/')
       const newPathNames = [...pathnames.slice(0, 4), value, ...pathnames.slice(4)]
@@ -49,17 +49,18 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName, namespac
   }, [namespace, clusterName])
 
   return (
-    <Flex gap={18} justify="start">
+    <Flex gap={18} justify="start" align="center">
       {/* <EntrySelect
         placeholder="Cluster"
         options={clustersInSidebar}
         value={selectedClusterName}
         onChange={handleClusterChange}
       /> */}
+      <Typography.Text>Namespace: </Typography.Text>
       <EntrySelect
         placeholder="Namespace"
-        options={namespacesInSidebar}
-        value={selectedNamespace}
+        options={[{ value: 'all', label: 'All Namespaces' }, ...namespacesInSidebar]}
+        value={selectedNamespace || 'all'}
         onChange={handleNamepsaceChange}
         disabled={selectedClusterName === undefined || namespacesInSidebar.length === 0}
       />

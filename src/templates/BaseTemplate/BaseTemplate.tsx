@@ -98,7 +98,7 @@ export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, 
               <Header />
               <RowFlexGrow wrap={false}>
                 <Col span="250px">
-                  <Sidebar inside={inside} sidebar={sidebar} />
+                  <Sidebar sidebar={sidebar} />
                 </Col>
                 <FlexCol flex="auto">
                   <DefaultLayout.ContentPadding $isFederation={isFederation}>

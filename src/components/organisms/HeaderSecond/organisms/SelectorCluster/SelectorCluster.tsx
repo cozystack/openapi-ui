@@ -1,29 +1,30 @@
 import React, { FC, useState } from 'react'
+import { Flex, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { useNavSelectorInside } from 'hooks/useNavSelectorInside'
+import { useNavSelectorClusters } from 'hooks/useNavSelectorClusters'
 import { useMountEffect } from 'hooks/useMountEffect'
 import { EntrySelect } from 'components/atoms'
 
-type TSelectorInsideProps = {
+type TSelectorClusterProps = {
   clusterName?: string
 }
 
-export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName }) => {
+export const SelectorCluster: FC<TSelectorClusterProps> = ({ clusterName }) => {
   const navigate = useNavigate()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
 
   const [selectedClusterName, setSelectedClusterName] = useState(clusterName)
 
-  const { clustersInSidebar } = useNavSelectorInside(selectedClusterName)
+  const { clustersInSidebar } = useNavSelectorClusters()
 
   const handleClusterChange = (value?: string) => {
     if (value) {
       setSelectedClusterName(value)
-      navigate(`${baseprefix}/inside/${value}/apis`)
+      navigate(`${baseprefix}/clusters/${value}`)
     } else {
-      navigate(`${baseprefix}/inside/`)
+      navigate(`${baseprefix}/clusters/`)
     }
   }
 
@@ -32,12 +33,15 @@ export const SelectorInside: FC<TSelectorInsideProps> = ({ clusterName }) => {
   }, [clusterName])
 
   return (
-    <EntrySelect
-      placeholder="Cluster"
-      options={clustersInSidebar}
-      value={selectedClusterName}
-      onChange={handleClusterChange}
-      fullwidth
-    />
+    <Flex gap={18} justify="start" align="center">
+      <Typography.Text>Cluster: </Typography.Text>
+      <EntrySelect
+        placeholder="Cluster"
+        options={clustersInSidebar}
+        value={selectedClusterName}
+        onChange={handleClusterChange}
+        // fullwidth
+      />
+    </Flex>
   )
 }
