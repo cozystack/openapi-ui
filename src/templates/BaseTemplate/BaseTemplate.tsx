@@ -85,6 +85,10 @@ export const BaseTemplate: FC<TBaseTemplateProps> = ({ children, withNoCluster, 
     dispatch(setCluster(clusterName))
   }
 
+  if (clusterName === undefined) {
+    dispatch(setCluster(''))
+  }
+
   if (!clusterName && !withNoCluster) {
     navigate(`${baseprefix}/`)
   }
