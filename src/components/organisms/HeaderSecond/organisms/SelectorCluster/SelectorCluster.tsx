@@ -6,6 +6,7 @@ import { RootState } from 'store/store'
 import { useNavSelectorClusters } from 'hooks/useNavSelectorClusters'
 import { useMountEffect } from 'hooks/useMountEffect'
 import { EntrySelect } from 'components/atoms'
+import { BASE_NAVIGATE_FROM_CLUSTERLIST } from 'constants/customizationApiGroupAndVersion'
 
 type TSelectorClusterProps = {
   clusterName?: string
@@ -22,7 +23,8 @@ export const SelectorCluster: FC<TSelectorClusterProps> = ({ clusterName }) => {
   const handleClusterChange = (value?: string) => {
     if (value) {
       setSelectedClusterName(value)
-      navigate(`${baseprefix}/clusters/${value}`)
+      // navigate(`${baseprefix}/clusters/${value}`)
+      navigate(BASE_NAVIGATE_FROM_CLUSTERLIST.replace('~recordValue~', value))
     } else {
       navigate(`${baseprefix}/clusters/`)
     }
