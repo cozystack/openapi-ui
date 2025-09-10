@@ -62,6 +62,10 @@ export const LOGIN_USERNAME_FIELD = import.meta.env.DEV
   ? window._env_.LOGIN_USERNAME_FIELD || import.meta.env.VITE_LOGIN_USERNAME_FIELD
   : window._env_.LOGIN_USERNAME_FIELD
 
+export const DOCS_URL = import.meta.env.DEV
+  ? window._env_.DOCS_URL || import.meta.env.VITE_DOCS_URL
+  : window._env_.DOCS_URL
+
 export const BASE_REMOVE_BACKLINK = import.meta.env.DEV
   ? window._env_.REMOVE_BACKLINK === 'true' || import.meta.env.VITE_REMOVE_BACKLINK?.toString().toLowerCase() === 'true'
   : window._env_.REMOVE_BACKLINK === 'true'
