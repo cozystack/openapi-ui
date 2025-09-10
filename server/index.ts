@@ -66,6 +66,8 @@ const REMOVE_BACKLINK = process.env.LOCAL === 'true' ? options?.REMOVE_BACKLINK 
 const REMOVE_BACKLINK_TEXT =
   process.env.LOCAL === 'true' ? options?.REMOVE_BACKLINK_TEXT : process.env.REMOVE_BACKLINK_TEXT
 
+const DOCS_URL = process.env.LOCAL === 'true' ? options?.DOCS_URL : process.env.DOCS_URL
+
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
 
@@ -189,6 +191,7 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
       LOGIN_URL: ${JSON.stringify(LOGIN_URL) || '"check envs"'},
       LOGOUT_URL: ${JSON.stringify(LOGOUT_URL) || '"check envs"'},
       LOGIN_USERNAME_FIELD: ${JSON.stringify(LOGIN_USERNAME_FIELD) || '"check envs"'},
+      DOCS_URL: ${JSON.stringify(DOCS_URL) || '"/docs"'},
       REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? JSON.stringify(REMOVE_BACKLINK).toLowerCase() : '"false"'},
       REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? JSON.stringify(REMOVE_BACKLINK_TEXT).toLowerCase() : '"false"'}
     }

@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
 import { Button } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { DOCS_URL } from 'constants/customizationApiGroupAndVersion'
 
 export const Documentation: FC = () => {
-  const platformDocumentationUrl = '/docs'
-
   return (
-    <Button type="text" onClick={() => window.open(platformDocumentationUrl, '_blank')}>
+    <Button type="text" onClick={() => window.open(typeof DOCS_URL === 'string' ? DOCS_URL : '/docs', '_blank')}>
       <QuestionCircleOutlined />
     </Button>
   )
