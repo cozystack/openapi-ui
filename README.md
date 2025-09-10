@@ -5,7 +5,7 @@
 A React + TypeScript app that provides tables, forms and factories that renders UI and data directly from Kubernetes Custom Resources (CRDs).
 Define interfaces in YAML; the app discovers CRDs, watches their objects, and builds a live UI.
 
-# ⚙️ Configuration
+## ⚙️ Configuration
 
 This app can be configured through environment variables.
 
