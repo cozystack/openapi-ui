@@ -3,7 +3,7 @@ import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableNonCrdInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
+import { TableApiBuiltin, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { getTableCustomizationIdPrefix } from 'utils/getTableCustomizationIdPrefix'
@@ -79,7 +79,8 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
       </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         {typeName && apiGroup && apiVersion && (
-          <TableNonCrdInfo
+          <TableApiBuiltin
+            resourceType="api"
             namespace={namespace}
             apiGroup={apiGroup}
             apiVersion={apiVersion}

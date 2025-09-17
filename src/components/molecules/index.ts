@@ -1,3 +1,5 @@
 export * from './BlackholeForm'
 export * from './ManageableBreadcrumbs'
 export * from './ManageableSidebar'
+export * from './TableCrdInfo'
+export * from './TableApiBuiltin'

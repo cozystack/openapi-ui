@@ -3,13 +3,23 @@ export const getTableCustomizationIdPrefix = ({
   instance,
   namespace,
   inside,
+  search,
 }: {
   project?: boolean
   instance?: boolean
   namespace?: boolean
   inside?: boolean
+  search?: boolean
 }): string => {
-  let result = inside ? 'inside-' : 'stock-'
+  let result: string
+
+  if (inside) {
+    result = 'inside-'
+  } else if (search) {
+    result = 'search-'
+  } else {
+    result = 'stock-'
+  }
 
   if (instance) {
     result += 'instance-'

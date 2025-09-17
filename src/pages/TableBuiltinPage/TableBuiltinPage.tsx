@@ -3,7 +3,7 @@ import { ContentCard } from '@prorobotech/openapi-k8s-toolkit'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import { TableBuiltinInfo, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
+import { TableApiBuiltin, BackLink, ManageableBreadcrumbs, ManageableSidebar, NavigationContainer } from 'components'
 import { getSidebarIdPrefix } from 'utils/getSidebarIdPrefix'
 import { getBreadcrumbsIdPrefix } from 'utils/getBreadcrumbsIdPrefix'
 import { getTableCustomizationIdPrefix } from 'utils/getTableCustomizationIdPrefix'
@@ -66,7 +66,8 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
       </NavigationContainer>
       <ContentCard flexGrow={1} displayFlex flexFlow="column">
         {typeName && (
-          <TableBuiltinInfo
+          <TableApiBuiltin
+            resourceType="builtin"
             namespace={namespace}
             typeName={typeName}
             limit={searchParams.get('limit')}
