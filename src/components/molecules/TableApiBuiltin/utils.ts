@@ -1,3 +1,28 @@
+import { TBuiltinResources, TApiResources, TJSON } from '@prorobotech/openapi-k8s-toolkit'
+
+export const getDataItems = ({
+  resourceType,
+  dataBuiltin,
+  dataApi,
+  isSingle,
+}: {
+  resourceType: 'builtin' | 'api'
+  dataBuiltin?: TBuiltinResources
+  dataApi?: TApiResources
+  isSingle?: boolean
+}): TJSON[] => {
+  if (isSingle) {
+    if (resourceType === 'builtin') {
+      return dataBuiltin ? [dataBuiltin] : []
+    }
+
+    if (resourceType === 'api') {
+      return dataApi ? [dataApi] : []
+    }
+  }
+  return resourceType === 'builtin' ? dataBuiltin?.items || [] : dataApi?.items || []
+}
+
 export const getBackLinkToBuiltinTable = ({
   cluster,
   baseprefix,
