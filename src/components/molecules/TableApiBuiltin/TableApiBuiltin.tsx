@@ -26,7 +26,7 @@ import {
   TABLE_ADD_BUTTON_HEIGHT,
 } from 'constants/blocksSizes'
 import { OverflowContainer } from './atoms'
-import { getBackLinkToTable, getLinkToForm } from './utils'
+import { getDataItems, getBackLinkToTable, getLinkToForm } from './utils'
 
 type TTableApiBuiltinProps = {
   namespace?: string
@@ -34,6 +34,8 @@ type TTableApiBuiltinProps = {
   apiGroup?: string // api
   apiVersion?: string // api
   typeName: string
+  specificName?: string
+  labels?: string[]
   limit: string | null
   inside?: boolean
   customizationIdPrefix: string
@@ -46,6 +48,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   apiGroup,
   apiVersion,
   typeName,
+  specificName,
+  labels,
   limit,
   inside,
   customizationIdPrefix,
@@ -150,6 +154,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     clusterName: cluster,
     namespace,
     typeName,
+    specificName,
+    labels,
     limit,
     isEnabled: resourceType === 'builtin',
   })
@@ -164,6 +170,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     apiGroup: apiGroup || '',
     apiVersion: apiVersion || '',
     typeName,
+    specificName,
+    labels,
     limit,
     isEnabled: resourceType === 'api' && !!apiGroup && !!apiVersion,
   })
@@ -222,7 +230,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               cluster={cluster}
               theme={theme}
               baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
-              dataItems={resourceType === 'builtin' ? dataBuiltin?.items || [] : dataApi?.items || []}
+              dataItems={getDataItems({ resourceType, dataBuiltin, dataApi, isSingle: !!specificName })}
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,

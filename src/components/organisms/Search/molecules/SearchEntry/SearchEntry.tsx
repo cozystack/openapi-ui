@@ -7,9 +7,11 @@ import { BASE_USE_NAMESPACE_NAV } from 'constants/customizationApiGroupAndVersio
 
 type TSearchEntryProps = {
   resource: string
+  name?: string
+  labels?: string[]
 }
 
-export const SearchEntry: FC<TSearchEntryProps> = ({ resource }) => {
+export const SearchEntry: FC<TSearchEntryProps> = ({ resource, name, labels }) => {
   const { namespace, syntheticProject } = useParams()
   const [searchParams] = useSearchParams()
 
@@ -27,14 +29,18 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource }) => {
       <Typography.Title level={4}>
         {apiGroup.length > 0 ? `${apiGroup}/${apiVersion}/` : 'v1/'}
         {typeName}
+        {name ? ` & name=${name}` : ''}
+        {labels ? ` & labels=${labels.join('+')}` : ''}
       </Typography.Title>
-      {typeName && apiGroup && apiVersion && (
+      {typeName && (
         <TableApiBuiltin
-          resourceType={apiGroup ? 'api' : 'builtin'}
+          resourceType={apiGroup.length > 0 ? 'api' : 'builtin'}
           namespace={namespace}
           apiGroup={apiGroup.length > 0 ? apiGroup : undefined}
           apiVersion={apiGroup.length > 0 ? apiVersion : undefined}
           typeName={typeName}
+          specificName={name?.length ? name : undefined}
+          labels={labels?.length ? labels : undefined}
           limit={searchParams.get('limit')}
           customizationIdPrefix={tableCustomizationIdPrefix}
           searchMount
