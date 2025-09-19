@@ -9,9 +9,10 @@ type TSearchEntryProps = {
   resource: string
   name?: string
   labels?: string[]
+  fields?: string[]
 }
 
-export const SearchEntry: FC<TSearchEntryProps> = ({ resource, name, labels }) => {
+export const SearchEntry: FC<TSearchEntryProps> = ({ resource, name, labels, fields }) => {
   const { namespace, syntheticProject } = useParams()
   const [searchParams] = useSearchParams()
 
@@ -30,7 +31,8 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, name, labels }) =
         {apiGroup.length > 0 ? `${apiGroup}/${apiVersion}/` : 'v1/'}
         {typeName}
         {name ? ` & name=${name}` : ''}
-        {labels ? ` & labels=${labels.join('+')}` : ''}
+        {labels && labels.length ? ` & labels=${labels.join('+')}` : ''}
+        {fields && fields.length ? ` & labels=${fields.join('+')}` : ''}
       </Typography.Title>
       {typeName && (
         <TableApiBuiltin
@@ -41,6 +43,7 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, name, labels }) =
           typeName={typeName}
           specificName={name?.length ? name : undefined}
           labels={labels?.length ? labels : undefined}
+          fields={fields?.length ? fields : undefined}
           limit={searchParams.get('limit')}
           customizationIdPrefix={tableCustomizationIdPrefix}
           searchMount
