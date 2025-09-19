@@ -36,6 +36,7 @@ type TTableApiBuiltinProps = {
   typeName: string
   specificName?: string
   labels?: string[]
+  fields?: string[]
   limit: string | null
   inside?: boolean
   customizationIdPrefix: string
@@ -50,6 +51,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   typeName,
   specificName,
   labels,
+  fields,
   limit,
   inside,
   customizationIdPrefix,
@@ -156,6 +158,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     typeName,
     specificName,
     labels,
+    fields,
     limit,
     isEnabled: resourceType === 'builtin',
   })
@@ -172,6 +175,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     typeName,
     specificName,
     labels,
+    fields,
     limit,
     isEnabled: resourceType === 'api' && !!apiGroup && !!apiVersion,
   })

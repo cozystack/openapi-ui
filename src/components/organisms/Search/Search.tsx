@@ -8,14 +8,24 @@ import { SearchEntry } from './molecules'
 export const Search: FC = () => {
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
 
-  const [currentSearch, setCurrentSearch] = useState<{ resources?: string[]; name?: string; labels?: string[] }>()
+  const [currentSearch, setCurrentSearch] = useState<{
+    resources?: string[]
+    name?: string
+    labels?: string[]
+    fields?: string[]
+  }>()
 
   return (
     <>
       <PackageSearch cluster={cluster} updateCurrentSearch={value => setCurrentSearch(value)} />
       {currentSearch?.resources?.map(item => (
         <Fragment key={item}>
-          <SearchEntry resource={item} name={currentSearch.name} labels={currentSearch.labels} />
+          <SearchEntry
+            resource={item}
+            name={currentSearch.name}
+            labels={currentSearch.labels}
+            fields={currentSearch.fields}
+          />
           <Spacer $space={50} $samespace />
         </Fragment>
       ))}
