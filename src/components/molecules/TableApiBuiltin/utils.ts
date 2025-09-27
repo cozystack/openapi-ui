@@ -30,6 +30,8 @@ export const getBackLinkToBuiltinTable = ({
   syntheticProject,
   typeName,
   inside,
+  fullPath,
+  searchMount,
 }: {
   cluster: string
   baseprefix?: string
@@ -37,7 +39,12 @@ export const getBackLinkToBuiltinTable = ({
   syntheticProject?: string
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
+  if (searchMount) {
+    return fullPath
+  }
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
   const mainRoute = `${root}${namespace ? `/${namespace}` : ''}${syntheticProject ? `/${syntheticProject}` : ''}`
 
@@ -53,6 +60,8 @@ export const getBackLinkToApiTable = ({
   apiVersion,
   typeName,
   inside,
+  fullPath,
+  searchMount,
 }: {
   cluster: string
   baseprefix?: string
@@ -62,7 +71,13 @@ export const getBackLinkToApiTable = ({
   apiVersion?: string // api
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
+  if (searchMount) {
+    return fullPath
+  }
+
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
   const mainRoute = `${root}${namespace ? `/${namespace}` : ''}${syntheticProject ? `/${syntheticProject}` : ''}`
 
@@ -82,6 +97,8 @@ export const getBackLinkToTable = ({
   apiVersion?: string // api
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
   return resourceType === 'builtin' ? getBackLinkToBuiltinTable({ ...rest }) : getBackLinkToApiTable({ ...rest })
 }
@@ -93,6 +110,8 @@ export const getLinkToBuiltinForm = ({
   syntheticProject,
   typeName,
   inside,
+  fullPath,
+  searchMount,
 }: {
   cluster: string
   baseprefix?: string
@@ -100,10 +119,21 @@ export const getLinkToBuiltinForm = ({
   syntheticProject?: string
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
   const mainRoute = `${root}${namespace ? `/${namespace}` : ''}${syntheticProject ? `/${syntheticProject}` : ''}`
-  const backlink = getBackLinkToBuiltinTable({ cluster, baseprefix, namespace, syntheticProject, typeName, inside })
+  const backlink = getBackLinkToBuiltinTable({
+    cluster,
+    baseprefix,
+    namespace,
+    syntheticProject,
+    typeName,
+    inside,
+    fullPath,
+    searchMount,
+  })
 
   return `${mainRoute}/forms/builtin/v1/${typeName}?backlink=${backlink}`
 }
@@ -117,6 +147,8 @@ export const getLinkToApiForm = ({
   apiVersion,
   typeName,
   inside,
+  fullPath,
+  searchMount,
 }: {
   cluster: string
   baseprefix?: string
@@ -126,6 +158,8 @@ export const getLinkToApiForm = ({
   apiVersion?: string // api
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
   const mainRoute = `${root}${namespace ? `/${namespace}` : ''}${syntheticProject ? `/${syntheticProject}` : ''}`
@@ -138,6 +172,8 @@ export const getLinkToApiForm = ({
     apiVersion,
     typeName,
     inside,
+    fullPath,
+    searchMount,
   })
 
   return `${mainRoute}/forms/apis/${apiGroup}/${apiVersion}/${typeName}?backlink=${backlink}`
@@ -156,6 +192,8 @@ export const getLinkToForm = ({
   apiVersion?: string // api
   typeName: string
   inside?: boolean
+  fullPath: string
+  searchMount?: boolean
 }): string => {
   return resourceType === 'builtin' ? getLinkToBuiltinForm({ ...rest }) : getLinkToApiForm({ ...rest })
 }

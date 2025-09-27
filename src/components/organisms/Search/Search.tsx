@@ -11,9 +11,10 @@ import {
   getSortedKinds,
   // kindByGvr,
 } from '@prorobotech/openapi-k8s-toolkit'
-import { Form, Spin, Alert } from 'antd'
+import { ConfigProvider, theme as antdtheme, Form, Spin, Alert } from 'antd'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
+import { HEAD_FIRST_ROW, HEAD_SECOND_ROW, FOOTER_HEIGHT, NAV_HEIGHT, CONTENT_CARD_PADDING } from 'constants/blocksSizes'
 import {
   FIELD_NAME,
   FIELD_NAME_STRING,
@@ -27,10 +28,12 @@ import {
 } from './constants'
 import { useDebouncedCallback, getArrayParam, setArrayParam, getStringParam, setStringParam } from './utils'
 import { SearchEntry } from './molecules'
+import { Styled } from './styled'
 
 export const Search: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
+  const { token } = antdtheme.useToken()
 
   const cluster = useSelector((state: RootState) => state.cluster.cluster)
   const theme = useSelector((state: RootState) => state.openapiTheme.theme)
@@ -42,6 +45,24 @@ export const Search: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [kindIndex, setKindIndex] = useState<TKindIndex>()
   const [kindsWithVersion, setKindWithVersion] = useState<TKindWithVersion[]>()
+
+  const [height, setHeight] = useState(0)
+
+  useEffect(() => {
+    const height =
+      window.innerHeight - HEAD_FIRST_ROW - HEAD_SECOND_ROW - NAV_HEIGHT - CONTENT_CARD_PADDING * 2 - FOOTER_HEIGHT - 1
+    setHeight(height)
+
+    const handleResize = () => {
+      setHeight(height)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   useEffect(() => {
     setIsLoading(true)
@@ -195,26 +216,49 @@ export const Search: FC = () => {
   }
 
   return (
-    <>
-      <PackageSearch
-        cluster={cluster}
-        theme={theme}
-        form={form}
-        constants={{
-          FIELD_NAME,
-          FIELD_NAME_STRING,
-          FIELD_NAME_LABELS,
-          FIELD_NAME_FIELDS,
-          TYPE_SELECTOR,
-        }}
-        kindsWithVersion={kindsWithVersion}
-      />
-      {watchedKinds?.map(item => (
-        <Fragment key={item}>
-          <SearchEntry resource={item} name={watchedName} labels={watchedLabels} fields={watchedFields} />
-          <Spacer $space={50} $samespace />
-        </Fragment>
-      ))}
-    </>
+    <Styled.Container $height={height}>
+      <Styled.OverflowContainer>
+        <PackageSearch
+          cluster={cluster}
+          theme={theme}
+          form={form}
+          constants={{
+            FIELD_NAME,
+            FIELD_NAME_STRING,
+            FIELD_NAME_LABELS,
+            FIELD_NAME_FIELDS,
+            TYPE_SELECTOR,
+          }}
+          kindsWithVersion={kindsWithVersion}
+        />
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: token.colorBgContainer,
+              },
+            },
+          }}
+        >
+          {watchedKinds?.map(item => (
+            <Fragment key={item}>
+              <Spacer $space={20} $samespace />
+              <SearchEntry
+                kindsWithVersion={kindsWithVersion}
+                form={form}
+                constants={{
+                  FIELD_NAME,
+                }}
+                resource={item}
+                name={watchedName}
+                labels={watchedLabels}
+                fields={watchedFields}
+              />
+            </Fragment>
+          ))}
+        </ConfigProvider>
+        <Spacer $space={20} $samespace />
+      </Styled.OverflowContainer>
+    </Styled.Container>
   )
 }

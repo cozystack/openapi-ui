@@ -14,6 +14,7 @@ import {
   checkIfApiInstanceNamespaceScoped,
   useBuiltinResources,
   useApiResources,
+  Spacer,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { FlexGrow, PaddingContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
@@ -41,6 +42,7 @@ type TTableApiBuiltinProps = {
   inside?: boolean
   customizationIdPrefix: string
   searchMount?: boolean
+  kindName?: string
 }
 
 export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
@@ -56,6 +58,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   inside,
   customizationIdPrefix,
   searchMount,
+  kindName,
 }) => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -196,6 +199,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
       return acc
     }, {})
 
+  const fullPath = `${location.pathname}${location.search}`
+
   return (
     <>
       {((resourceType === 'builtin' && isPendingBuiltin) || (resourceType === 'api' && isPendingApi)) && <Spin />}
@@ -251,6 +256,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
                   apiVersion,
                   typeName,
                   inside,
+                  fullPath,
+                  searchMount,
                 }),
                 deletePathPrefix:
                   resourceType === 'builtin' ? `/api/clusters/${cluster}/k8s/api` : `/api/clusters/${cluster}/k8s/apis`,
@@ -286,49 +293,48 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
           </MarginTopContainer>
         )} */}
       </OverflowContainer>
-      {!searchMount && (
-        <>
-          <FlexGrow />
-          <PaddingContainer $padding="4px">
-            <Flex justify="space-between">
-              <Button
-                type="primary"
-                onClick={() => {
-                  const url = getLinkToForm({
-                    resourceType,
-                    cluster,
-                    baseprefix,
-                    namespace,
-                    syntheticProject: params.syntheticProject,
-                    apiGroup,
-                    apiVersion,
-                    typeName,
-                    inside,
-                  })
-                  navigate(url)
-                }}
-                loading={isNamespaced ? false : createPermission.isPending}
-                disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
-              >
-                <PlusOutlined />
-                Add
+
+      {searchMount ? <Spacer $space={12} $samespace /> : <FlexGrow />}
+      <PaddingContainer $padding="4px">
+        <Flex justify="space-between">
+          <Button
+            type="primary"
+            onClick={() => {
+              const url = getLinkToForm({
+                resourceType,
+                cluster,
+                baseprefix,
+                namespace,
+                syntheticProject: params.syntheticProject,
+                apiGroup,
+                apiVersion,
+                typeName,
+                inside,
+                fullPath,
+                searchMount,
+              })
+              navigate(url)
+            }}
+            loading={isNamespaced ? false : createPermission.isPending}
+            disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+          >
+            <PlusOutlined />
+            Add {kindName}
+          </Button>
+          {selectedRowKeys.length > 0 && (
+            <Flex gap={16}>
+              <Button type="primary" onClick={clearSelected}>
+                <ClearOutlined />
+                Clear
               </Button>
-              {selectedRowKeys.length > 0 && (
-                <Flex gap={16}>
-                  <Button type="primary" onClick={clearSelected}>
-                    <ClearOutlined />
-                    Clear
-                  </Button>
-                  <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
-                    <MinusOutlined />
-                    Delete
-                  </Button>
-                </Flex>
-              )}
+              <Button type="primary" onClick={() => setIsDeleteModalManyOpen(selectedRowsData)}>
+                <MinusOutlined />
+                Delete
+              </Button>
             </Flex>
-          </PaddingContainer>
-        </>
-      )}
+          )}
+        </Flex>
+      </PaddingContainer>
       {isDeleteModalOpen && (
         <DeleteModal
           name={isDeleteModalOpen.name}
