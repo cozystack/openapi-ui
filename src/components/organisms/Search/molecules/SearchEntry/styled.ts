@@ -18,6 +18,7 @@ const Container = styled.div<TContainerProps>`
 const CustomTag = styled(Tag)`
   font-size: 14px;
   height: 22px;
+  /* stylelint-disable declaration-no-important */
   margin-inline-end: 0 !important;
 `
 
