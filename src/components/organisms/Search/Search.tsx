@@ -240,22 +240,24 @@ export const Search: FC = () => {
             },
           }}
         >
-          {watchedKinds?.map(item => (
-            <Fragment key={item}>
-              <Spacer $space={20} $samespace />
-              <SearchEntry
-                kindsWithVersion={kindsWithVersion}
-                form={form}
-                constants={{
-                  FIELD_NAME,
-                }}
-                resource={item}
-                name={watchedName}
-                labels={watchedLabels}
-                fields={watchedFields}
-              />
-            </Fragment>
-          ))}
+          {watchedKinds?.map(item => {
+            const fields = [...(watchedFields || []), ...(watchedName ? [`metadata.name=${watchedName}`] : [])]
+            return (
+              <Fragment key={item}>
+                <Spacer $space={20} $samespace />
+                <SearchEntry
+                  kindsWithVersion={kindsWithVersion}
+                  form={form}
+                  constants={{
+                    FIELD_NAME,
+                  }}
+                  resource={item}
+                  labels={watchedLabels}
+                  fields={fields.length ? fields : undefined}
+                />
+              </Fragment>
+            )
+          })}
         </ConfigProvider>
         <Spacer $space={20} $samespace />
       </Styled.OverflowContainer>

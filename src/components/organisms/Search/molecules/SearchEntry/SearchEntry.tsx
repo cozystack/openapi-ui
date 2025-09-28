@@ -19,7 +19,6 @@ import { Styled } from './styled'
 
 type TSearchEntryProps = {
   resource: string
-  name?: string
   labels?: string[]
   fields?: string[]
   form: FormInstance
@@ -29,15 +28,7 @@ type TSearchEntryProps = {
   kindsWithVersion: TKindWithVersion[]
 }
 
-export const SearchEntry: FC<TSearchEntryProps> = ({
-  resource,
-  name,
-  labels,
-  fields,
-  form,
-  constants,
-  kindsWithVersion,
-}) => {
+export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, form, constants, kindsWithVersion }) => {
   const { namespace, syntheticProject } = useParams()
   const [searchParams] = useSearchParams()
   const { token } = antdtheme.useToken()
@@ -96,7 +87,6 @@ export const SearchEntry: FC<TSearchEntryProps> = ({
               apiGroup={apiGroup.length > 0 ? apiGroup : undefined}
               apiVersion={apiGroup.length > 0 ? apiVersion : undefined}
               typeName={typeName}
-              specificName={name?.length ? name : undefined}
               labels={labels?.length ? labels : undefined}
               fields={fields?.length ? fields : undefined}
               limit={searchParams.get('limit')}
