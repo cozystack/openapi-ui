@@ -40,3 +40,20 @@ export const setStringParam = (sp: URLSearchParams, key: string, value: string |
   else next.set(key, v)
   return next
 }
+
+export const getTypeParam = (sp: URLSearchParams, key: string): 'name' | 'labels' | 'fields' | undefined => {
+  const v = sp.get(key)?.trim()
+  if (v === 'name' || v === 'labels' || v === 'fields') return v
+  return undefined
+}
+
+export const setTypeParam = (sp: URLSearchParams, key: string, value: string | undefined | null) => {
+  const next = new URLSearchParams(sp)
+  const v = (value ?? '').trim()
+  if (v !== 'name' && v !== 'labels' && v !== 'fields') {
+    next.delete(key)
+  } else {
+    next.set(key, v)
+  }
+  return next
+}

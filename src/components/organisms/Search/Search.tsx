@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import React, { FC, Fragment, useState, useEffect } from 'react'
+import React, { FC, Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import {
   Search as PackageSearch,
@@ -9,7 +9,6 @@ import {
   TKindWithVersion,
   getKinds,
   getSortedKinds,
-  // kindByGvr,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { ConfigProvider, theme as antdtheme, Form, Spin, Alert } from 'antd'
 import { useSelector } from 'react-redux'
@@ -20,13 +19,22 @@ import {
   FIELD_NAME_STRING,
   FIELD_NAME_LABELS,
   FIELD_NAME_FIELDS,
-  TYPE_SELECTOR,
   QUERY_KEY,
   NAME_QUERY_KEY,
   LABELS_QUERY_KEY,
   FIELDS_QUERY_KEY,
+  TYPE_SELECTOR,
+  TYPE_QUERY_KEY,
 } from './constants'
-import { useDebouncedCallback, getArrayParam, setArrayParam, getStringParam, setStringParam } from './utils'
+import {
+  useDebouncedCallback,
+  getArrayParam,
+  setArrayParam,
+  getStringParam,
+  setStringParam,
+  getTypeParam,
+  setTypeParam,
+} from './utils'
 import { SearchEntry } from './molecules'
 import { Styled } from './styled'
 
@@ -67,9 +75,7 @@ export const Search: FC = () => {
   useEffect(() => {
     setIsLoading(true)
     setError(undefined)
-    getKinds({
-      clusterName: cluster,
-    })
+    getKinds({ clusterName: cluster })
       .then(data => {
         setKindIndex(data)
         setKindWithVersion(getSortedKinds(data))
@@ -88,59 +94,79 @@ export const Search: FC = () => {
   const watchedFields = Form.useWatch<string[] | undefined>(FIELD_NAME_FIELDS, form)
   const watchedTypedSelector = Form.useWatch<string | undefined>(TYPE_SELECTOR, form)
 
-  // Apply current values from search params on mount / when URL changes
+  // —— hydration control to prevent “push empties” on first render ——
+  const isHydratingRef = useRef(true)
+
+  // First, synchronously hydrate form from URL so watchers aren’t undefined on paint
+  useLayoutEffect(() => {
+    const fromKinds = getArrayParam(searchParams, QUERY_KEY)
+    const fromName = getStringParam(searchParams, NAME_QUERY_KEY)
+    const fromLabels = getArrayParam(searchParams, LABELS_QUERY_KEY)
+    const fromFields = getArrayParam(searchParams, FIELDS_QUERY_KEY)
+
+    const explicitType = getTypeParam(searchParams, TYPE_QUERY_KEY)
+    const inferredFromValues =
+      (fromFields.length > 0 && 'fields') || (fromLabels.length > 0 && 'labels') || (fromName ? 'name' : undefined)
+    const nextType = explicitType ?? inferredFromValues
+
+    form.setFieldsValue({
+      [FIELD_NAME]: fromKinds,
+      [FIELD_NAME_STRING]: fromName,
+      [FIELD_NAME_LABELS]: fromLabels,
+      [FIELD_NAME_FIELDS]: fromFields,
+      [TYPE_SELECTOR]: nextType,
+    })
+
+    isHydratingRef.current = false
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // keep form in sync if URL changes later (back/forward/external edits) ——
   useEffect(() => {
+    if (isHydratingRef.current) return
+
     const fromKinds = getArrayParam(searchParams, QUERY_KEY)
     const currentKinds = form.getFieldValue(FIELD_NAME)
     const kindsDiffer =
       (fromKinds.length || 0) !== (currentKinds?.length || 0) || fromKinds.some((v, i) => v !== currentKinds?.[i])
 
-    // name
     const fromName = getStringParam(searchParams, NAME_QUERY_KEY)
-    const currentName = form.getFieldValue(FIELD_NAME_STRING) as string | undefined
+    const currentName = form.getFieldValue(FIELD_NAME_STRING)
     const nameDiffer = (fromName || '') !== (currentName || '')
 
-    // labels
     const fromLabels = getArrayParam(searchParams, LABELS_QUERY_KEY)
-    const currentLabels = form.getFieldValue(FIELD_NAME_LABELS) as string[] | undefined
+    const currentLabels = form.getFieldValue(FIELD_NAME_LABELS)
     const labelsDiffer =
       (fromLabels.length || 0) !== (currentLabels?.length || 0) || fromLabels.some((v, i) => v !== currentLabels?.[i])
 
-    // labels
     const fromFields = getArrayParam(searchParams, FIELDS_QUERY_KEY)
-    const currentFields = form.getFieldValue(FIELD_NAME_FIELDS) as string[] | undefined
+    const currentFields = form.getFieldValue(FIELD_NAME_FIELDS)
     const fieldsDiffer =
       (fromFields.length || 0) !== (currentFields?.length || 0) || fromFields.some((v, i) => v !== currentFields?.[i])
 
-    // decide type from params
+    const explicitType = getTypeParam(searchParams, TYPE_QUERY_KEY)
     const currentType = form.getFieldValue(TYPE_SELECTOR)
-    let inferredType: string | undefined
-    if (fromName) {
-      inferredType = 'name'
-    } else if (fromLabels.length > 0) {
-      inferredType = 'labels'
-    } else if (fromFields.length > 0) {
-      inferredType = 'fields'
-    }
-    const typeDiffer = inferredType !== currentType
+    const inferredFromValues =
+      (fromFields.length > 0 && 'fields') || (fromLabels.length > 0 && 'labels') || (fromName ? 'name' : undefined)
+    const nextType = explicitType ?? currentType ?? inferredFromValues
+    const typeDiffer = nextType !== currentType
 
-    // Only update the form if URL differs from form (prevents loops)
-    if (kindsDiffer || nameDiffer || labelsDiffer || fieldsDiffer) {
+    if (kindsDiffer || nameDiffer || labelsDiffer || fieldsDiffer || typeDiffer) {
       form.setFieldsValue({
         [FIELD_NAME]: kindsDiffer ? fromKinds : currentKinds,
         [FIELD_NAME_STRING]: nameDiffer ? fromName : currentName,
         [FIELD_NAME_LABELS]: labelsDiffer ? fromLabels : currentLabels,
         [FIELD_NAME_FIELDS]: fieldsDiffer ? fromFields : currentFields,
-        [TYPE_SELECTOR]: typeDiffer ? inferredType : currentType,
+        ...(typeDiffer ? { [TYPE_SELECTOR]: nextType } : {}),
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]) // react to back/forward, external URL edits
+  }, [location.search])
 
-  // Watch field changes to push to URL (debounced)
-  const debouncedPush = useDebouncedCallback((values: string[]) => {
+  // debounced URL pushers (guarded against hydration & undefined) ——
+  const debouncedPushKinds = useDebouncedCallback((values: string[]) => {
     const next = setArrayParam(searchParams, QUERY_KEY, values)
-    setSearchParams(next, { replace: true }) // replace to keep history cleaner
+    setSearchParams(next, { replace: true })
   }, 250)
 
   const debouncedPushName = useDebouncedCallback((value: string) => {
@@ -159,47 +185,43 @@ export const Search: FC = () => {
   }, 250)
 
   useEffect(() => {
-    debouncedPush(watchedKinds || [])
+    if (isHydratingRef.current || watchedKinds === undefined) {
+      return
+    }
+    debouncedPushKinds(watchedKinds)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedKinds])
 
   useEffect(() => {
-    debouncedPushName((watchedName || '').trim())
+    if (isHydratingRef.current || watchedName === undefined) {
+      return
+    }
+    debouncedPushName(watchedName.trim())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedName])
 
   useEffect(() => {
+    if (isHydratingRef.current || watchedLabels === undefined) {
+      return
+    }
     debouncedPushLabels(watchedLabels || [])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedLabels])
 
   useEffect(() => {
+    if (isHydratingRef.current || watchedFields === undefined) {
+      return
+    }
     debouncedPushFields(watchedFields || [])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedFields])
 
   useEffect(() => {
-    if (watchedTypedSelector === 'name') {
-      // Clear labels when switching to "name"
-      // const cur = form.getFieldValue(FIELD_NAME_LABELS) as string[] | undefined
-      // if (cur?.length) {
-      form.setFieldsValue({ [FIELD_NAME_LABELS]: [], [FIELD_NAME_FIELDS]: [] })
-      // }
-    } else if (watchedTypedSelector === 'labels') {
-      // Clear name when switching to "labels"
-      // const cur = (form.getFieldValue(FIELD_NAME_STRING) as string | undefined) ?? ''
-      // if (cur) {
-      form.setFieldsValue({ [FIELD_NAME_STRING]: '', [FIELD_NAME_FIELDS]: [] })
-      // }
-    } else if (watchedTypedSelector === 'fields') {
-      // Clear name when switching to "labels"
-      // const cur = (form.getFieldValue(FIELD_NAME_STRING) as string | undefined) ?? ''
-      // if (cur) {
-      form.setFieldsValue({ [FIELD_NAME_STRING]: '', [FIELD_NAME_LABELS]: [] })
-      // }
+    if (isHydratingRef.current || watchedTypedSelector === undefined) {
+      return
     }
-    // Optional: if undefined (e.g., initial), choose a default behavior:
-    // else { form.setFieldsValue({ [FIELD_NAME_STRING]: '', [FIELD_NAME_MULTIPLE]: [] }) }
+    const next = setTypeParam(searchParams, TYPE_QUERY_KEY, watchedTypedSelector)
+    setSearchParams(next, { replace: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedTypedSelector])
 
