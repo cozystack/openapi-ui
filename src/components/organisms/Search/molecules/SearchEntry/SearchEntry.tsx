@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import {
   TKindWithVersion,
   kindByGvr,
+  namespacedByGvr,
   getUppercase,
   hslFromString,
   Spacer,
@@ -19,7 +20,6 @@ import { Styled } from './styled'
 
 type TSearchEntryProps = {
   resource: string
-  name?: string
   labels?: string[]
   fields?: string[]
   form: FormInstance
@@ -29,15 +29,7 @@ type TSearchEntryProps = {
   kindsWithVersion: TKindWithVersion[]
 }
 
-export const SearchEntry: FC<TSearchEntryProps> = ({
-  resource,
-  name,
-  labels,
-  fields,
-  form,
-  constants,
-  kindsWithVersion,
-}) => {
+export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, form, constants, kindsWithVersion }) => {
   const { namespace, syntheticProject } = useParams()
   const [searchParams] = useSearchParams()
   const { token } = antdtheme.useToken()
@@ -53,6 +45,8 @@ export const SearchEntry: FC<TSearchEntryProps> = ({
   const kindName = kindByGvr(kindsWithVersion)(resource)
   const abbr = getUppercase(kindName && kindName.length ? kindName : 'Loading')
   const bgColor = kindName && kindName.length ? hslFromString(abbr, theme) : ''
+
+  const isNamespaceResource = namespacedByGvr(kindsWithVersion)(resource)
 
   const tableCustomizationIdPrefix = getTableCustomizationIdPrefix({
     instance: !!syntheticProject,
@@ -92,11 +86,10 @@ export const SearchEntry: FC<TSearchEntryProps> = ({
           {typeName && (
             <TableApiBuiltin
               resourceType={apiGroup.length > 0 ? 'api' : 'builtin'}
-              namespace={namespace}
+              namespace={isNamespaceResource ? namespace : undefined}
               apiGroup={apiGroup.length > 0 ? apiGroup : undefined}
               apiVersion={apiGroup.length > 0 ? apiVersion : undefined}
               typeName={typeName}
-              specificName={name?.length ? name : undefined}
               labels={labels?.length ? labels : undefined}
               fields={fields?.length ? fields : undefined}
               limit={searchParams.get('limit')}

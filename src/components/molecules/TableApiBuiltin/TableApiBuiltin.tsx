@@ -35,7 +35,6 @@ type TTableApiBuiltinProps = {
   apiGroup?: string // api
   apiVersion?: string // api
   typeName: string
-  specificName?: string
   labels?: string[]
   fields?: string[]
   limit: string | null
@@ -51,7 +50,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   apiGroup,
   apiVersion,
   typeName,
-  specificName,
   labels,
   fields,
   limit,
@@ -159,7 +157,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     clusterName: cluster,
     namespace,
     typeName,
-    specificName,
     labels,
     fields,
     limit,
@@ -176,7 +173,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     apiGroup: apiGroup || '',
     apiVersion: apiVersion || '',
     typeName,
-    specificName,
     labels,
     fields,
     limit,
@@ -239,7 +235,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               cluster={cluster}
               theme={theme}
               baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
-              dataItems={getDataItems({ resourceType, dataBuiltin, dataApi, isSingle: !!specificName })}
+              dataItems={getDataItems({ resourceType, dataBuiltin, dataApi })}
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,
