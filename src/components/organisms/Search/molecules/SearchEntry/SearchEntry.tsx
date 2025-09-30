@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import {
   TKindWithVersion,
   kindByGvr,
+  namespacedByGvr,
   getUppercase,
   hslFromString,
   Spacer,
@@ -45,6 +46,8 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, f
   const abbr = getUppercase(kindName && kindName.length ? kindName : 'Loading')
   const bgColor = kindName && kindName.length ? hslFromString(abbr, theme) : ''
 
+  const isNamespaceResource = namespacedByGvr(kindsWithVersion)(resource)
+
   const tableCustomizationIdPrefix = getTableCustomizationIdPrefix({
     instance: !!syntheticProject,
     project: BASE_USE_NAMESPACE_NAV !== 'true' && !!namespace,
@@ -83,7 +86,7 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, f
           {typeName && (
             <TableApiBuiltin
               resourceType={apiGroup.length > 0 ? 'api' : 'builtin'}
-              namespace={namespace}
+              namespace={isNamespaceResource ? namespace : undefined}
               apiGroup={apiGroup.length > 0 ? apiGroup : undefined}
               apiVersion={apiGroup.length > 0 ? apiVersion : undefined}
               typeName={typeName}
