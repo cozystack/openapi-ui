@@ -26,6 +26,7 @@ export const SearchPage: FC<TSearchPageProps> = ({ forcedTheme }) => {
     <BaseTemplate
       forcedTheme={forcedTheme}
       inside={false}
+      isSearch
       sidebar={
         <ManageableSidebar
           instanceName={possibleInstance}
