@@ -44,7 +44,7 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, f
 
   const kindName = kindByGvr(kindsWithVersion)(resource)
   const abbr = getUppercase(kindName && kindName.length ? kindName : 'Loading')
-  const bgColor = kindName && kindName.length ? hslFromString(abbr, theme) : ''
+  const bgColor = kindName && kindName.length ? hslFromString(kindName, theme) : ''
 
   const isNamespaceResource = namespacedByGvr(kindsWithVersion)(resource)
 
@@ -63,17 +63,23 @@ export const SearchEntry: FC<TSearchEntryProps> = ({ resource, labels, fields, f
   return (
     <Styled.Container $colorBorder={token.colorBorder} $colorText={token.colorText}>
       <Flex justify="space-between" align="center">
-        <Styled.CustomTag
-          key={resource}
-          onClose={e => {
-            e.preventDefault()
-            removeKind(resource)
-          }}
-          closable
-        >
-          {kindName && kindName.length && bgColor.length && <Styled.Abbr $bgColor={bgColor}>{abbr}</Styled.Abbr>}
-          {kindName}
-        </Styled.CustomTag>
+        <Flex gap={10}>
+          <Styled.CustomTag
+            key={resource}
+            onClose={e => {
+              e.preventDefault()
+              removeKind(resource)
+            }}
+            closable
+          >
+            {kindName && kindName.length && bgColor.length && <Styled.Abbr $bgColor={bgColor}>{abbr}</Styled.Abbr>}
+            {kindName}
+          </Styled.CustomTag>
+          <Styled.ApiGroupVersion $colorTextDescription={token.colorTextDescription}>
+            {apiGroup && apiGroup.length > 0 ? `${apiGroup}/` : ''}
+            {apiVersion}
+          </Styled.ApiGroupVersion>
+        </Flex>
         <div>
           <Button type="text" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <DownIcon size={14} /> : <UpIcon size={14} />}
