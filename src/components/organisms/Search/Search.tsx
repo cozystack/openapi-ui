@@ -9,6 +9,7 @@ import {
   TKindWithVersion,
   getKinds,
   getSortedKinds,
+  LookingGlassIcon,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { ConfigProvider, theme as antdtheme, Form, Spin, Alert } from 'antd'
 import { useSelector } from 'react-redux'
@@ -55,6 +56,7 @@ export const Search: FC = () => {
   const [kindsWithVersion, setKindWithVersion] = useState<TKindWithVersion[]>()
 
   const [height, setHeight] = useState(0)
+  const [emptyHeight, setEmptyHeight] = useState(0)
 
   useEffect(() => {
     const height =
@@ -63,6 +65,29 @@ export const Search: FC = () => {
 
     const handleResize = () => {
       setHeight(height)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  useEffect(() => {
+    const emptyHeight =
+      window.innerHeight -
+      HEAD_FIRST_ROW -
+      HEAD_SECOND_ROW -
+      NAV_HEIGHT -
+      CONTENT_CARD_PADDING * 2 -
+      FOOTER_HEIGHT -
+      1 -
+      50 // packagesearch emptyy height
+    setEmptyHeight(emptyHeight)
+
+    const handleResize = () => {
+      setEmptyHeight(emptyHeight)
     }
 
     window.addEventListener('resize', handleResize)
@@ -281,7 +306,18 @@ export const Search: FC = () => {
             )
           })}
         </ConfigProvider>
-        <Spacer $space={20} $samespace />
+
+        {(watchedKinds && watchedKinds.length) ||
+        (watchedName && watchedName.length) ||
+        (watchedLabels && watchedLabels.length) ||
+        (watchedFields && watchedFields.length) ? (
+          <Spacer $space={20} $samespace />
+        ) : (
+          <Styled.EmptyContainer $height={emptyHeight}>
+            <LookingGlassIcon />
+            <Styled.EmptyText>Select search options</Styled.EmptyText>
+          </Styled.EmptyContainer>
+        )}
       </Styled.OverflowContainer>
     </Styled.Container>
   )
