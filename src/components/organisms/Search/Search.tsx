@@ -8,7 +8,7 @@ import {
   TKindIndex,
   TKindWithVersion,
   getKinds,
-  getSortedKinds,
+  getSortedKindsAll,
   LookingGlassIcon,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { ConfigProvider, theme as antdtheme, Form, Spin, Alert } from 'antd'
@@ -103,7 +103,7 @@ export const Search: FC = () => {
     getKinds({ clusterName: cluster })
       .then(data => {
         setKindIndex(data)
-        setKindWithVersion(getSortedKinds(data))
+        setKindWithVersion(getSortedKindsAll(data))
         setIsLoading(false)
         setError(undefined)
       })
