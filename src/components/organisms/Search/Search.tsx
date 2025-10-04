@@ -262,9 +262,6 @@ export const Search: FC = () => {
     return <Alert type="error" message="Error while loading kinds" description="Empty" />
   }
 
-  console.log(kindIndex)
-  console.log(kindsWithVersion)
-
   return (
     <Styled.Container $height={height}>
       <Styled.OverflowContainer>
