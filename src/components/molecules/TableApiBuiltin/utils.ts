@@ -32,7 +32,7 @@ export const getBackLinkToBuiltinTable = ({
   searchMount?: boolean
 }): string => {
   if (searchMount) {
-    return fullPath
+    return encodeURIComponent(fullPath)
   }
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
   const mainRoute = `${root}${namespace ? `/${namespace}` : ''}${syntheticProject ? `/${syntheticProject}` : ''}`
@@ -64,7 +64,7 @@ export const getBackLinkToApiTable = ({
   searchMount?: boolean
 }): string => {
   if (searchMount) {
-    return fullPath
+    return encodeURIComponent(fullPath)
   }
 
   const root = `${baseprefix}${inside ? '/inside' : ''}/${cluster}`
