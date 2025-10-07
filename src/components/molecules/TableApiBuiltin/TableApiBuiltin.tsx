@@ -271,7 +271,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
                 },
               }}
               tableProps={{ ...TABLE_PROPS, disablePagination: !searchMount }}
-              namespaceScopedWithoutNamespace={isNamespaced && !!namespace}
+              namespaceScopedWithoutNamespace={isNamespaced && !namespace}
               // maxHeight={height - 65}
             />
           )}
@@ -290,7 +290,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
           </MarginTopContainer>
         )} */}
       </OverflowContainer>
-
       {searchMount ? <Spacer $space={12} $samespace /> : <FlexGrow />}
       <PaddingContainer $padding="4px">
         <Flex justify="space-between">
