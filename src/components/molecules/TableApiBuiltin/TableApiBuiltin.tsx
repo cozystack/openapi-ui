@@ -237,7 +237,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
                 },
               }}
               tableProps={{ ...TABLE_PROPS, disablePagination: !searchMount }}
-              namespaceScopedWithoutNamespace={isNamespaced && !namespace}
               // maxHeight={height - 65}
             />
           )}
