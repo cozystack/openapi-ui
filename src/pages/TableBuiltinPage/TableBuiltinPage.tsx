@@ -68,6 +68,7 @@ export const TableBuiltinPage: FC<TTableBuiltinPageProps> = ({ forcedTheme, insi
         {typeName && (
           <TableApiBuiltin
             resourceType="builtin"
+            apiVersion="v1"
             namespace={namespace}
             typeName={typeName}
             limit={searchParams.get('limit')}

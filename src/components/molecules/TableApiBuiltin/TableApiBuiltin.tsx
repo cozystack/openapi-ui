@@ -15,6 +15,7 @@ import {
   useBuiltinResources,
   useApiResources,
   Spacer,
+  getLinkToForm,
 } from '@prorobotech/openapi-k8s-toolkit'
 import { FlexGrow, PaddingContainer } from 'components'
 import { TABLE_PROPS } from 'constants/tableProps'
@@ -27,13 +28,13 @@ import {
   TABLE_ADD_BUTTON_HEIGHT,
 } from 'constants/blocksSizes'
 import { OverflowContainer } from './atoms'
-import { getDataItems, getBackLinkToTable, getLinkToForm } from './utils'
+import { getDataItems } from './utils'
 
 type TTableApiBuiltinProps = {
   namespace?: string
   resourceType: 'builtin' | 'api'
   apiGroup?: string // api
-  apiVersion?: string // api
+  apiVersion: string // api
   typeName: string
   labels?: string[]
   fields?: string[]
@@ -123,29 +124,11 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   }, [resourceType, cluster, typeName, apiGroup, apiVersion])
 
   const createPermission = usePermissions({
-    apiGroup: apiGroup || '',
-    typeName,
-    namespace: '',
+    group: apiGroup || undefined,
+    resource: typeName,
+    namespace: params.namespace,
     clusterName: cluster,
     verb: 'create',
-    refetchInterval: false,
-  })
-
-  const updatePermission = usePermissions({
-    apiGroup: apiGroup || '',
-    typeName,
-    namespace: '',
-    clusterName: cluster,
-    verb: 'update',
-    refetchInterval: false,
-  })
-
-  const deletePermission = usePermissions({
-    apiGroup: apiGroup || '',
-    typeName,
-    namespace: '',
-    clusterName: cluster,
-    verb: 'delete',
     refetchInterval: false,
   })
 
@@ -239,29 +222,12 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,
-                pathPrefix: resourceType === 'builtin' ? 'forms/builtin' : 'forms/apis',
-                typeName,
-                apiVersion: resourceType === 'builtin' ? 'v1' : `${apiGroup}/${apiVersion}`,
-                backlink: getBackLinkToTable({
-                  resourceType,
-                  cluster,
-                  baseprefix,
-                  namespace,
-                  syntheticProject: params.syntheticProject,
-                  apiGroup,
-                  apiVersion,
-                  typeName,
-                  inside,
-                  fullPath,
-                  searchMount,
-                }),
-                deletePathPrefix:
-                  resourceType === 'builtin' ? `/api/clusters/${cluster}/k8s/api` : `/api/clusters/${cluster}/k8s/apis`,
+                resource: typeName,
+                apiGroup,
+                apiVersion,
+              }}
+              dataForControlsInternal={{
                 onDeleteHandle,
-                permissions: {
-                  canUpdate: isNamespaced ? true : updatePermission.data?.status.allowed,
-                  canDelete: isNamespaced ? true : deletePermission.data?.status.allowed,
-                },
               }}
               selectData={{
                 selectedRowKeys,
@@ -297,7 +263,6 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
             type="primary"
             onClick={() => {
               const url = getLinkToForm({
-                resourceType,
                 cluster,
                 baseprefix,
                 namespace,
