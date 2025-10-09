@@ -216,9 +216,11 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
                 ...replaceValuesPartsOfUrls,
               }}
               cluster={cluster}
+              namespace={namespace}
               theme={theme}
               baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
               dataItems={getDataItems({ resourceType, dataBuiltin, dataApi })}
+              isNamespaced={isNamespaced}
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,
