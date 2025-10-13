@@ -73,6 +73,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedRowsData, setSelectedRowsData] = useState<{ name: string; endpoint: string }[]>([])
   const [isNamespaced, setIsNamespaced] = useState<boolean>()
+  const [isNamespacedLoading, setIsNamespacedLoading] = useState<boolean>()
 
   const [height, setHeight] = useState(0)
 
@@ -99,15 +100,20 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   }, [])
 
   useEffect(() => {
+    setIsNamespacedLoading(true)
     if (resourceType === 'builtin') {
       checkIfBuiltInInstanceNamespaceScoped({
         typeName,
         clusterName: cluster,
-      }).then(({ isNamespaceScoped }) => {
-        if (isNamespaceScoped) {
-          setIsNamespaced(isNamespaceScoped)
-        }
       })
+        .then(({ isNamespaceScoped }) => {
+          if (isNamespaceScoped) {
+            setIsNamespaced(isNamespaceScoped)
+          } else {
+            setIsNamespaced(false)
+          }
+        })
+        .finally(() => setIsNamespacedLoading(false))
     }
     if (resourceType === 'api' && apiGroup && apiVersion) {
       checkIfApiInstanceNamespaceScoped({
@@ -115,11 +121,15 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
         apiVersion,
         typeName,
         clusterName: cluster,
-      }).then(({ isNamespaceScoped }) => {
-        if (isNamespaceScoped) {
-          setIsNamespaced(true)
-        }
       })
+        .then(({ isNamespaceScoped }) => {
+          if (isNamespaceScoped) {
+            setIsNamespaced(true)
+          } else {
+            setIsNamespaced(false)
+          }
+        })
+        .finally(() => setIsNamespacedLoading(false))
     }
   }, [resourceType, cluster, typeName, apiGroup, apiVersion])
 
@@ -221,6 +231,7 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
               dataItems={getDataItems({ resourceType, dataBuiltin, dataApi })}
               isNamespaced={isNamespaced}
+              isNamespacedLoading={isNamespacedLoading}
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,

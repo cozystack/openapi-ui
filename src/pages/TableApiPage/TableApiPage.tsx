@@ -85,6 +85,7 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
             apiGroup={apiGroup}
             apiVersion={apiVersion}
             typeName={typeName}
+            key={`${apiGroup}-${apiVersion}-${namespace}-${typeName}`}
             limit={searchParams.get('limit')}
             inside={inside}
             customizationIdPrefix={tableCustomizationIdPrefix}
