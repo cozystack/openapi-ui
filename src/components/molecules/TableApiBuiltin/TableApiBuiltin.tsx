@@ -10,8 +10,8 @@ import {
   usePermissions,
   DeleteModal,
   DeleteModalMany,
-  checkIfBuiltInInstanceNamespaceScoped,
-  checkIfApiInstanceNamespaceScoped,
+  // checkIfBuiltInInstanceNamespaceScoped,
+  // checkIfApiInstanceNamespaceScoped,
   useBuiltinResources,
   useApiResources,
   Spacer,
@@ -72,8 +72,8 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
   )
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedRowsData, setSelectedRowsData] = useState<{ name: string; endpoint: string }[]>([])
-  const [isNamespaced, setIsNamespaced] = useState<boolean>()
-  const [isNamespacedLoading, setIsNamespacedLoading] = useState<boolean>()
+  // const [isNamespaced, setIsNamespaced] = useState<boolean>()
+  // const [isNamespacedLoading, setIsNamespacedLoading] = useState<boolean>()
 
   const [height, setHeight] = useState(0)
 
@@ -99,39 +99,39 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
     }
   }, [])
 
-  useEffect(() => {
-    setIsNamespacedLoading(true)
-    if (resourceType === 'builtin') {
-      checkIfBuiltInInstanceNamespaceScoped({
-        typeName,
-        clusterName: cluster,
-      })
-        .then(({ isNamespaceScoped }) => {
-          if (isNamespaceScoped) {
-            setIsNamespaced(isNamespaceScoped)
-          } else {
-            setIsNamespaced(false)
-          }
-        })
-        .finally(() => setIsNamespacedLoading(false))
-    }
-    if (resourceType === 'api' && apiGroup && apiVersion) {
-      checkIfApiInstanceNamespaceScoped({
-        apiGroup,
-        apiVersion,
-        typeName,
-        clusterName: cluster,
-      })
-        .then(({ isNamespaceScoped }) => {
-          if (isNamespaceScoped) {
-            setIsNamespaced(true)
-          } else {
-            setIsNamespaced(false)
-          }
-        })
-        .finally(() => setIsNamespacedLoading(false))
-    }
-  }, [resourceType, cluster, typeName, apiGroup, apiVersion])
+  // useEffect(() => {
+  //   setIsNamespacedLoading(true)
+  //   if (resourceType === 'builtin') {
+  //     checkIfBuiltInInstanceNamespaceScoped({
+  //       typeName,
+  //       clusterName: cluster,
+  //     })
+  //       .then(({ isNamespaceScoped }) => {
+  //         if (isNamespaceScoped) {
+  //           setIsNamespaced(isNamespaceScoped)
+  //         } else {
+  //           setIsNamespaced(false)
+  //         }
+  //       })
+  //       .finally(() => setIsNamespacedLoading(false))
+  //   }
+  //   if (resourceType === 'api' && apiGroup && apiVersion) {
+  //     checkIfApiInstanceNamespaceScoped({
+  //       apiGroup,
+  //       apiVersion,
+  //       typeName,
+  //       clusterName: cluster,
+  //     })
+  //       .then(({ isNamespaceScoped }) => {
+  //         if (isNamespaceScoped) {
+  //           setIsNamespaced(true)
+  //         } else {
+  //           setIsNamespaced(false)
+  //         }
+  //       })
+  //       .finally(() => setIsNamespacedLoading(false))
+  //   }
+  // }, [resourceType, cluster, typeName, apiGroup, apiVersion])
 
   const createPermission = usePermissions({
     group: apiGroup || undefined,
@@ -230,8 +230,13 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               theme={theme}
               baseprefix={inside ? `${baseprefix}/inside` : baseprefix}
               dataItems={getDataItems({ resourceType, dataBuiltin, dataApi })}
-              isNamespaced={isNamespaced}
-              isNamespacedLoading={isNamespacedLoading}
+              k8sResource={{
+                resource: typeName,
+                apiGroup,
+                apiVersion,
+              }}
+              // isNamespaced={isNamespaced}
+              // isNamespacedLoading={isNamespacedLoading}
               dataForControls={{
                 cluster,
                 syntheticProject: params.syntheticProject,
@@ -288,8 +293,10 @@ export const TableApiBuiltin: FC<TTableApiBuiltinProps> = ({
               })
               navigate(url)
             }}
-            loading={isNamespaced ? false : createPermission.isPending}
-            disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+            // loading={isNamespaced ? false : createPermission.isPending}
+            // disabled={isNamespaced ? false : !createPermission.data?.status.allowed}
+            loading={createPermission.isPending}
+            disabled={!createPermission.data?.status.allowed}
           >
             <PlusOutlined />
             Add {kindName}
