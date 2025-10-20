@@ -17,11 +17,10 @@ import {
 } from 'constants/customizationApiGroupAndVersion'
 
 type TTableApiPageProps = {
-  forcedTheme?: 'light' | 'dark'
   inside?: boolean
 }
 
-export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) => {
+export const TableApiPage: FC<TTableApiPageProps> = ({ inside }) => {
   const { clusterName, namespace, syntheticProject, apiGroup, apiVersion, typeName } = useParams()
   const [searchParams] = useSearchParams()
   const baseprefix = useSelector((state: RootState) => state.baseprefix.baseprefix)
@@ -62,7 +61,6 @@ export const TableApiPage: FC<TTableApiPageProps> = ({ forcedTheme, inside }) =>
 
   return (
     <BaseTemplate
-      forcedTheme={forcedTheme}
       inside={inside}
       sidebar={
         <ManageableSidebar
