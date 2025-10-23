@@ -71,7 +71,7 @@ const Container = styled.div<TContainerProps>`
   }
 
   && .ant-menu-sub .ant-menu-item.ant-menu-item-selected {
-    width: 225px;
+    width: 214px;
     margin-left: 25px !important;
     padding-left: 23px !important;
     transition: padding 0s;
