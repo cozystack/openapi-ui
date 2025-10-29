@@ -9,6 +9,7 @@
 // ------------------------------------------------------------
 
 import React, { FC, useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { theme as antdtheme } from 'antd'
 import { TScrollMsg, TServerFrame } from './types'
 import { eventKey } from './utils'
 import { reducer } from './reducer'
@@ -22,7 +23,8 @@ type TEventsProps = {
   title?: string
 }
 
-export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height, title = 'Cluster Events' }) => {
+export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
+  const { token } = antdtheme.useToken()
   // Reducer-backed store of events
   const [state, dispatch] = useReducer(reducer, { order: [], byKey: {} })
 
@@ -207,13 +209,14 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height, title =
   return (
     <Styled.Root $maxHeight={height || 640}>
       <Styled.Header>
-        <Styled.Title>{title}</Styled.Title>
         <Styled.Status>
           {connStatus === 'connecting' && 'Connecting…'}
           {connStatus === 'open' && 'Live'}
           {connStatus === 'closed' && 'Reconnecting…'}
           {typeof total === 'number' ? ` · ${total} items` : ''}
         </Styled.Status>
+        {hasMore ? <span>Scroll to load older events…</span> : <span>No more events.</span>}
+        {lastError && <span aria-live="polite">· {lastError}</span>}
       </Styled.Header>
 
       {/* Scrollable list of event rows */}
@@ -225,10 +228,7 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height, title =
         <Styled.Sentinel ref={sentinelRef} />
       </Styled.List>
 
-      <Styled.Footer>
-        {hasMore ? <span>Scroll to load older events…</span> : <span>No more events.</span>}
-        {lastError && <span aria-live="polite">· {lastError}</span>}
-      </Styled.Footer>
+      <Styled.Timeline $colorText={token.colorText} $maxHeight={height || 640} />
     </Styled.Root>
   )
 }
