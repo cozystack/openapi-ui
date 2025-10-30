@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 // ------------------------------------------------------------
 // Simple, self-contained React component implementing:
 // - WebSocket connection to your events endpoint
@@ -9,7 +10,8 @@
 // ------------------------------------------------------------
 
 import React, { FC, useCallback, useEffect, useReducer, useRef, useState } from 'react'
-import { theme as antdtheme } from 'antd'
+import { theme as antdtheme, Flex, Tooltip } from 'antd'
+import { ResumeCircleIcon, PauseCircleIcon, LockedIcon, UnlockedIcon } from '@prorobotech/openapi-k8s-toolkit'
 import { TScrollMsg, TServerFrame } from './types'
 import { eventKey } from './utils'
 import { reducer } from './reducer'
@@ -25,6 +27,23 @@ type TEventsProps = {
 
 export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
   const { token } = antdtheme.useToken()
+
+  // pause behaviour
+  const [isPaused, setIsPaused] = useState(false)
+  const pausedRef = useRef(isPaused)
+
+  useEffect(() => {
+    pausedRef.current = isPaused
+  }, [isPaused])
+
+  // ignore REMOVE signal
+  const [isRemoveIgnored, setIsRemoveIgnored] = useState(true)
+  const removeIgnoredRef = useRef(isRemoveIgnored)
+
+  useEffect(() => {
+    removeIgnoredRef.current = isRemoveIgnored
+  }, [isRemoveIgnored])
+
   // Reducer-backed store of events
   const [state, dispatch] = useReducer(reducer, { order: [], byKey: {} })
 
@@ -107,15 +126,17 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
       return
     }
 
-    if (frame.type === 'ADDED' || frame.type === 'MODIFIED') {
-      // Live update: insert or replace
-      dispatch({ type: 'UPSERT', item: frame.item })
-      return
-    }
+    if (!pausedRef.current) {
+      if (frame.type === 'ADDED' || frame.type === 'MODIFIED') {
+        // Live update: insert or replace
+        dispatch({ type: 'UPSERT', item: frame.item })
+        return
+      }
 
-    if (frame.type === 'DELETED') {
-      // Live delete
-      dispatch({ type: 'REMOVE', key: eventKey(frame.item) })
+      if (!removeIgnoredRef.current && frame.type === 'DELETED') {
+        // Live delete
+        dispatch({ type: 'REMOVE', key: eventKey(frame.item) })
+      }
     }
   }, [])
 
@@ -209,14 +230,45 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
   return (
     <Styled.Root $maxHeight={height || 640}>
       <Styled.Header>
-        <Styled.Status>
-          {connStatus === 'connecting' && 'Connecting…'}
-          {connStatus === 'open' && 'Live'}
-          {connStatus === 'closed' && 'Reconnecting…'}
-          {typeof total === 'number' ? ` · ${total} items` : ''}
-        </Styled.Status>
-        {hasMore ? <span>Scroll to load older events…</span> : <span>No more events.</span>}
-        {lastError && <span aria-live="polite">· {lastError}</span>}
+        <Styled.HeaderLeftSide>
+          <Flex justify="start" align="center" gap={10}>
+            <Styled.CursorPointerDiv
+              onClick={() => {
+                if (isPaused) {
+                  setIsPaused(false)
+                } else {
+                  setIsPaused(true)
+                }
+              }}
+            >
+              {isPaused ? <ResumeCircleIcon /> : <PauseCircleIcon />}
+            </Styled.CursorPointerDiv>
+            <Styled.StatusText>
+              {isPaused && 'Streaming paused'}
+              {!isPaused && connStatus === 'connecting' && 'Connecting…'}
+              {!isPaused && connStatus === 'open' && 'Streaming events...'}
+              {!isPaused && connStatus === 'closed' && 'Reconnecting…'}
+            </Styled.StatusText>
+          </Flex>
+        </Styled.HeaderLeftSide>
+        <Styled.HeaderRightSide $colorTextDescription={token.colorTextDescription}>
+          {!hasMore && <div>No more events · </div>}
+          {typeof total === 'number' ? <div>Loaded {total} events</div> : ''}
+          {lastError && <span aria-live="polite"> · {lastError}</span>}
+          <Tooltip
+            title={
+              <div>
+                <div>{isRemoveIgnored ? 'Handle REMOVE signals' : 'Ignore REMOVE signals'}</div>
+                <Flex justify="end">Locked means ignore</Flex>
+              </div>
+            }
+            placement="left"
+          >
+            <Styled.CursorPointerDiv onClick={() => setIsRemoveIgnored(!isRemoveIgnored)}>
+              {isRemoveIgnored ? <LockedIcon size={16} /> : <UnlockedIcon size={16} />}
+            </Styled.CursorPointerDiv>
+          </Tooltip>
+        </Styled.HeaderRightSide>
       </Styled.Header>
 
       {/* Scrollable list of event rows */}
