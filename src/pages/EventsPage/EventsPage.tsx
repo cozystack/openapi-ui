@@ -36,7 +36,13 @@ export const EventsPage: FC = () => {
       <NavigationContainer>
         <ManageableBreadcrumbs idToCompare={breadcrumbsId} />
       </NavigationContainer>
-      <Events wsUrl={`/api/clusters/${clusterName}/openapi-bff-ws/events/eventsWs?limit=40`} />
+      {clusterName && (
+        <Events
+          baseprefix="/openapi-ui"
+          cluster={clusterName}
+          wsUrl={`/api/clusters/${clusterName}/openapi-bff-ws/events/eventsWs?limit=40`}
+        />
+      )}
     </BaseTemplate>
   )
 }

@@ -10,8 +10,19 @@
 // ------------------------------------------------------------
 
 import React, { FC, useCallback, useEffect, useReducer, useRef, useState } from 'react'
-import { theme as antdtheme, Flex, Tooltip } from 'antd'
-import { ResumeCircleIcon, PauseCircleIcon, LockedIcon, UnlockedIcon } from '@prorobotech/openapi-k8s-toolkit'
+import { theme as antdtheme, Flex, Tooltip, Empty } from 'antd'
+import {
+  // TRequestError,
+  TKindIndex,
+  TKindWithVersion,
+  getKinds,
+  getSortedKindsAll,
+  pluralByKind,
+  ResumeCircleIcon,
+  PauseCircleIcon,
+  LockedIcon,
+  UnlockedIcon,
+} from '@prorobotech/openapi-k8s-toolkit'
 import { TScrollMsg, TServerFrame } from './types'
 import { eventKey, compareRV, getRV, getMaxRV } from './utils'
 import { reducer } from './reducer'
@@ -19,14 +30,40 @@ import { EventRow } from './molecules'
 import { Styled } from './styled'
 
 type TEventsProps = {
+  baseprefix?: string
+  cluster: string
   wsUrl: string // e.g. ws://localhost:3000/api/events?namespace=default&limit=40
   pageSize?: number // SCROLL page size (optional)
   height?: number // optional override
   title?: string
 }
 
-export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
+export const Events: FC<TEventsProps> = ({ baseprefix, cluster, wsUrl, pageSize = 50, height }) => {
   const { token } = antdtheme.useToken()
+
+  // const [error, setError] = useState<TRequestError | undefined>()
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [kindIndex, setKindIndex] = useState<TKindIndex>()
+  const [kindsWithVersion, setKindWithVersion] = useState<TKindWithVersion[]>()
+
+  useEffect(() => {
+    // setIsLoading(true)
+    // setError(undefined)
+    getKinds({ clusterName: cluster })
+      .then(data => {
+        setKindIndex(data)
+        setKindWithVersion(getSortedKindsAll(data))
+        // setIsLoading(false)
+        // setError(undefined)
+      })
+      .catch(error => {
+        // setIsLoading(false)
+        // setError(error)
+        // eslint-disable-next-line no-console
+        console.error(error)
+      })
+  }, [cluster])
 
   // pause behaviour
   const [isPaused, setIsPaused] = useState(false)
@@ -315,6 +352,8 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
 
   const total = state.order.length
 
+  const getPlural = kindsWithVersion ? pluralByKind(kindsWithVersion) : undefined
+
   return (
     <Styled.Root $maxHeight={height || 640}>
       <Styled.Header>
@@ -361,14 +400,18 @@ export const Events: FC<TEventsProps> = ({ wsUrl, pageSize = 50, height }) => {
 
       {/* Scrollable list of event rows */}
       <Styled.List ref={listRef} onScroll={onScroll}>
-        {state.order.map(k => (
-          <EventRow key={k} e={state.byKey[k]} />
-        ))}
+        {state.order.length > 0 ? (
+          state.order.map(k => (
+            <EventRow key={k} e={state.byKey[k]} baseprefix={baseprefix} cluster={cluster} getPlural={getPlural} />
+          ))
+        ) : (
+          <Empty />
+        )}
         {/* Infinite scroll sentinel */}
         <Styled.Sentinel ref={sentinelRef} />
       </Styled.List>
 
-      <Styled.Timeline $colorText={token.colorText} $maxHeight={height || 640} />
+      {state.order.length > 0 && <Styled.Timeline $colorText={token.colorText} $maxHeight={height || 640} />}
     </Styled.Root>
   )
 }

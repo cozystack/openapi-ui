@@ -60,9 +60,14 @@ const Title = styled.div`
   font-weight: 700;
 `
 
+const TimesInPeriod = styled.div`
+  margin-top: -16px;
+`
+
 export const Styled = {
   Card,
   Abbr,
   TimeStamp,
   Title,
+  TimesInPeriod,
 }

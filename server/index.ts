@@ -73,6 +73,23 @@ const SEARCH_TABLE_CUSTOMIZATION_PREFIX =
     ? options?.SEARCH_TABLE_CUSTOMIZATION_PREFIX
     : process.env.SEARCH_TABLE_CUSTOMIZATION_PREFIX
 
+const BASE_FACTORY_NAMESPACED_API_KEY =
+  process.env.LOCAL === 'true' ? options?.BASE_FACTORY_NAMESPACED_API_KEY : process.env.BASE_FACTORY_NAMESPACED_API_KEY
+const BASE_FACTORY_CLUSTERSCOPED_API_KEY =
+  process.env.LOCAL === 'true'
+    ? options?.BASE_FACTORY_CLUSTERSCOPED_API_KEY
+    : process.env.BASE_FACTORY_CLUSTERSCOPED_API_KEY
+const BASE_FACTORY_NAMESPACED_BUILTIN_KEY =
+  process.env.LOCAL === 'true'
+    ? options?.BASE_FACTORY_NAMESPACED_BUILTIN_KEY
+    : process.env.BASE_FACTORY_NAMESPACED_BUILTIN_KEY
+const BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY =
+  process.env.LOCAL === 'true'
+    ? options?.BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY
+    : process.env.BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY
+const BASE_NAMESPACE_FACTORY_KEY =
+  process.env.LOCAL === 'true' ? options?.BASE_NAMESPACE_FACTORY_KEY : process.env.BASE_NAMESPACE_FACTORY_KEY
+
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
 
@@ -199,7 +216,14 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
       DOCS_URL: ${JSON.stringify(DOCS_URL) || '"/docs"'},
       SEARCH_TABLE_CUSTOMIZATION_PREFIX: ${JSON.stringify(SEARCH_TABLE_CUSTOMIZATION_PREFIX) || '"search-"'},
       REMOVE_BACKLINK: ${!!REMOVE_BACKLINK ? JSON.stringify(REMOVE_BACKLINK).toLowerCase() : '"false"'},
-      REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? JSON.stringify(REMOVE_BACKLINK_TEXT).toLowerCase() : '"false"'}
+      REMOVE_BACKLINK_TEXT: ${!!REMOVE_BACKLINK_TEXT ? JSON.stringify(REMOVE_BACKLINK_TEXT).toLowerCase() : '"false"'},
+      BASE_FACTORY_NAMESPACED_API_KEY: ${JSON.stringify(BASE_FACTORY_NAMESPACED_API_KEY) || '"check envs"'},
+      BASE_FACTORY_CLUSTERSCOPED_API_KEY: ${JSON.stringify(BASE_FACTORY_CLUSTERSCOPED_API_KEY) || '"check envs"'},
+      BASE_FACTORY_NAMESPACED_BUILTIN_KEY: ${JSON.stringify(BASE_FACTORY_NAMESPACED_BUILTIN_KEY) || '"check envs"'},
+      BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY: ${
+        JSON.stringify(BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY) || '"check envs"'
+      },
+      BASE_NAMESPACE_FACTORY_KEY: ${JSON.stringify(BASE_NAMESPACE_FACTORY_KEY) || '"check envs"'}
     }
     `,
   )

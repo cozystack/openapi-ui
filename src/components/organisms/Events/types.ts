@@ -21,9 +21,11 @@ export type TEventsV1Event = {
   reportingController?: string
   reportingInstance?: string
   deprecatedCount?: number
+  deprecatedFirstTimestamp?: Date
   action?: string
   eventTime?: string
   regarding?: {
+    apiVersion?: string
     kind?: string
     name?: string
     namespace?: string
