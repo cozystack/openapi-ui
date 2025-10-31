@@ -77,3 +77,19 @@ export const BASE_REMOVE_BACKLINK_TEXT = import.meta.env.DEV
   ? window._env_.REMOVE_BACKLINK_TEXT === 'true' ||
     import.meta.env.VITE_REMOVE_BACKLINK_TEXT?.toString().toLowerCase() === 'true'
   : window._env_.REMOVE_BACKLINK_TEXT === 'true'
+
+export const BASE_FACTORY_NAMESPACED_API_KEY = import.meta.env.DEV
+  ? window._env_.BASE_FACTORY_NAMESPACED_API_KEY || import.meta.env.VITE_BASE_FACTORY_NAMESPACED_API_KEY
+  : window._env_.BASE_FACTORY_NAMESPACED_API_KEY
+export const BASE_FACTORY_CLUSTERSCOPED_API_KEY = import.meta.env.DEV
+  ? window._env_.BASE_FACTORY_CLUSTERSCOPED_API_KEY || import.meta.env.VITE_BASE_FACTORY_CLUSTERSCOPED_API_KEY
+  : window._env_.BASE_FACTORY_CLUSTERSCOPED_API_KEY
+export const BASE_FACTORY_NAMESPACED_BUILTIN_KEY = import.meta.env.DEV
+  ? window._env_.BASE_FACTORY_NAMESPACED_BUILTIN_KEY || import.meta.env.VITE_BASE_FACTORY_NAMESPACED_BUILTIN_KEY
+  : window._env_.BASE_FACTORY_NAMESPACED_BUILTIN_KEY
+export const BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY = import.meta.env.DEV
+  ? window._env_.BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY || import.meta.env.VITE_BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY
+  : window._env_.BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY
+export const BASE_NAMESPACE_FACTORY_KEY = import.meta.env.DEV
+  ? window._env_.BASE_NAMESPACE_FACTORY_KEY || import.meta.env.VITE_BASE_NAMESPACE_FACTORY_KEY
+  : window._env_.BASE_NAMESPACE_FACTORY_KEY
