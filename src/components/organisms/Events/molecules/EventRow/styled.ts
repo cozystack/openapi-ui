@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 
 type TCardProps = {
-  $colorText: string
+  $mainColor: string
+  $bigBorder?: boolean
 }
 
 const Card = styled.div<TCardProps>`
   border-radius: 6px;
   padding: 16px 8px;
-  border: 1px solid ${({ $colorText }) => $colorText};
+  border: ${({ $bigBorder }) => ($bigBorder ? 2 : 1)}px solid ${({ $mainColor }) => $mainColor};
   gap: 12px;
   margin-bottom: 16px;
   position: relative;
@@ -16,8 +17,8 @@ const Card = styled.div<TCardProps>`
     position: absolute;
     content: '';
     width: 36px;
-    height: 1px;
-    background: ${({ $colorText }) => $colorText};
+    height: ${({ $bigBorder }) => ($bigBorder ? 2 : 1)}px;
+    background: ${({ $mainColor }) => $mainColor};
     left: -37px;
     top: 50%; /* halfway down parent */
     transform: translateY(-50%); /* center vertically */
@@ -26,11 +27,11 @@ const Card = styled.div<TCardProps>`
   &:after {
     position: absolute;
     content: '';
-    width: 6px;
-    height: 6px;
+    width: ${({ $bigBorder }) => ($bigBorder ? 7 : 6)}px;
+    height: ${({ $bigBorder }) => ($bigBorder ? 7 : 6)}px;
     border-radius: 50%;
-    background: ${({ $colorText }) => $colorText};
-    left: -39px;
+    background: ${({ $mainColor }) => $mainColor};
+    left: ${({ $bigBorder }) => ($bigBorder ? -41 : -39)}px;
     top: 50%;
     transform: translateY(-50%);
   }
