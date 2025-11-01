@@ -15,7 +15,8 @@ This app can be configured through environment variables.
 | `KUBE_API_URL`                                | `string`  | URL for the Kubernetes API. `http://api.incloud-web.svc.default.in-cloud.internal:8081` |
 | `BFF_URL`                                     | `string`  | URL for the BFF                                                                         |
 | `TITLE_TEXT`                                  | `string`  | Page title                                                                              |
-| `LOGO_TEXT`                                   | `string`  | Logo text                                                                               |
+| `TITLE_TEXT`                                  | `string`  | Page title                                                                              |
+| `ICON_SVG`                                    | `string`  | Favicon base64 encoded                                                                  |
 | `FOOTER_TEXT`                                 | `string`  | Footer text                                                                             |
 | `CUSTOM_LOGO_SVG`                             | `string`  | Base64 encoded svg                                                                      |
 | `CUSTOM_TENANT_TEXT`                          | `string`  | Custom tenant text override                                                             |
