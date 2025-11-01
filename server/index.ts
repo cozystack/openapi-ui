@@ -213,7 +213,7 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
     window._env_ = {
     ${basePrefix ? `  BASEPREFIX: "${basePrefix}",` : ''}
       TITLE_TEXT: ${JSON.stringify(TITLE_TEXT) || '"check envs"'},
-      LOGO_TEXT: ${JSON.stringify(LOGO_TEXT) || '"check envs"'},
+      LOGO_TEXT: ${LOGO_TEXT !== undefined ? JSON.stringify(LOGO_TEXT) : '"check envs"'},
       FOOTER_TEXT: ${JSON.stringify(FOOTER_TEXT) || '"check envs"'},
       ${CUSTOM_LOGO_SVG ? `  CUSTOM_LOGO_SVG: "${CUSTOM_LOGO_SVG}",` : ''}
       ${CUSTOM_TENANT_TEXT ? `  CUSTOM_TENANT_TEXT: "${CUSTOM_TENANT_TEXT}",` : ''}

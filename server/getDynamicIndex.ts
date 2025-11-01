@@ -7,15 +7,19 @@ export const getDynamicIndex = (baseprefix: string): string => {
 
     // Generate favicon from SVG if provided
     const generateFavicon = (): string => {
-      if (!iconSvg) {
-        return ''
-      }
+      if (!iconSvg) return ''
       try {
-        const decodedSvg = Buffer.from(iconSvg, 'base64').toString('utf-8')
-        const dataUri = `data:image/svg+xml;base64,${decodedSvg}`
+        // If iconSvg is base64-of-base64, unwrap once
+        const maybeInner = Buffer.from(iconSvg, 'base64').toString('utf8')
+        const payload =
+          /^[A-Za-z0-9+/=\n\r]+$/.test(maybeInner) && !maybeInner.trim().startsWith('<')
+            ? maybeInner // double-encoded → use inner base64
+            : iconSvg // single-encoded → already fine
+
+        const dataUri = `data:image/svg+xml;base64,${payload}`
         return `<link rel="icon" type="image/svg+xml" href="${dataUri}">`
-      } catch (error) {
-        console.error('Error processing icon SVG:', error)
+      } catch (e) {
+        console.error('Error processing icon SVG:', e)
         return ''
       }
     }
