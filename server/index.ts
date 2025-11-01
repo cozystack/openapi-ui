@@ -18,6 +18,12 @@ if (process.env.LOCAL === 'true') {
 
 const KUBE_API_URL = process.env.LOCAL === 'true' ? options?.KUBE_API_URL : process.env.KUBE_API_URL
 
+const TITLE_TEXT = process.env.LOCAL === 'true' ? options?.TITLE_TEXT : process.env.TITLE_TEXT
+const LOGO_TEXT = process.env.LOCAL === 'true' ? options?.LOGO_TEXT : process.env.LOGO_TEXT
+const FOOTER_TEXT = process.env.LOCAL === 'true' ? options?.FOOTER_TEXT : process.env.FOOTER_TEXT
+const CUSTOM_LOGO_SVG = process.env.LOCAL === 'true' ? options?.CUSTOM_LOGO_SVG : process.env.CUSTOM_LOGO_SVG
+const CUSTOM_TENANT_TEXT = process.env.LOCAL === 'true' ? options?.CUSTOM_TENANT_TEXT : process.env.CUSTOM_TENANT_TEXT
+
 const CUSTOMIZATION_API_GROUP =
   process.env.LOCAL === 'true' ? options?.CUSTOMIZATION_API_GROUP : process.env.CUSTOMIZATION_API_GROUP
 const CUSTOMIZATION_API_VERSION =
@@ -89,6 +95,19 @@ const BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY =
     : process.env.BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY
 const BASE_NAMESPACE_FACTORY_KEY =
   process.env.LOCAL === 'true' ? options?.BASE_NAMESPACE_FACTORY_KEY : process.env.BASE_NAMESPACE_FACTORY_KEY
+
+const CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP =
+  process.env.LOCAL === 'true'
+    ? options?.CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP
+    : process.env.CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP
+const CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION =
+  process.env.LOCAL === 'true'
+    ? options?.CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION
+    : process.env.CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION
+const CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME =
+  process.env.LOCAL === 'true'
+    ? options?.CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME
+    : process.env.CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME
 
 const healthcheck = require('express-healthcheck')
 const promBundle = require('express-prom-bundle')
@@ -193,11 +212,31 @@ app.get(`${basePrefix ? basePrefix : ''}/env.js`, (_, res) => {
     `
     window._env_ = {
     ${basePrefix ? `  BASEPREFIX: "${basePrefix}",` : ''}
+      TITLE_TEXT: ${JSON.stringify(TITLE_TEXT) || '"check envs"'},
+      LOGO_TEXT: ${JSON.stringify(LOGO_TEXT) || '"check envs"'},
+      FOOTER_TEXT: ${JSON.stringify(FOOTER_TEXT) || '"check envs"'},
+      ${CUSTOM_LOGO_SVG ? `  CUSTOM_LOGO_SVG: "${CUSTOM_LOGO_SVG}",` : ''}
+      ${CUSTOM_TENANT_TEXT ? `  CUSTOM_TENANT_TEXT: "${CUSTOM_TENANT_TEXT}",` : ''}
       CUSTOMIZATION_API_GROUP: ${JSON.stringify(CUSTOMIZATION_API_GROUP) || '"check envs"'},
       CUSTOMIZATION_API_VERSION: ${JSON.stringify(CUSTOMIZATION_API_VERSION) || '"check envs"'},
       CUSTOMIZATION_NAVIGATION_RESOURCE_NAME: ${
         JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE_NAME) || '"check envs"'
       },
+      ${
+        CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP
+          ? `  CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP: "${CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP}",`
+          : ''
+      }
+      ${
+        CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION
+          ? `  CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION: "${CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION}",`
+          : ''
+      }
+      ${
+        CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME
+          ? `  CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME: "${CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME}",`
+          : ''
+      }
       CUSTOMIZATION_NAVIGATION_RESOURCE: ${JSON.stringify(CUSTOMIZATION_NAVIGATION_RESOURCE) || '"check envs"'},
       USE_NAMESPACE_NAV: ${USE_NAMESPACE_NAV ? JSON.stringify(USE_NAMESPACE_NAV).toLowerCase() : '"false"'},
       NAVIGATE_FROM_CLUSTERLIST: ${JSON.stringify(NAVIGATE_FROM_CLUSTERLIST) || '"check envs"'},
