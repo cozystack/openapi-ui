@@ -27,7 +27,6 @@ import {
   FactoryPage,
   FactoryAdminPage,
   SearchPage,
-  EventsPage,
 } from 'pages'
 import { getBasePrefix } from 'utils/getBaseprefix'
 import { colorsLight, colorsDark, sizes } from 'constants/colors'
@@ -125,7 +124,6 @@ export const App: FC<TAppProps> = ({ isFederation, forcedTheme }) => {
           element={<FactoryPage />}
         />
         <Route path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/search/*`} element={<SearchPage />} />
-        <Route path={`${prefix}/:clusterName/:namespace?/:syntheticProject?/events/*`} element={<EventsPage />} />
         <Route path={`${prefix}/factory-admin/*`} element={<FactoryAdminPage />} />
       </Route>
     </Routes>
