@@ -19,5 +19,3 @@ export { FactoryPage } from './FactoryPage'
 export { FactoryAdminPage } from './FactoryAdminPage'
 /* search */
 export { SearchPage } from './SearchPage'
-/* events */
-export { EventsPage } from './EventsPage'
