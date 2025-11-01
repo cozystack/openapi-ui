@@ -18,6 +18,7 @@ const Container = styled.div<TContainerProps>`
   direction: rtl;
   max-height: ${({ $maxHeight }) => $maxHeight || 'initial'};
   user-select: none;
+  border-top-right-radius: 12px;
 
   & ul {
     direction: ltr;
