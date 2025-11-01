@@ -1,4 +1,25 @@
 /* eslint-disable no-underscore-dangle */
+
+export const TITLE_TEXT = import.meta.env.DEV
+  ? window._env_.TITLE_TEXT || import.meta.env.VITE_TITLE_TEXT
+  : window._env_.TITLE_TEXT
+
+export const LOGO_TEXT = import.meta.env.DEV
+  ? window._env_.LOGO_TEXT || import.meta.env.VITE_LOGO_TEXT
+  : window._env_.LOGO_TEXT
+
+export const FOOTER_TEXT = import.meta.env.DEV
+  ? window._env_.FOOTER_TEXT || import.meta.env.VITE_FOOTER_TEXT
+  : window._env_.FOOTER_TEXT
+
+export const CUSTOM_LOGO_SVG = import.meta.env.DEV
+  ? window._env_.CUSTOM_LOGO_SVG || import.meta.env.VITE_CUSTOM_LOGO_SVG
+  : window._env_.CUSTOM_LOGO_SVG
+
+export const CUSTOM_TENANT_TEXT = import.meta.env.DEV
+  ? window._env_.CUSTOM_TENANT_TEXT || import.meta.env.VITE_CUSTOM_TENANT_TEXT
+  : window._env_.CUSTOM_TENANT_TEXT
+
 export const BASE_API_GROUP = import.meta.env.DEV
   ? window._env_.CUSTOMIZATION_API_GROUP || import.meta.env.VITE_CUSTOMIZATION_API_GROUP
   : window._env_.CUSTOMIZATION_API_GROUP
@@ -93,3 +114,15 @@ export const BASE_FACTORY_CLUSTERSCOPED_BUILTIN_KEY = import.meta.env.DEV
 export const BASE_NAMESPACE_FACTORY_KEY = import.meta.env.DEV
   ? window._env_.BASE_NAMESPACE_FACTORY_KEY || import.meta.env.VITE_BASE_NAMESPACE_FACTORY_KEY
   : window._env_.BASE_NAMESPACE_FACTORY_KEY
+
+export const CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP = import.meta.env.DEV
+  ? window._env_.CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP || import.meta.env.VITE_CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP
+  : window._env_.CUSTOM_NAMESPACE_API_RESOURCE_API_GROUP
+export const CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION = import.meta.env.DEV
+  ? window._env_.CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION ||
+    import.meta.env.VITE_CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION
+  : window._env_.CUSTOM_NAMESPACE_API_RESOURCE_API_VERSION
+export const CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME = import.meta.env.DEV
+  ? window._env_.CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME ||
+    import.meta.env.VITE_CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME
+  : window._env_.CUSTOM_NAMESPACE_API_RESOURCE_RESOURCE_NAME
